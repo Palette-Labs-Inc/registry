@@ -1,2 +1,2 @@
 # UTP Registry
-registry infrastructure for the universal transaction protocol
+Registry infrastructure for the universal transaction protocol
