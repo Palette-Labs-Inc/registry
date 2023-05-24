@@ -5,3 +5,4 @@
 
 - demonstrate how to query the registry
 - lookup .yaml specification or equivalent standards doc.
+- change verification language
