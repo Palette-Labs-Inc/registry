@@ -31,7 +31,7 @@ Once all checks are passed, the Registrar creates an entry for the participant o
 | 5k8D92xR |    Nosh     | https://noshdelivery.xyz |   [{lat,lng},...]    |     FOOD      | UNO | VERIFIED | utc timestamp | utc timestamp | utc timestamp   | utc timestamp |
 | J3t7fGhE |  GrubDash  | https://grubdash.xyz  |   [{lat,lng},...]    |     FOOD      | UNO | VERIFIED | utc timestamp | utc timestamp | utc timestamp   | utc timestamp |
 | qR9u2YsT |  RocketRides  | https://rocketrides.xyz  |   [{lat,lng},...]    |     RIDES      | CSN | VERIFIED | utc timestamp | utc timestamp | utc timestamp   | utc timestamp |
-| dF8nH7jK |  SnackAttack  | https://snackattack.xyz  |   [{lat,lng},...]    |     RIDES      | BSN | VERIFIED | utc timestamp | utc timestamp | utc timestamp   | utc timestamp |
+| dF8nH7jK |  SnackAttack  | https://snackattack.xyz  |   [{lat,lng},...]    |     FOOD      | BSN | VERIFIED | utc timestamp | utc timestamp | utc timestamp   | utc timestamp |
 | tN6sH4mE |  Drivers Coop  | https://drivers.coop  |   [{lat,lng},...]    |     RIDES      | CSN | VERIFIED | utc timestamp | utc timestamp | utc timestamp   | utc timestamp |
 | eG2hT6nQ |  Boulder Local  | https://boulderlocal.org  |   [{lat,lng},...]    |     RIDES      | SSN | VERIFIED | utc timestamp | utc timestamp | utc timestamp   | utc timestamp |
 
