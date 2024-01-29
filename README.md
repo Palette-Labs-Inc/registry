@@ -50,9 +50,9 @@ The expected structure is based off of the The [Ethereum Attestation Service](ht
 ### Resource 
 - The [Ethereum Attestation Service](https://github.com/ethereum-attestation-service/eas-contracts/tree/master) provides a good overview of dealing with different data structures in solidity smart contracts
 - The [EAS indexing service](https://github.com/ethereum-attestation-service/eas-indexing-service)
-- Uber [`Hexagonal Hierarchical Spatial Index`](https://github.com/uber/h3) repository and [PostgreSQL bindings for the H3 Core Library](https://github.com/zachasme/h3-pg) bindings to include in the registry indexer. 
+- Uber [Hexagonal Hierarchical Spatial Index](https://github.com/uber/h3) repository and [PostgreSQL bindings for the H3 Core Library](https://github.com/zachasme/h3-pg) bindings to include in the registry indexer. 
 - [Chai assertion library](https://www.chaijs.com/) for unit tests.
-- [Template contract definition](./INodeRegistry.sol)
+- [Template contract definition](./INodeRegistry.sol) can be found in the `INodeRegistry.sol` file.
 - [Hardhat](https://hardhat.org/) 
 
 
