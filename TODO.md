@@ -2,9 +2,11 @@
 - [ ] Get etherscan api key
 - [ ] run verify command for deployed contract on base-sepolia
 
+- [ ] Typescript SDK for registry contract `registerNode` and `getNode` methods in typescript
 - [ ] Build a simple interface to call the `registerNode` method in the registry contract
 - [ ] Build a simple interface to call the `getNode` method in the registry contract
 - [ ] Figure out how to subscribe to the emission event in the smart contract so that any indexer has the latest state, (search EAS dev chat in tg for **Yeah, you can either subscribe to the Attested event that the EAS contract emits or using GraphQL**)
+
 - [ ] Build the GraphQL Indexer for the registry
 
 
@@ -17,4 +19,3 @@
     // issue https://github.com/NomicFoundation/hardhat/issues/3833 
     // await expect(res).to.emit(registry, 'Registered').withArgs(uid, await sender.getAddress(), nodeEntry);  
 ```
-
