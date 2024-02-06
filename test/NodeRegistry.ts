@@ -46,7 +46,8 @@ describe('NodeRegistry', function () {
       // issue https://github.com/NomicFoundation/hardhat/issues/4207
       // issue https://github.com/NomicFoundation/hardhat/issues/3833 
       // await expect(res).to.emit(registry, 'Registered').withArgs(uid, await sender.getAddress(), nodeEntry);  
-
+      // console.log('nodeEntry',nodeEntry);
+      
       expect(nodeEntry.uid).to.equal(uid);
       expect(nodeEntry.name).to.equal(node.name);
       expect(nodeEntry.callbackUrl).to.equal(node.callbackUrl);

@@ -3,14 +3,16 @@ pragma solidity ^0.8.0;
 
 // Define an enum for a Provider Supporting Node and Buyer Supporting Node
 enum NodeType {
-    PSN,
-    BSN
+    PSN, // provider supporting node
+    BSN, // buyer supporting node
+    GP // gateway provider
 }
 
 // Define an enum for the status
 enum NodeStatus {
-    UNVERIFIED,
-    VERIFIED
+    INITIATED,
+    VERIFIED,
+    INVALID
 }
 
 struct NodeEntry {
@@ -30,7 +32,6 @@ struct RegisterNodeEntryParams {
     string industryCode; // Industry code
     NodeType nodeType; // Type of the node (PSN or BSN)
 }
-
 
 /// @title INodeEntry
 /// @notice Interface for Node Entry management in a Solidity smart contract.

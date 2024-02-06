@@ -21,7 +21,7 @@ contract NodeRegistry is INodeRegistry, Semver {
     function registerNode(RegisterNodeEntryParams calldata entry) external returns (bytes32) {
         NodeEntry memory nodeEntry = NodeEntry({
             uid: EMPTY_UID,
-            status: NodeStatus.UNVERIFIED,
+            status: NodeStatus.INITIATED,
             name: entry.name,
             callbackUrl: entry.callbackUrl,
             location: entry.location,
