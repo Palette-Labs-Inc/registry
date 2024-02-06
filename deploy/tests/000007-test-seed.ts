@@ -16,7 +16,7 @@ describeDeployment(__filename, () => {
     // Read registered node data from the JSON file
     const registeredNodes = JSON.parse(fs.readFileSync(TEST_NODES_OUTPUT_PATH, 'utf-8'));
 
-    for (const { uid, name, callbackUrl, location, industryCode, nodeType, status } of registeredNodes) {
+    for (const { uid, name, callbackUrl, location, industryCode, nodeType } of registeredNodes) {
       // Retrieve the node details from the NodeRegistry contract
       const nodeEntry = await nodeRegistry.getNode(uid);
 
@@ -26,7 +26,7 @@ describeDeployment(__filename, () => {
       expect(nodeEntry.location).to.deep.equal(location);
       expect(nodeEntry.industryCode).to.equal(industryCode);
       expect(nodeEntry.nodeType).to.equal(nodeType);
-      expect(nodeEntry.status).to.equal(status);
+      expect(nodeEntry.status).to.equal(0n);
     }
   });
 });

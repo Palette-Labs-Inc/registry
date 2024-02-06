@@ -2,7 +2,6 @@ import fs from 'fs';
 import path from 'path';
 import { DeployFunction } from 'hardhat-deploy/types';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
-import { NodeEntryStruct } from '../../typechain-types/INodeRegistry';
 import {
   execute,
   getDeploymentDir,
@@ -24,7 +23,7 @@ const NODES = [
     location: ['882681a339fffff'],
     industryCode: 'FOOD',
     nodeType: 0, // Corresponds to NodeType.PSN, for example
-    status: 0 // Corresponds to NodeStatus.VERIFIED, for example
+    status: 0 // Corresponds to NodeStatus.UNVERIFIED, for example
   },
   {
     name: 'Node Two',
@@ -32,7 +31,7 @@ const NODES = [
     location: ['882681a339fffff'],
     industryCode: 'FOOD',
     nodeType: 1, // Corresponds to NodeType.BSN
-    status: 0 // Corresponds to NodeStatus.VERIFIED
+    status: 0 // Corresponds to NodeStatus.UNVERIFIED
   }
 ];
 
@@ -41,7 +40,8 @@ const func: DeployFunction = async ({ getNamedAccounts }: HardhatRuntimeEnvironm
   const registeredNodes = [];
 
   for (const node of NODES) {
-    const uid = getNodeUID(node as NodeEntryStruct);
+    const { name, callbackUrl, industryCode } = node; 
+    const uid = getNodeUID(name,callbackUrl,industryCode);
 
     await execute({
       name: InstanceName.NodeRegistry,

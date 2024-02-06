@@ -9,11 +9,10 @@ enum NodeType {
 
 // Define an enum for the status
 enum NodeStatus {
-    VERIFIED,
-    UNVERIFIED
+    UNVERIFIED,
+    VERIFIED
 }
 
-// Define a struct for the Node Entry outside the interface
 struct NodeEntry {
     bytes32 uid; // Unique identifier
     string name; // Name of the node
@@ -23,6 +22,15 @@ struct NodeEntry {
     NodeType nodeType; // Type of the node (PSN or BSN)
     NodeStatus status; // Status of the node (VERIFIED or UNVERIFIED)
 }
+
+struct RegisterNodeEntryParams {
+    string name; // Name of the node
+    string callbackUrl; // Callback URL of the server for the node
+    string[] location; // Array of h3 strings for the supported location
+    string industryCode; // Industry code
+    NodeType nodeType; // Type of the node (PSN or BSN)
+}
+
 
 /// @title INodeEntry
 /// @notice Interface for Node Entry management in a Solidity smart contract.
@@ -36,7 +44,7 @@ interface INodeRegistry {
     /// @notice Registers a new node entry
     /// @param entry The NodeEntry data.
     /// @return The UID of the registered node.
-    function registerNode(NodeEntry calldata entry) external returns (bytes32);
+    function registerNode(RegisterNodeEntryParams calldata entry) external returns (bytes32);
 
     /// @notice Retrieves a node entry by its UID
     /// @param uid The UID of the node to retrieve.

@@ -2,7 +2,7 @@
 
 pragma solidity 0.8.19;
 
-import { INodeRegistry, NodeEntry } from "./INodeRegistry.sol";
+import { INodeRegistry, NodeEntry, RegisterNodeEntryParams, NodeStatus } from "./INodeRegistry.sol";
 import { EMPTY_UID } from "./Common.sol";
 import { Semver } from "./Semver.sol";
 
@@ -18,15 +18,15 @@ contract NodeRegistry is INodeRegistry, Semver {
     constructor() Semver(0, 0, 1) {}
 
     /// @inheritdoc INodeRegistry
-    function registerNode(NodeEntry calldata entry) external returns (bytes32) {
+    function registerNode(RegisterNodeEntryParams calldata entry) external returns (bytes32) {
         NodeEntry memory nodeEntry = NodeEntry({
             uid: EMPTY_UID,
+            status: NodeStatus.UNVERIFIED,
             name: entry.name,
             callbackUrl: entry.callbackUrl,
             location: entry.location,
             industryCode: entry.industryCode,
-            nodeType: entry.nodeType,
-            status: entry.status
+            nodeType: entry.nodeType
         });
 
         bytes32 uid = _getUID(nodeEntry);

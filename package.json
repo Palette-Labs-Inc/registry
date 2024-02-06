@@ -1,10 +1,10 @@
 {
   "name": "@palette-labs/registry",
   "version": "0.0.1",
-  "description": "registry infrstructure for ocn",
+  "description": "registry infrastructure for ocpn",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ethereum-attestation-service/eas-contracts"
+    "url": "git+https://github.com/Palette-Labs-Inc/registry"
   },
   "author": "mike perhats <mike@noshdelivery.co> (https://github.com/Mperhats)",
   "license": "MIT",

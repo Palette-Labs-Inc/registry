@@ -4,7 +4,7 @@ import { Signer, encodeBytes32String } from 'ethers';
 import { NodeRegistry } from '../typechain-types';
 import Contracts from '../components/Contracts';
 
-import { NodeEntryStruct as NodeEntry } from '../typechain-types/NodeRegistry';
+import { RegisterNodeEntryParamsStruct } from '../typechain-types/NodeRegistry';
 import { ZERO_BYTES32 } from '../utils/Constants';
 import { getNodeUID } from '../utils/UID';
 
@@ -28,8 +28,9 @@ describe('NodeRegistry', function () {
   });
 
   describe('node registration', function () {
-    const testRegister = async (node: NodeEntry) => {
-      const uid = getNodeUID(node);
+    const testRegister = async (node: RegisterNodeEntryParamsStruct) => {
+      const { name, callbackUrl, industryCode } = node;
+      const uid = getNodeUID(name,callbackUrl,industryCode);
 
       const retUID = await registry.registerNode.staticCall(node);
       // const res = await registry.registerNode(node);
@@ -52,18 +53,16 @@ describe('NodeRegistry', function () {
       expect(nodeEntry.industryCode).to.equal(node.industryCode);
       expect(nodeEntry.location).to.deep.equal(node.location);
       expect(nodeEntry.nodeType).to.equal(node.nodeType);
-      expect(nodeEntry.status).to.equal(node.status);
+      expect(nodeEntry.status).to.equal(0n); // 0n is UNVERIFIED the first value in the enums.
     };
 
     it('should allow registering a node', async () => {
-      const node = {
-        uid: encodeBytes32String('testUID'),
+      const node: RegisterNodeEntryParamsStruct = {
         name: 'Test Node',
         callbackUrl: 'http://testnode.com',
         location: ['882681a339fffff'], // h3 cell index at resolution 8 in Boulder, CO.
         industryCode: 'TEST',
         nodeType: 0, 
-        status: 0 
       };
 
       await testRegister(node);
@@ -71,13 +70,11 @@ describe('NodeRegistry', function () {
 
     it('should not allow registering a node with existing uid', async () => {
       const node = {
-        uid: ZERO_BYTES32,
         name: 'Test Node',
         callbackUrl: 'http://testnode.com',
         location: ['882681a339fffff'], // h3 cell index at resolution 8 in Boulder, CO.
         industryCode: 'TEST',
         nodeType: 0, 
-        status: 0 
       };
   
       await testRegister(node);
@@ -88,18 +85,17 @@ describe('NodeRegistry', function () {
   describe('node querying', () => {
     it('should return a node', async () => {
       
-      const node: NodeEntry = {
-        uid: ZERO_BYTES32,
+      const node = {
         name: 'Test Node',
         callbackUrl: 'http://testnode.com',
         location: ['882681a339fffff'], // h3 cell index at resolution 8 in Boulder, CO.
         industryCode: 'TEST',
         nodeType: 0,
-        status: 0 
       };
 
       await registry.registerNode(node);
-      const uid = getNodeUID(node);
+      const { name, callbackUrl, industryCode } = node;
+      const uid = getNodeUID(name,callbackUrl,industryCode);
 
       const nodeEntry = await registry.getNode(uid);
 
@@ -109,7 +105,7 @@ describe('NodeRegistry', function () {
       expect(nodeEntry.industryCode).to.equal(node.industryCode);
       expect(nodeEntry.location).to.deep.equal(node.location);
       expect(nodeEntry.nodeType).to.equal(node.nodeType);
-      expect(nodeEntry.status).to.equal(node.status);
+      expect(nodeEntry.status).to.equal(0);
     });
 
     it('should return an empty node given non-existing id', async () => {
