@@ -2,14 +2,13 @@
 
 pragma solidity 0.8.19;
 
-import { INodeRegistry, NodeEntry, RegisterNodeEntryParams, NodeStatus } from "./INodeRegistry.sol";
-import { EMPTY_UID } from "./Common.sol";
+import { INodeRegistry, NodeEntry, RegisterNodeEntryParams, NodeStatus, NodeType } from "./INodeRegistry.sol";
+import { EMPTY_UID, MissingLocation, AlreadyExists } from "./Common.sol";
 import { Semver } from "./Semver.sol";
 
 /// @title NodeRegistry
 /// @notice The global node registry.
 contract NodeRegistry is INodeRegistry, Semver {
-    error AlreadyExists();
 
     // The global mapping between node records and their IDs.
     mapping(bytes32 uid => NodeEntry nodeEntry) private _registry;
@@ -19,6 +18,11 @@ contract NodeRegistry is INodeRegistry, Semver {
 
     /// @inheritdoc INodeRegistry
     function registerNode(RegisterNodeEntryParams calldata entry) external returns (bytes32) {
+
+        if (entry.nodeType == NodeType.PSN && entry.location.length == 0) {
+            revert MissingLocation(); 
+        }
+
         NodeEntry memory nodeEntry = NodeEntry({
             uid: EMPTY_UID,
             status: NodeStatus.INITIATED,

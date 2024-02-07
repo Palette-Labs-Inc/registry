@@ -82,6 +82,19 @@ describe('NodeRegistry', function () {
       await testRegister(node);
       await expect(registry.registerNode(node)).to.be.revertedWithCustomError(registry, 'AlreadyExists');
     });
+
+    it('should not allow registering a PSN without a location', async () => {
+      const node = {
+        name: 'Test Node 2',
+        callbackUrl: 'https://testnode2.com',
+        location: [], // h3 cell index at resolution 8 in Boulder, CO.
+        industryCode: 'TEST',
+        nodeType: 0, 
+      };
+  
+      await expect(registry.registerNode(node)).to.be.revertedWithCustomError(registry, 'MissingLocation');
+    });
+
   });
 
   describe('node querying', () => {

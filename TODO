@@ -13,12 +13,18 @@
   },
 ```
 
+
 - [ ] monitor unit test for location string validation withArgs support 
 - [ ] typechain does not support native enums from solidity. This means that we manually need to update the enums, if we added a new enum this would not be known to the SDK's imported methods. Determine how to convert the typescript enum to bignumberish ethers type.
 
+#### Needed smart contract methods
+- [ ] need a method for the owner of the contract to update their `callbackUrl`. 
+- [ ] if a `callbackUrl` is updated, this will invalidate the node into an `INITIATED` status again.
 
+#### Needed SDK methods
 - [ ] add new method for getting the ECDSA signature for a registered node using the typescript SDK.
 - [ ] Add some regex testing for the registerNode method in the SDK to validate that the url is valid before registering the smart contract.
+- [ ] add a method for constructing an authorization header signature.
 
 
 ### Technical projects

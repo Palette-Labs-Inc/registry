@@ -29,11 +29,20 @@ pnpm add @palette-labs/registry-ts-sdk
 
 ### Using the SDK
 
-To register a new schema, you can use the `registerNode` function provided by the registry SDK. This function takes an object with the following properties:
+To register a new node, you can use the `registerNode` function provided by the registry SDK. This function takes an object with the following properties:
+```ts 
+export type RegisterNodeEntryParamsStruct = {
+  name: string;
+  callbackUrl: string;
+  location: string[];
+  industryCode: string;
+  nodeType: BigNumberish;
+};
+```
 
-- `schema`: The schema string that defines the structure of the data to be attested.
-- `resolverAddress`: The Ethereum address of the resolver responsible for managing the schema.
-- `revocable`: A boolean value indicating whether attestations created with this schema can be revoked.
+- `name`: The public name of your node.
+- `callbackUrl`: The public endpoint of your deployed server.
+- `location`: an array of h3 strings that your node supports. The location property is required for PSNs and optional for other node types.
 
 Here's an example of how to register a new schema:
 
