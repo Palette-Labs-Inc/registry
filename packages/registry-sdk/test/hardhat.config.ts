@@ -1,13 +1,5 @@
 import '@nomicfoundation/hardhat-toolbox';
-// import 'hardhat-dependency-compiler'; // 
-/**
- dependencyCompiler: {
-  paths: [
-    '@ethereum-attestation-service/eas-contracts/contracts/EAS.sol',
-    '@ethereum-attestation-service/eas-contracts/contracts/SchemaRegistry.sol'
-  ]
-},
-*/
+import 'hardhat-dependency-compiler';
 
 import { HardhatUserConfig } from 'hardhat/config';
 
@@ -38,10 +30,16 @@ const config: HardhatUserConfig = {
     }
   },
 
+  dependencyCompiler: {
+    paths: [
+      '@palette-labs/registry-contracts/contracts/NodeRegistry.sol'
+    ]
+  },
+
   typechain: {
     target: 'ethers-v6'
   },
-  
+
   mocha: {
     timeout: 600000,
     color: true,
