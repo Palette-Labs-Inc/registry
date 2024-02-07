@@ -42,12 +42,14 @@ export type RegisterNodeEntryParamsStruct = {
 
 - `name`: The public name of your node.
 - `callbackUrl`: The public endpoint of your deployed server.
-- `location`: an array of h3 strings that your node supports. The location property is required for PSNs and optional for other node types.
+- `location`: an array of [h3 strings](https://github.com/uber/h3) that your node supports. The location property is required for PSNs and optional for other node types.
+- `industryCode`: a network defined code. Each industry code has a specific protocol that your server must adopt. 
+- `nodeType`: a numerical value representing an enum for your node type (PSN = 0, BSN = 1, GP = 2) 
 
 Here's an example of how to register a new schema:
 
 ```ts
-import { SchemaRegistry } from "@ethereum-attestation-service/eas-sdk";
+import { SchemaRegistry } from "@palette-labs/registry-ts-sdk";
 import { ethers } from 'ethers';
 
 const schemaRegistryContractAddress = "0xYourSchemaRegistryContractAddress";

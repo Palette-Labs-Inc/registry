@@ -21,16 +21,16 @@ Version 0.0.1:
 
 * deployment logs
 ```sh
-deploying "NodeRegistry" (tx: 0x51fe522e1003ce51c3df39b560231297992ddea0246aa70f3f3de717a511ce0c)...: deployed at 0x1AB85870ae7732418ba084C1862704BD523d0505 with 1081514 gas
-  executing NodeRegistry.registerNode : (0x1AB85870ae7732418ba084C1862704BD523d0505)
+deploying "NodeRegistry" (tx: 0x835613322d4f33e3dc5ace957c283d8f1e105ef5fecfacdb9d9743eaa7db4e87)...: deployed at 0x56e3B524302Ec60Ec7850aF492D079367E03e5fb with 1105818 gas
+  executing NodeRegistry.registerNode : (0x56e3B524302Ec60Ec7850aF492D079367E03e5fb)
   registerNode params: 
     entry (tuple): [object Object]
-executing NodeRegistry.registerNode (tx: 0x0b22813b8219065cf0b910a7a5dd137c83b87da0abab1c50ef4cd4c9fde97f9d) ...: performed with 192672 gas
-  executing NodeRegistry.registerNode : (0x1AB85870ae7732418ba084C1862704BD523d0505)
+executing NodeRegistry.registerNode (tx: 0x315f6f500cd523eb44f8c6a5edfcb2ba019b0c22799cb657b373ca62ec5db012) ...: performed with 193055 gas
+  executing NodeRegistry.registerNode : (0x56e3B524302Ec60Ec7850aF492D079367E03e5fb)
   registerNode params: 
     entry (tuple): [object Object]
-executing NodeRegistry.registerNode (tx: 0xf37cc3cf50d28efedc54d6527259ab306a296c5c30122e9e7f2450b5e98bd237) ...: performed with 192684 gas
-✨  Done in 22.62s.
+executing NodeRegistry.registerNode (tx: 0x7920ed29a8955ac318defa95eff7c04c7ae6f2f4a1e6abc8e4834c9a2acf8dc9) ...: performed with 192868 gas
+✨  Done in 22.28s.
 ```
 
 ## Installation
