@@ -21,6 +21,7 @@ struct NodeEntry {
     string callbackUrl; // Callback URL of the server for the node
     string[] location; // Array of h3 strings for the supported location
     string industryCode; // Industry code
+    address owner; // the wallet holder of the registrant.
     NodeType nodeType; // Type of the node (PSN or BSN)
     NodeStatus status; // Status of the node (VERIFIED or UNVERIFIED)
 }

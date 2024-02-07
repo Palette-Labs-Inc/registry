@@ -22,6 +22,7 @@ contract NodeRegistry is INodeRegistry, Semver {
         NodeEntry memory nodeEntry = NodeEntry({
             uid: EMPTY_UID,
             status: NodeStatus.INITIATED,
+            owner: msg.sender,
             name: entry.name,
             callbackUrl: entry.callbackUrl,
             location: entry.location,

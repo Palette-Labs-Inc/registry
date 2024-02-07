@@ -39,8 +39,8 @@ describe('NodeRegistry', function () {
       expect(retUID).to.equal(uid);
         
       const nodeEntry = await registry.getNode(uid);
-      // const sender = accounts[0];
-      accounts[0];
+      const sender = accounts[0];
+      // accounts[0];
       
       // known issue - withArgs doesn't deep compare arrays within structs, so the location assertion will fail the emit test
       // issue https://github.com/NomicFoundation/hardhat/issues/4207
@@ -54,6 +54,7 @@ describe('NodeRegistry', function () {
       expect(nodeEntry.industryCode).to.equal(node.industryCode);
       expect(nodeEntry.location).to.deep.equal(node.location);
       expect(nodeEntry.nodeType).to.equal(node.nodeType);
+      expect(nodeEntry.owner).to.equal(await sender.getAddress());
       expect(nodeEntry.status).to.equal(0n); // 0n is UNVERIFIED the first value in the enums.
     };
 
