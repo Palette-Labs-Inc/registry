@@ -1,9 +1,9 @@
 ## TODO
 
 ### Technical small
-- [ ] `getNodeUID` to be exported from the registry contract package and imported into `registry-ts-sdk` instead of duplicated in the /util folder OR create a shared utils package.
+- [ ] `getNodeUID` to be exported from the registry contract package and imported into `registry-sdk` instead of duplicated in the /util folder OR create a shared utils package.
 - [ ] Identify a method for `NodeEntry` owners to be able to self-attest to update their status by submitting a cryptographic proof of their adoption of the protocol specification for their industry.
-- [ ] Add unit tests for `getNode` method to `registry-ts-sdk`
+- [ ] Add unit tests for `getNode` method to `registry-sdk`
 - [ ] Test that the `hardhat.config.ts` works with the dependency compiler update.
 ```ts
   dependencyCompiler: {
@@ -34,8 +34,8 @@
 
 ### Organizational
 - [ ] write a README that describes the structure of the repository.
-- [ ] improve structure of `registry-ts-sdk/test` to not have it's own package.json. It feels similar to the tests in the `registry-contracts` folder. See what can be re-useable.
-- [ ] Remove EAS README from `registry-ts-sdk` package.
+- [ ] improve structure of `registry-sdk/test` to not have it's own package.json. It feels similar to the tests in the `registry-contracts` folder. See what can be re-useable.
+- [ ] Remove EAS README from `registry-sdk` package.
 - [ ] Update the **overview of registration process** below to mirror updates and add to root README.
 
 ### Future TODO

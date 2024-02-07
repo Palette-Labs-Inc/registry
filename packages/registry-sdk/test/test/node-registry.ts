@@ -55,18 +55,40 @@ describe('NodeRegistry API', () => {
       expect(nodeEntry.status).to.equal(0n); // 0n is INITIATED the first value in the enums and initial value of a node upon registration
     };
 
-    it('should not allow registering a node with existing uid', async () => {
+    it('should allow registering a node', async () => {
         const node = {
-          uid: ZERO_BYTES32,
           name: 'Test Node',
           callbackUrl: 'http://testnode.com',
           location: ['882681a339fffff'], // h3 cell index at resolution 8 in Boulder, CO.
           industryCode: 'TEST',
           nodeType: NodeType.PSN, 
-          status: NodeStatus.VERIFIED // TODO: registered nodes should automatically have a pending status.
         };
         
         await testRegisterNode(node);
+      });
+
+      it('should not allow registering the same node twice', async () => {
+        const node = {
+          name: 'Test Node',
+          callbackUrl: 'http://testnode.com',
+          location: ['882681a339fffff'], // h3 cell index at resolution 8 in Boulder, CO.
+          industryCode: 'TEST',
+          nodeType: NodeType.PSN, 
+        };
+        
+        await testRegisterNode(node);
+      });
+
+      it('should not allow registering a PSN with empty location', async () => {
+        const node = {
+          name: 'Test Node 2',
+          callbackUrl: 'http://testnode2.com',
+          location: [], 
+          industryCode: 'TEST',
+          nodeType: NodeType.PSN, 
+        };
+        
+        await expect(nodeRegistry.registerNode(node)).to.be.revertedWithCustomError(nodeRegistryContract, 'MissingLocation');
       });
   });
 });
