@@ -19,6 +19,7 @@
   "packageManager": "yarn@1.22.19",
   "workspaces": [
     "apps/*",
-    "packages/*"
+    "packages/*",
+    "packages/registry-ts-sdk/test/*"
   ]
 }

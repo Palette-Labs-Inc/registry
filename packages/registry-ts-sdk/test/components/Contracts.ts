@@ -1,9 +1,9 @@
 import { ContractFactory, Signer } from 'ethers';
 import { ethers } from 'hardhat';
 import { ABI } from 'hardhat-deploy/types';
-import { NodeRegistry__factory } from '@palette-labs/registry-contracts';
+import { NodeRegistry__factory } from '@palette-labs/registry-contracts/typechain-types';
 
-export * from '@palette-labs/registry-contracts';
+export * from '@palette-labs/registry-contracts/typechain-types';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type AsyncReturnType<T extends (...args: never) => any> = T extends (...args: any) => Promise<infer U>

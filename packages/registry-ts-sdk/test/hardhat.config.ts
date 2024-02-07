@@ -1,5 +1,5 @@
 import '@nomicfoundation/hardhat-toolbox';
-import 'hardhat-dependency-compiler';
+//import 'hardhat-dependency-compiler';
 
 import { HardhatUserConfig } from 'hardhat/config';
 
@@ -30,11 +30,7 @@ const config: HardhatUserConfig = {
     }
   },
 
-  dependencyCompiler: {
-    paths: [
-      '@palette-labs/registry-contracts/contracts/NodeRegistry.sol'
-    ]
-  },
+
 
   typechain: {
     target: 'ethers-v6'

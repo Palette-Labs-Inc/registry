@@ -1,5 +1,5 @@
 {
-  "author": "Leonid Beder",
+  "author": "Mike Perhats",
   "license": "MIT",
   "scripts": {
     "compile": "hardhat compile",
