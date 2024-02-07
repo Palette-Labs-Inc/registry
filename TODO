@@ -1,0 +1,14 @@
+## TODO
+
+### Technical 
+- [ ] `getNodeUID` to be exported from the registry contract package and imported into `registry-sdk` instead of duplicated in the /util folder. OR create a shared utils package.
+
+
+### Organizationa
+- [ ] write a README that describes the structure of the repository.
+- [ ] improve structure of `registry-sdk/test` to not have it's own package.json. It feels similar to the tests in the `registry-contracts` folder. See what can be re-useable.
+
+
+
+### Future TODO
+- [ ] determine how to deploy internal packages to npm from  monorepo structure.

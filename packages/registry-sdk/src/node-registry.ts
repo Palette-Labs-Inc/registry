@@ -1,11 +1,11 @@
 import {
     NodeRegistry__factory,
     NodeRegistry as NodeRegistryContract,
-} from '../pl-registry/typechain-types';
+} from '@palette-labs/registry-contracts';
 import { Overrides, TransactionReceipt } from 'ethers';
 import { Base, SignerOrProvider, Transaction } from './transaction';
 import { ZERO_BYTES32, getNodeUID } from './utils';
-import { NodeEntryStruct, RegisterNodeEntryParamsStruct } from '../pl-registry/typechain-types/INodeRegistry';
+import { NodeEntryStruct, RegisterNodeEntryParamsStruct } from '@palette-labs/registry-contracts/dist/typechain-types/INodeRegistry';
 
 // TypeScript representation of the NodeEntry struct from Solidity
 export type NodeEntry = {

@@ -26,5 +26,6 @@
     "./test",
     "./typechain-types",
     "./utils"
-  ]
+  ],
+  "exclude": ["dist", "node_modules"]
 }

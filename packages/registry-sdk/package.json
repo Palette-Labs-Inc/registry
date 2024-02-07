@@ -1,5 +1,5 @@
 {
-  "name": "@palette-labs/registry",
+  "name": "@palette-labs/registry-sdk",
   "version": "1.4.1",
   "description": "registry infrastructure sdk for ocpn",
   "repository": {
@@ -21,7 +21,7 @@
     "prepare:release": "yarn lint && yarn test && yarn build"
   },
   "dependencies": {
-    "@ethereum-attestation-service/eas-contracts": "1.3.7", 
+    "@palette-labs/registry-contracts": "*", 
     "ethers": "^6.10.0",
     "js-base64": "^3.7.6",
     "lodash": "^4.17.21",

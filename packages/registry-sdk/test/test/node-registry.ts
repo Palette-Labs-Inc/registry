@@ -1,11 +1,11 @@
-import { NodeRegistry as NodeRegistryContract } from '../../pl-registry/typechain-types';
+import { NodeRegistry as NodeRegistryContract } from '@palette-labs/registry-contracts/typechain-types';
 import { Signer } from 'ethers';
 import { ethers } from 'hardhat';
 import { NodeRegistry, NodeType, NodeStatus } from '../../src/node-registry';
 import { ZERO_BYTES32, getNodeUID } from '../../src/utils';
 import Contracts from '../components/Contracts';
 import chai from './helpers/chai';
-import { RegisterNodeEntryParamsStruct } from '../../pl-registry/typechain-types/INodeRegistry';
+import { RegisterNodeEntryParamsStruct } from '@palette-labs/registry-contracts/typechain-types/INodeRegistry';
 
 const { expect } = chai;
 
