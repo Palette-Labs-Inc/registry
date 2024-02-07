@@ -26,7 +26,7 @@ export const SupportedNetworks = {
     url: ETHEREUM_BASE_SEPOLIA_PROVIDER_URL,
     saveDeployments: true,
     accounts: [deployer].filter(Boolean),
-    live: true
+    live: true,
   }
 };
 

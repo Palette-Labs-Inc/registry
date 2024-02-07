@@ -12,26 +12,25 @@ import {
 } from '../../utils/Deploy';
 import Logger from '../../utils/Logger';
 import { getNodeUID } from '../../utils/UID'; // Ensure you have this utility function
+import { RegisterNodeEntryParamsStruct } from '../../typechain-types/INodeRegistry';
 
 export const TEST_NODES_OUTPUT_PATH = path.join(getDeploymentDir(), '/test-nodes.json');
 
 // Sample node entries
-const NODES = [
+const NODES: RegisterNodeEntryParamsStruct[] = [
   {
     name: 'Node One',
     callbackUrl: 'http://callback.one',
     location: ['882681a339fffff'],
     industryCode: 'FOOD',
-    nodeType: 0, // Corresponds to NodeType.PSN, for example
-    status: 0 // Corresponds to NodeStatus.INITIATED, for example
+    nodeType: 0,
   },
   {
     name: 'Node Two',
     callbackUrl: 'http://callback.two',
     location: ['882681a339fffff'],
     industryCode: 'FOOD',
-    nodeType: 1, // Corresponds to NodeType.BSN
-    status: 0 // Corresponds to NodeStatus.INITIATED
+    nodeType: 1, 
   }
 ];
 
@@ -46,8 +45,8 @@ const func: DeployFunction = async ({ getNamedAccounts }: HardhatRuntimeEnvironm
     await execute({
       name: InstanceName.NodeRegistry,
       methodName: 'registerNode',
-      args: [{ ...node, uid }],
-      from: deployer
+      args: [node],
+      from: deployer,
     });
 
     registeredNodes.push({ ...node, uid });

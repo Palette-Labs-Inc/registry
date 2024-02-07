@@ -7,7 +7,6 @@
     ],
     "industryCode": "FOOD",
     "nodeType": 0,
-    "status": 0,
     "uid": "0x214978f84ea6adb114deb41b5922f9007e6fa5debcf1c61d382186f5b4e1fce0"
   },
   {
@@ -18,7 +17,6 @@
     ],
     "industryCode": "FOOD",
     "nodeType": 1,
-    "status": 0,
     "uid": "0x514299713646043dc4cdd91d4dcdf61ed3b5b4f9e3dedd8ec246e76ef02785d0"
   }
 ]

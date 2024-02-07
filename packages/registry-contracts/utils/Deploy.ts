@@ -195,9 +195,10 @@ interface ExecuteOptions {
 
 export const execute = async (options: ExecuteOptions) => {
   const { name, methodName, from, value, args } = options;
+
   const contract = await ethers.getContract(name);
 
-  Logger.info(`  executing ${name}.${methodName} (${await contract.getAddress()})`);
+  Logger.info(`  executing ${name}.${methodName} : (${await contract.getAddress()})`);
 
   await logParams({ name, args, methodName });
 

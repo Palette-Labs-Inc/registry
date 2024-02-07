@@ -1,7 +1,7 @@
 ## TODO
 
 ### Technical small
-- [ ] `getNodeUID` to be exported from the registry contract package and imported into `registry-ts-sdk` instead of duplicated in the /util folder. OR create a shared utils package.
+- [ ] `getNodeUID` to be exported from the registry contract package and imported into `registry-ts-sdk` instead of duplicated in the /util folder OR create a shared utils package.
 - [ ] Identify a method for `NodeEntry` owners to be able to self-attest to update their status by submitting a cryptographic proof of their adoption of the protocol specification for their industry.
 - [ ] Add unit tests for `getNode` method to `registry-ts-sdk`
 - [ ] Test that the `hardhat.config.ts` works with the dependency compiler update.
@@ -13,6 +13,7 @@
   },
 ```
 
+- [ ] monitor unit test for location string validation withArgs support 
 - [ ] typechain does not support native enums from solidity. This means that we manually need to update the enums, if we added a new enum this would not be known to the SDK's imported methods. Determine how to convert the typescript enum to bignumberish ethers type.
 
 
@@ -20,9 +21,9 @@
 - [ ] Add some regex testing for the registerNode method in the SDK to validate that the url is valid before registering the smart contract.
 
 
-
 ### Technical projects
 - [ ] App for registering a node.
+- [ ] Zk proof of protocol adoption.
 
 
 ### Organizational
