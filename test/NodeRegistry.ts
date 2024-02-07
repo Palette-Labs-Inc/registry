@@ -55,7 +55,7 @@ describe('NodeRegistry', function () {
       expect(nodeEntry.location).to.deep.equal(node.location);
       expect(nodeEntry.nodeType).to.equal(node.nodeType);
       expect(nodeEntry.owner).to.equal(await sender.getAddress());
-      expect(nodeEntry.status).to.equal(0n); // 0n is UNVERIFIED the first value in the enums.
+      expect(nodeEntry.status).to.equal(0n); // 0n is INITIATED the first value in the enums and initial value of a node upon registration
     };
 
     it('should allow registering a node', async () => {

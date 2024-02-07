@@ -23,7 +23,7 @@ const NODES = [
     location: ['882681a339fffff'],
     industryCode: 'FOOD',
     nodeType: 0, // Corresponds to NodeType.PSN, for example
-    status: 0 // Corresponds to NodeStatus.UNVERIFIED, for example
+    status: 0 // Corresponds to NodeStatus.INITIATED, for example
   },
   {
     name: 'Node Two',
@@ -31,7 +31,7 @@ const NODES = [
     location: ['882681a339fffff'],
     industryCode: 'FOOD',
     nodeType: 1, // Corresponds to NodeType.BSN
-    status: 0 // Corresponds to NodeStatus.UNVERIFIED
+    status: 0 // Corresponds to NodeStatus.INITIATED
   }
 ];
 
