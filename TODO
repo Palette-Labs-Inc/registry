@@ -9,6 +9,5 @@
 - [ ] improve structure of `registry-sdk/test` to not have it's own package.json. It feels similar to the tests in the `registry-contracts` folder. See what can be re-useable.
 
 
-
 ### Future TODO
 - [ ] determine how to deploy internal packages to npm from  monorepo structure.
