@@ -3,11 +3,8 @@
 ### Technical 
 - [ ] `getNodeUID` to be exported from the registry contract package and imported into `registry-sdk` instead of duplicated in the /util folder. OR create a shared utils package.
 - [ ] Identify a method for `NodeEntry` owners to be able to self-attest to update their status by submitting a cryptographic proof of their adoption of the protocol specification for their industry.
-- [ ] Add methods to `registry-sdk` to verify Authorization signature headers.
 - [ ] Add unit tests for `getNode` method to `registry-sdk`
-
 - [ ] Test that the `hardhat.config.ts` works with the dependency compiler update.
-
 ```ts
   dependencyCompiler: {
     paths: [
@@ -15,6 +12,12 @@
     ]
   },
 ```
+
+- [ ] typechain does not support native enums from solidity. This means that we manually need to update the enums, if we added a new enum this would not be known to the SDK's imported methods. Determine how to convert the typescript enum to bignumberish ethers type.
+
+
+- [ ] add new method for getting the ECDSA signature for a registered node using the typescript SDK.
+- [ ] Add some regex testing for the registerNode method in the SDK to validate that the url is valid before registering the smart contract.
 
 
 ### Organizational
@@ -25,8 +28,6 @@
 
 ### Future TODO
 - [ ] determine how to deploy internal packages to npm from  monorepo structure.
-
-
 
 
 ### Overview of registration process
