@@ -1,9 +1,9 @@
 ## TODO
 
-### Technical 
-- [ ] `getNodeUID` to be exported from the registry contract package and imported into `registry-sdk` instead of duplicated in the /util folder. OR create a shared utils package.
+### Technical small
+- [ ] `getNodeUID` to be exported from the registry contract package and imported into `registry-ts-sdk` instead of duplicated in the /util folder. OR create a shared utils package.
 - [ ] Identify a method for `NodeEntry` owners to be able to self-attest to update their status by submitting a cryptographic proof of their adoption of the protocol specification for their industry.
-- [ ] Add unit tests for `getNode` method to `registry-sdk`
+- [ ] Add unit tests for `getNode` method to `registry-ts-sdk`
 - [ ] Test that the `hardhat.config.ts` works with the dependency compiler update.
 ```ts
   dependencyCompiler: {
@@ -20,10 +20,15 @@
 - [ ] Add some regex testing for the registerNode method in the SDK to validate that the url is valid before registering the smart contract.
 
 
+
+### Technical projects
+- [ ] App for registering a node.
+
+
 ### Organizational
 - [ ] write a README that describes the structure of the repository.
-- [ ] improve structure of `registry-sdk/test` to not have it's own package.json. It feels similar to the tests in the `registry-contracts` folder. See what can be re-useable.
-- [ ] Remove EAS README from `registry-sdk` package.
+- [ ] improve structure of `registry-ts-sdk/test` to not have it's own package.json. It feels similar to the tests in the `registry-contracts` folder. See what can be re-useable.
+- [ ] Remove EAS README from `registry-ts-sdk` package.
 - [ ] Update the **overview of registration process** below to mirror updates and add to root README.
 
 ### Future TODO
@@ -53,7 +58,8 @@
 
 
 
-
 ### Need a way to move an "INITIATED" Node to a "VERIFIED" Node. In Beckn this is the /on_subscribe handshake.
 [Beckn Registry Api.](https://github.com/beckn/registry/blob/main/local-registry/api.yaml) 
 - description: 'Validates a subscriber. In this API the Registry generates a random string, encrypts it with the subscriber\''s encryption public key and sends it to the subscriber\''s callback URL. The subscriber then decrypts the string using it''s encryption private key and sends back the decypted value to the registry. If the decrypted value is the same as the sent value, the subscriber get''s added to the registry with a ```status = "SUBSCRIBED"```'
+
+

@@ -1,10 +1,10 @@
 {
-  "name": "@palette-labs/registry-sdk",
+  "name": "@palette-labs/registry-ts-sdk",
   "version": "1.4.1",
-  "description": "registry infrastructure sdk for ocpn",
+  "description": "registry infrastructure sdk",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Palette-Labs-Inc/registry-sdk"
+    "url": "git+https://github.com/Palette-Labs-Inc/registry"
   },
   "author": "mike perhats <mike@noshdelivery.co> (https://github.com/Mperhats)",
   "license": "MIT",
@@ -18,7 +18,8 @@
     "test": "cd test && yarn test",
     "lint": "eslint -c .eslintrc --ext .ts src test",
     "format": "prettier --check --write src/**/*.ts test/test/**/*.ts  --config .prettierrc",
-    "prepare:release": "yarn lint && yarn test && yarn build"
+    "prepare:release": "yarn lint && yarn test && yarn build",
+    "postinstall": "cd test && yarn install"
   },
   "dependencies": {
     "@palette-labs/registry-contracts": "*", 

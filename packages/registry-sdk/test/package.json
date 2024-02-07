@@ -5,10 +5,10 @@
     "compile": "hardhat compile",
     "recompile": "yarn clean && yarn compile",
     "clean": "rm -rf artifacts cache dist coverage typechain-types",
-    "test": "hardhat test",
-    "postinstall": "cd test && yarn install"
+    "test": "hardhat test"
   },
   "devDependencies": {
+    "@palette-labs/registry-contracts": "*", 
     "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
     "@nomicfoundation/hardhat-ethers": "^3.0.5",
