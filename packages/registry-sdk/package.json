@@ -1,5 +1,5 @@
 {
-  "name": "@palette-labs/registry-ts-sdk",
+  "name": "@palette-labs/registry-sdk",
   "version": "1.4.1",
   "description": "registry infrastructure sdk",
   "repository": {

@@ -11,19 +11,19 @@ This repository contains the Ethereum Attestation Service SDK, used to interact 
 To install the EAS SDK, run the following command within your project directory:
 
 ```sh
-yarn add @palette-labs/registry-ts-sdk
+yarn add @palette-labs/registry-sdk
 ```
 
 OR
 
 ```sh
-npm install @palette-labs/registry-ts-sdk
+npm install @palette-labs/registry-sdk
 ```
 
 OR
 
 ```sh
-pnpm add @palette-labs/registry-ts-sdk
+pnpm add @palette-labs/registry-sdk
 ```
 
 
@@ -49,7 +49,7 @@ export type RegisterNodeEntryParamsStruct = {
 Here's an example of how to register a new schema:
 
 ```ts
-import { SchemaRegistry } from "@palette-labs/registry-ts-sdk";
+import { SchemaRegistry } from "@palette-labs/registry-sdk";
 import { ethers } from 'ethers';
 
 const schemaRegistryContractAddress = "0xYourSchemaRegistryContractAddress";
