@@ -89,7 +89,7 @@ After registering a node, you can use its UID to retrieve it's information.
 
 ### Getting Schema Information
 
-To retrieve the schema information for a specific schema UID, you can use the `getNode` function provided by the EAS SDK. Here's an example:
+To retrieve the node information for a specific node UID, you can use the `getNode` function provided by the Registry SDK. Here's an example:
 
 ```ts
 import { NodeRegistry } from "@palette-labs/registry-sdk";
@@ -123,4 +123,43 @@ import { NodeRegistry } from "@palette-labs/registry-sdk";
   ]
 ```
 
-In the output, you will receive an object containing the schema UID, the schema string, the resolver address, and a boolean indicating whether the schema is revocable or not.
+In the output, you will receive an object containing the noode UID and it's contents.
+
+
+### Signing Headers
+During registration, a Node Operator creates a public private key pair. The public key is stored on the blockchain in the network registry along with a unique identifier. When communicating with other Node's in the network, a *sending* Node Operator signs the data that they are sending over the network, including the signature hash in the header of the HTTP request. When this message is received by a *receiving* Node, they should query the registry for the *sending* Node's public key and use the signature in the request header to decrypt the message. If the message is successfully decrypted and the status of the *sending* Node is `VERIFIED`, the *receiving* Node Operator can know that the *sending* Node Operator is properly registered and their message should be processed. If the *sending* Node Operator's message is unable to be decrypted, the *receiving* Node Operator should respond to the *sending* Node Operators request with an error code. 
+
+--- 
+# HTTP Server-to-server Message Signatures 
+
+The BSN and PSN is expected to send an Authorization header (as defined in the latest [RFC](https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-message-signatures#name-scheme)  where the “auth-scheme” is “Signature” and the “auth-param” parameters meet the requirements listed in Section 2.3 of [this](https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-message-signatures#section-2.3) document.
+
+Below is the format of a BSN/PSN Authorization header using a typical HTTP Signature format:
+
+`Authorization: Signature keyId="{registry_public_key_identifier}",algorithm="ecdsa-p256-keccak256",created="1606970629",expires="1607030629",headers="(created) (expires) digest",signature="Base64url(secp256k1(signing string))"`
+
+The signature parameters component value is the serialization of the signature parameters for this signature, including the covered components ordered set with all associated parameters. These parameters include any of the following[¶](https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-message-signatures#section-2.): 
+- `created`: Creation time as an Integer UNIX timestamp value. Sub-second precision is not supported. Inclusion of this parameter is RECOMMENDED
+- `expires`: Expiration time as an Integer UNIX timestamp value. Sub-second precision is not supported
+- `algorithm`: The HTTP message signature algorithm from the HTTP Signature Algorithms registry, as a String value
+- `keyid`: The public key identifier for the key material as a String value. This is the public key identifier on the registry for the sending node. The public key can be found by querying the registry based on the public key identifier. 
+
+### Purpose of `headers` in `authorizationHeader`:
+
+1. **Defines Signed Headers**: The `headers` attribute in the `authorizationHeader` specifies which parts of the HTTP request were included when generating the signature. It's a list of HTTP header fields (and potentially pseudo-headers like `(created)` and `(expires)`) that were used to construct the signing string.
+    
+2. **Guides Signature Verification**: On the *receiving* node, this list tells the server which headers (and their values) need to be collected and used to reconstruct the signing string for signature verification. The server will follow the same order and include the same headers as specified in this list to ensure that the reconstructed signing string matches what was originally signed by the *sending* node.
+    
+3. **Ensures Integrity of Specific Headers**: By listing specific headers, you're asserting that these headers were part of the signature generation process, and any alteration in these headers would invalidate the signature. 
+
+## ECDSA Algorithm 
+- [ ] **todo**
+
+## Hashing Algorithm
+
+For computing the digest of the request body, the hashing function will use the Keccak256 hashing algorithm. Keccak256 is a member of the Keccak family of cryptographic hash functions and is most notably known for its use in Ethereum. Keccak256 is designed to be secure against a wide range of attacks, including preimage attacks, collision attacks, and length extension attacks. It is also efficient, with a relatively low computational cost and a simple implementation.
+## Signing Algorithm
+
+To digitally sign the singing string, the subscribers should use the “secp256k1” signature scheme. The ECDSA algorithm with the secp256k1 elliptical curve is commonly used for signing and verifying messages in the context of Ethereum key-pairs and is also suitable for creating and verifying digital signatures over components of an HTTP message as per the latest RFC standard. Adopting the “secp256k1” signature scheme provides nice interoperability with the protocol networks ethereum registry infrastructure.
+
+## Signature Construction in Typescript
