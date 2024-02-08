@@ -1,4 +1,4 @@
-# Ethereum Attestation Service - TypeScript/JavaScript SDK
+# TypeScript/JavaScript SDK
 
 [![Docs](https://img.shields.io/badge/docs-%F0%9F%93%84-blue)](https://eas.eth.link)
 [![NPM Package](https://img.shields.io/npm/v/@ethereum-attestation-service/eas-sdk.svg)](https://www.npmjs.org/package/@ethereum-attestation-service/eas-sdk)
@@ -123,11 +123,11 @@ import { NodeRegistry } from "@palette-labs/registry-sdk";
   ]
 ```
 
-In the output, you will receive an object containing the noode UID and it's contents.
+In the output, you will receive an object containing the node UID and it's contents.
 
 
 ### Signing Headers
-During registration, a Node Operator creates a public private key pair. The public key is stored on the blockchain in the network registry along with a unique identifier. When communicating with other Node's in the network, a *sending* Node Operator signs the data that they are sending over the network, including the signature hash in the header of the HTTP request. When this message is received by a *receiving* Node, they should query the registry for the *sending* Node's public key and use the signature in the request header to decrypt the message. If the message is successfully decrypted and the status of the *sending* Node is `VERIFIED`, the *receiving* Node Operator can know that the *sending* Node Operator is properly registered and their message should be processed. If the *sending* Node Operator's message is unable to be decrypted, the *receiving* Node Operator should respond to the *sending* Node Operators request with an error code. 
+During registration, a Node Operator creates a public private key pair. The public key is stored on the blockchain in the network registry along with a unique identifier. When communicating with other Node's in the network, a *sending* Node Operator signs the data that they are sending over the network, including the signature hash in the header of the HTTP request. When this message is received by a *receiving* Node, they should query the registry for the *sending* Node's public key and use the signature in the request header to decrypt the message. If the message is successfully decrypted and the status of the *sending* Node is `VERIFIED`, the *receiving* Node Operator can know that the *sending* Node Operator is properly registered and their message has not been tampered. If the *sending* Node Operator's message is unable to be decrypted, the *receiving* Node Operator should respond to the *sending* Node Operators request with an error code. 
 
 --- 
 # HTTP Server-to-server Message Signatures 
@@ -153,7 +153,7 @@ The signature parameters component value is the serialization of the signature p
 3. **Ensures Integrity of Specific Headers**: By listing specific headers, you're asserting that these headers were part of the signature generation process, and any alteration in these headers would invalidate the signature. 
 
 ## ECDSA Algorithm 
-- [ ] **todo**
+- [ ] *todo*
 
 ## Hashing Algorithm
 

@@ -27,7 +27,7 @@ describe('NodeRegistry', function () {
     });
   });
 
-  describe('node registration', function () {
+  describe('registerNode method', function () {
     const testRegister = async (node: RegisterNodeEntryParamsStruct) => {
       const { name, callbackUrl, industryCode } = node;
       const uid = getNodeUID(name,callbackUrl,industryCode);
@@ -97,7 +97,7 @@ describe('NodeRegistry', function () {
 
   });
 
-  describe('node querying', () => {
+  describe('getNode Method', () => {
     it('should return a node', async () => {
       
       const node = {

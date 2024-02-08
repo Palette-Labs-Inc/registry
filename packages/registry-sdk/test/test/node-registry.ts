@@ -1,8 +1,8 @@
 import { NodeRegistry as NodeRegistryContract } from '@palette-labs/registry-contracts/typechain-types';
-import { Signer } from 'ethers';
+import { Signer, encodeBytes32String } from 'ethers';
 import { ethers } from 'hardhat';
-import { NodeRegistry, NodeType, NodeStatus } from '../../src/node-registry';
-import { ZERO_BYTES32, getNodeUID } from '../../src/utils';
+import { NodeRegistry, NodeStatus, NodeType } from '../../src/node-registry';
+import { getNodeUID } from '../../src/utils';
 import Contracts from '../components/Contracts';
 import chai from './helpers/chai';
 import { RegisterNodeEntryParamsStruct } from '@palette-labs/registry-contracts/typechain-types/INodeRegistry';
@@ -52,10 +52,10 @@ describe('NodeRegistry API', () => {
       expect(nodeEntry.location).to.deep.equal(node.location);
       expect(nodeEntry.nodeType).to.equal(node.nodeType);
       expect(nodeEntry.owner).to.equal(await sender.getAddress());
-      expect(nodeEntry.status).to.equal(0n); // 0n is INITIATED the first value in the enums and initial value of a node upon registration
+      expect(nodeEntry.status).to.equal(NodeStatus.INITIATED); // 0n is INITIATED the first value in the enums and initial value of a node upon registration
     };
 
-    it('should allow registering a node', async () => {
+    it('registerNode method', async () => {
         const node = {
           name: 'Test Node',
           callbackUrl: 'http://testnode.com',
@@ -90,5 +90,45 @@ describe('NodeRegistry API', () => {
         
         await expect(nodeRegistry.registerNode(node)).to.be.revertedWithCustomError(nodeRegistryContract, 'MissingLocation');
       });
+  });
+
+  describe('getNode method', () => {
+    it('should return a node', async () => {
+      
+      const node = {
+        name: 'Test Node',
+        callbackUrl: 'http://testnode.com',
+        location: ['882681a339fffff'], // h3 cell index at resolution 8 in Boulder, CO.
+        industryCode: 'TEST',
+        nodeType: 0,
+      };
+
+      await nodeRegistry.registerNode(node);
+      const { name, callbackUrl, industryCode } = node;
+      const uid = getNodeUID(name,callbackUrl,industryCode);
+
+      const nodeEntry = await nodeRegistry.getNode({ uid });
+
+      expect(nodeEntry.uid).to.equal(uid);
+      expect(nodeEntry.name).to.equal(node.name);
+      expect(nodeEntry.callbackUrl).to.equal(node.callbackUrl);
+      expect(nodeEntry.industryCode).to.equal(node.industryCode);
+      expect(nodeEntry.location).to.deep.equal(node.location);
+      expect(nodeEntry.nodeType).to.equal(node.nodeType);
+      expect(nodeEntry.status).to.equal(NodeStatus.INITIATED);
+    });
+
+    it('should throw an error given a non-existing id', async () => {
+      try {
+        await nodeRegistry.getNode({uid: encodeBytes32String('BAD')});
+        expect.fail('Expected an error to be thrown, but none was.');
+      } catch (error) {
+        if (error instanceof Error) {
+          expect(error.message).to.equal('Node not found');
+        } else {
+          expect.fail('The thrown error is not an instance of Error.');
+        }
+      }
+    });
   });
 });

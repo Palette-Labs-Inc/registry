@@ -113,7 +113,6 @@ const testNodeQueryTime = async () => {
     console.log(`\nAverage query time: ${averageDuration} ms`);
 };
 
-
 */
 
 async function testVerifySignature() {
