@@ -31,17 +31,17 @@ Provides a typed interface and SDK for interacting with the `registry-contracts`
 ### Setting Up Your Environment
 Before diving into development or deployment, ensure your environment is correctly set up by following these steps:
 
-1. **Environment Requirements**: 
+#### Environment Requirements: 
 Begin by reviewing the `.env.template` file in `registry-contracts` to understand the required environment variables. 
 
-2. **Navigate to Registry Contracts**: 
+#### Navigate to Registry Contracts: 
 Change your directory to the registry contracts package to work with the smart contracts.
 
 ```sh
 cd packages/registry-contracts
 ```
 
-3. **Recompile Contracts**: 
+#### Recompile Contracts: 
 If you need to recompile the contract and associated typechain types, particularly after making changes to `/contracts/NodeRegistry.sol`, run:
 
 ```sh
@@ -50,14 +50,14 @@ yarn recompile
 
 This ensures that your contracts and TypeScript bindings are up to date.
 
-4. **Run Unit Tests**: 
+#### Run Unit Tests: 
 It's crucial to run unit tests after making any edits to the smart contracts to ensure that all functionalities work as expected.
 
 
 ```sh
 yarn test
 ```
-5. **Test Contract Deployment**: 
+#### Test Contract Deployment: 
 Before an official release, test the deployment process of the contract to catch any potential issues early.
 
 ```sh
@@ -67,17 +67,18 @@ yarn test:deploy
 ### Preparing for Release: 
 To prepare your contract for a release and ensure a smooth deployment process, follow these steps:
 
-1. **Setup Your Wallet**: 
+#### Setup Your Wallet: 
 The deployment process requires access to a wallet with sufficient funds on the base-sepolia network. Follow [these instructions](https://www.coinbase.com/wallet) for setting up your wallet. Verify that your `.env` file includes the private key for the wallet responsible for deploying the contract.
 
-2. **Prepare for Release**: 
+#### Prepare for Release: 
 Run the following command to prepare your contract for release. This step might involve flattening the contract, verifying dependencies, or other pre-deployment checks.
 
 ```sh
 yarn prepare:release
 ```
 
-3. **Deploy Your Contract**: With your environment set up and your wallet prepared, you're ready to deploy your contract to the base-sepolia network. Execute the deployment command:
+#### Deploy Your Contract:
+With your environment set up and your wallet prepared, you're ready to deploy your contract to the base-sepolia network. Execute the deployment command:
 
 ```sh
 yarn deploy:base-sepolia
