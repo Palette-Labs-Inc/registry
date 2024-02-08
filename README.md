@@ -1,4 +1,83 @@
-## Network Registry Infrastructure
+# registry
+
+
+## Deployments
+#### Base Sepolia
+
+Version 0.0.1:
+* **NodeRegistry**:
+  * Contract: [0x56e3B524302Ec60Ec7850aF492D079367E03e5fb](https://sepolia.basescan.org/address/0x56e3B524302Ec60Ec7850aF492D079367E03e5fb)
+  * Deployment and ABI: [NodeRegistry.json](./packages/registry-contracts/deployments/base-sepolia/NodeRegistry.json)
+
+## Repository structure
+
+1. **[registry-contracts](./packages/registry-contracts/README.md)**
+Contains methods for registering and retrieving nodes.
+
+Features:
+- smart contracts for node registration and retrieval.
+- example registry contract and deployment information on base-sepolia.
+- unit tests using the Chai assertion framework and Hardhat for development and testing.
+
+1. **[registry-sdk](./packages/registry-sdk//README.md)**
+Provides a typed interface and SDK for interacting with the `registry-contracts`. Additionally, the sdk adds functionality to support header signing and verification for server-to-server communication within the network.
+
+Features:
+- typed interface to interact with registry-contracts.
+- authorization header signing and verification methods for secure communication during server-to-server requests on the network.
+
+## Getting Started 
+
+### Setting Up Your Environment
+Before diving into development or deployment, ensure your environment is correctly set up by following these steps:
+
+1. **Environment Requirements**: Begin by reviewing the `.env.template` file in `registry-contracts` to understand the required environment variables. 
+
+2. **Navigate to Registry Contracts**: Change your directory to the registry contracts package to work with the smart contracts.
+
+```sh
+cd packages/registry-contracts
+```
+3. **Recompile Contracts**: If you need to recompile the contract and associated typechain types, particularly after making changes to `/contracts/NodeRegistry.sol`, run:
+
+```sh
+yarn recompile
+```
+
+This ensures that your contracts and TypeScript bindings are up to date.
+
+4. **Run Unit Tests**: It's crucial to run unit tests after making any edits to the smart contracts to ensure that all functionalities work as expected.
+
+
+```sh
+yarn test
+```
+5. **Test Contract Deployment**: Before an official release, test the deployment process of the contract to catch any potential issues early.
+
+```sh
+yarn test:deploy
+```
+
+### Preparing for Release: 
+To prepare your contract for a release and ensure a smooth deployment process, follow these steps:
+
+1. **Setup Your Wallet**: The deployment process requires access to a wallet with sufficient funds on the base-sepolia network. Follow [these instructions](https://www.coinbase.com/wallet) for setting up your wallet. Verify that your `.env` file includes the private key for the wallet responsible for deploying the contract.
+
+2. **Prepare for Release**: Run the following command to prepare your contract for release. This step might involve flattening the contract, verifying dependencies, or other pre-deployment checks.
+
+```sh
+yarn prepare:release
+```
+
+3. **Deploy Your Contract**: With your environment set up and your wallet prepared, you're ready to deploy your contract to the base-sepolia network. Execute the deployment command:
+
+```sh
+yarn deploy:base-sepolia
+```
+Pay close attention to the output of this command, especially the address where the NodeRegistry contract is deployed. This address is necessary for interacting with the contract post-deployment and for configuring the SDK.
+
+
+## About the Network Registry Infrastructure
 We are designing a federated, server-to-server architecture for commercial markets. The design supports an interoperable network of independently hosted `Provider Supporting Servers` and `Buyer Supporting Servers` that are responsible for onboarding participants on either side of the network.
 
 The network registry is a decentralized public ledger that maintains the records of Node Operators (network servers), agents, their supported Industry Codes, and the geographical regions that they represent. The registry is queried for a Producers products or services during the search phase of a Buyers transaction lifecycle. 
@@ -7,53 +86,14 @@ During registration into the network, a Node Operator creates an ethereum key pa
 
 All registered Node Operators self-maintain a `location` field in the registry table. The location field supports an array of strings that represent a [`Hexagonal Hierarchical Spatial Index`](https://github.com/uber/h3). 
 
-### Requirements
-Design the network registry, submit it as a PR to this repository, and share a link to the [deployed registry contract to base-sepolia using hardhat](https://docs.base.org/guides/deploy-smart-contracts/). You can follow the same general repository structure as The [Ethereum Attestation Service](https://github.com/ethereum-attestation-service/eas-contracts/tree/master).
 
-1. A smart contract for the network registry written in solidity
-2. A fork of the [EAS indexing service](https://github.com/ethereum-attestation-service/eas-indexing-service) and GraphQL resolver to index and maintain the registry infrastructure w/ [PostgreSQL bindings for the H3 Core Library](https://github.com/zachasme/h3-pg) bindings
+## Dealing with Location Data
+The [H3 positioning system](https://github.com/uber/h3)is a geospatial indexing system using a hexagonal grid that can be (approximately) subdivided into finer and finer hexagonal grids, combining the benefits of a hexagonal grid with [S2](https://code.google.com/archive/p/s2-geometry-library/)'s hierarchical subdivisions. Each hexagonal cell is identified by an H3 index that enables efficient storage, querying, and processing of geospatial data. H3 offers the protocol a flexible and precise geospatial standard with prebuilt bindings for a wide range of programming languages like [Java](https://github.com/uber/h3-java), [JavaScript](https://github.com/uber/h3-js), [Python](https://github.com/uber/h3-py), and [others](https://h3geo.org/docs/community/bindings) are available.
 
-### NodeEntry example data structure.
-Each entry in the registry will follow this general structure.
-```sol
-struct NodeEntry {
-    bytes32 uid; // Unique identifier
-    address owner; // the eth address of the registrant.
-    string name; // Name of the node
-    string callbackUrl; // Callback URL of the server for the node
-    string[] location; // Array of h3 strings for the supported location
-    string industryCode; // Industry code
-    NodeType nodeType; // Type of the node (PSN or BSN)
-    NodeStatus status; // Status of the node (VERIFIED or UNVERIFIED)
-}
-```
+During the discovery phase of a `Buyers` transaction lifecycle, the registry is queried for `PSNs` that can offer products and services that fit the search criteria. The H3 system allows for a `BSN` to query the registry for `PSNs` offering nearby services during the discovery phase of the `Buyers` transaction lifecycle, offering local networks the opportunity to transact when there is a geographic restriction to the nature of the transaction; such as in food delivery or rideshare. 
 
-### Included Methods
-- `registerNode` - a public method to add an entry to the registry. Only requirement is a valid ethereum key pair
-- `getNode` - a public method to retrieve an entry by the ID of the entry
-- `getNodeCount` - a public method to retrieve the count of all of the existing node entries
-- `updateNode` - a method mutable only by the owner of the entry
-- `deleteNode` - a method mutable only by the owner of the entry
+The H3 standard also allows the protocol to have a holonic structure that naturally scales to the needs of different industries and urban densities, making for a flexible, dynamic, and precise standard for location-specific commercial transactions.
 
-### Project structure
-The expected structure is based off of the The [Ethereum Attestation Service](https://github.com/ethereum-attestation-service/eas-contracts/tree/master) folder structure. Use this structure as an outline for the repository
-- `/contracts` - contains data structure definitions and core registry contract
-- `/tests`  - contains unit tests in typescript for each of the included methods
-- `/deploy/scripts` - deployment methods in typescript for each 
-- `/deploy/tests` - deployment unit tests in typescript
-- `/deployments/base-sepolia` - contains data related to the deployment of the contract on the base-sepolia network
-- `/utils` - utility functions for contract deployment
+`PSNs` should establish H3 indexes based on the Providers that they represent; translating the self-defined serviceable regions of their Providers to an H3 index that is stored in the registry as an array of strings. Each of these strings represents a hexagonal cell that if queried, should return at lease a single Provider able to commence in a transaction.
 
-### Tests
-- use the [chai assertion library](https://www.chaijs.com/) to write unit tests for each method of the registry contract in typescript.
-
-### Resource 
-- The [Ethereum Attestation Service](https://github.com/ethereum-attestation-service/eas-contracts/tree/master) provides a good overview of dealing with different data structures in solidity smart contracts
-- The [EAS indexing service](https://github.com/ethereum-attestation-service/eas-indexing-service)
-- Uber [Hexagonal Hierarchical Spatial Index](https://github.com/uber/h3) repository and [PostgreSQL bindings for the H3 Core Library](https://github.com/zachasme/h3-pg) bindings to include in the registry indexer. 
-- [Chai assertion library](https://www.chaijs.com/) for unit tests.
-- [Template contract definition](./INodeRegistry.sol) can be found in the `INodeRegistry.sol` file.
-- [Hardhat](https://hardhat.org/) 
-
-
-Contact [mike](mailto:mike@noshdelivery.co) if you have questions about the structure of the registry table.
+For more on generating indexes, see [the h3 GitHub repository](https://github.com/uber/h3?tab=readme-ov-file) 

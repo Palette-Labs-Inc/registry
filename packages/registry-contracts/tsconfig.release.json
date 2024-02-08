@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig",
+  "include": [
+    "./typechain-types"
+  ],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "glob": [
+        "./packages/registry-contracts/node_modules/@types/glob"
+      ],
+      "minimatch": [
+        "./packages/registry-contracts/node_modules/minimatch"
+      ],
+    }
+  }
+}

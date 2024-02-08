@@ -1,0 +1,50 @@
+## TODO
+
+### Technical small
+- [ ] `getNodeUID` to be exported from the registry contract package and imported into `registry-sdk` instead of duplicated in the /util folder OR create a shared utils package.
+- [ ] Identify a method for `NodeEntry` owners to be able to self-attest to update their status by submitting a cryptographic proof of their adoption of the protocol specification for their industry.
+- [ ] Add unit tests for `getNode` method to `registry-sdk`
+- [ ] Test that the `hardhat.config.ts` works with the dependency compiler update.
+```ts
+  dependencyCompiler: {
+    paths: [
+      '@palette-labs/registry-contracts/contracts/NodeRegistry.sol'
+    ]
+  },
+```
+
+- [ ] monitor unit test for location string validation withArgs support 
+- [ ] typechain does not support native enums from solidity. This means that we manually need to update the enums, if we added a new enum this would not be known to the SDK's imported methods. Determine how to convert the typescript enum to bignumberish ethers type.
+
+#### Needed smart contract methods
+- [ ] need a method for the owner of the contract to update their `callbackUrl`. 
+- [ ] if a `callbackUrl` is updated, this will invalidate the node into an `INITIATED` status again.
+
+#### Needed SDK methods
+- [ ] add new method for getting the ECDSA signature for a registered node using the typescript SDK.
+- [ ] Add some regex testing for the registerNode method in the SDK to validate that the url is valid before registering the smart contract.
+- [ ] add a method for constructing an authorization header signature.
+
+### Known Issues:
+- [ ] `(unknown custom error)` is being thrown when running registerNode on an existing node. Figure out why this isn't processed properly by the SDK.
+
+### Organizational
+- [ ] add deployed contract details to root readme.
+- [ ] write a README that describes the structure of the repository.
+ 
+### Future TODO
+- [ ] determine CI/CD for how to deploy internal packages to npm from  monorepo structure.
+
+
+### Contribution requests / Technical projects
+- [ ] App for registering a node.
+- [ ] Zk proof of protocol adoption.
+- [ ] Add an Indexer service.
+- [ ] Web application for setting up a wallet, registering and managing a node.
+
+
+### Need a way to move an "INITIATED" Node to a "VERIFIED" Node. In Beckn this is the /on_subscribe handshake.
+[Beckn Registry Api.](https://github.com/beckn/registry/blob/main/local-registry/api.yaml) 
+- description: 'Validates a subscriber. In this API the Registry generates a random string, encrypts it with the subscriber\''s encryption public key and sends it to the subscriber\''s callback URL. The subscriber then decrypts the string using it''s encryption private key and sends back the decypted value to the registry. If the decrypted value is the same as the sent value, the subscriber get''s added to the registry with a ```status = "SUBSCRIBED"```'
+
+
