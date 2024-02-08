@@ -84,9 +84,10 @@ export class NodeRegistry extends Base<NodeRegistryContract> {
     }
 
 
-    public async constructSignatureHeader(body: any, signer: Signer, keyId: string, expires: number = 600): Promise<string> {
+    public async constructSignatureHeader(body: any, signer: Signer, keyId: string, expirationDurationSeconds: number = 600): Promise<string> {
         const httpBody = JSON.stringify(body);
         const created = Math.floor(Date.now() / 1000); 
+        const expires = created + expirationDurationSeconds; 
         const digest = keccak256(toUtf8Bytes(httpBody));
     
         const signingString = `created: ${created}\nexpires: ${expires}\ndigest: ${digest}`;
@@ -105,7 +106,7 @@ export class NodeRegistry extends Base<NodeRegistryContract> {
         body: any,
     ): Promise<boolean> {
         const { signature, created, expires, keyId } = parseAuthorizationHeader(authorizationHeader);
-    
+        
         const currentTime = Math.floor(Date.now() / 1000);
         if (currentTime > expires) {
             console.error("Message has expired.");
@@ -119,7 +120,6 @@ export class NodeRegistry extends Base<NodeRegistryContract> {
 
         // Reconstructing the signing string exactly as it was during signing
         const signingString = `created: ${created}\nexpires: ${expires}\ndigest: ${digest}`;
-    
         const decodedSignature = base64UrlDecode(signature);
     
         try {
