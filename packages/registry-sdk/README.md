@@ -152,15 +152,17 @@ The signature parameters component value is the serialization of the signature p
     
 3. **Ensures Integrity of Specific Headers**: By listing specific headers, you're asserting that these headers were part of the signature generation process, and any alteration in these headers would invalidate the signature. 
 
-## ECDSA Algorithm 
-- [ ] *todo*
-
 ## Hashing Algorithm
-
 For computing the digest of the request body, the hashing function will use the Keccak256 hashing algorithm. Keccak256 is a member of the Keccak family of cryptographic hash functions and is most notably known for its use in Ethereum. Keccak256 is designed to be secure against a wide range of attacks, including preimage attacks, collision attacks, and length extension attacks. It is also efficient, with a relatively low computational cost and a simple implementation.
-## Signing Algorithm
 
+## Signing Algorithm
 To digitally sign the singing string, the subscribers should use the “secp256k1” signature scheme. The ECDSA algorithm with the secp256k1 elliptical curve is commonly used for signing and verifying messages in the context of Ethereum key-pairs and is also suitable for creating and verifying digital signatures over components of an HTTP message as per the latest RFC standard. Adopting the “secp256k1” signature scheme provides nice interoperability with the protocol networks ethereum registry infrastructure.
+
+## Unique Aspects of ECDSA Ethereum Signing
+Ethereum uses the Elliptic Curve Digital Signature Algorithm (ECDSA) over the secp256k1 curve for signing transactions. This involves generating a signature from the Keccak256 hash of the transaction data using a private key. The signature can then be verified with the corresponding public key, proving the transaction was signed by the owner of the private key without revealing the private key itself.
+EIP-155 Replay Protection: Ethereum transactions include a chain ID as part of the signing process (specified in EIP-155) to prevent replay attacks across different Ethereum chains. This modification to the standard ECDSA signing process integrates the chain ID into the hash signed by the transaction creator, making the signature chain-specific.
+Signature Components: Ethereum signatures consist of three components: r, s, and v. The v component, in particular, helps indicate the recovery ID, which can be used to recover the signer's public key (and thus the address) from the signature itself, a feature not commonly found in standard ECDSA implementations.
+Message Signing: Ethereum also allows for signing arbitrary messages (not just transactions) using the eth_sign RPC call or equivalent methods in Ethereum libraries. Messages are prefixed with a specific header before hashing to prevent signed messages from being maliciously used as transaction signatures.
 
 #### Signature Construction 
 To construct the signing header when making a network request, you can use the `constructSignatureHeader` method provided by the registry SDK. This method takes the following arguments:
@@ -173,6 +175,7 @@ To construct the signing header when making a network request, you can use the `
 
 ```ts 
     const postBody = { data: 'Example data' };
+    const keyId = requestingNodeRegistryId; // the id of the requeting 
     const signature = await nodeRegistry.constructSignatureHeader(body, signer, keyId);
     // Example output 
     // Signature keyId="0x51b9c9ba8f587224ad89a05aed82d6a4bc21cd306043bd0a5338f2c35891d8b9",algorithm="ecdsa-p256-keccak256",created="1707422045",expires="1707422645",headers="(created) (expires) digest",signature="MHhmZDU2OWViZDMzMGQyMDhkNmQxMmFhZTYzY2U2YjBmYzdiZjgyNWVkYjdlZTk3ZDQwOTBlMDU4MDgzZjBmYWQxMDY3Yzg0Yzg1ODcxNmM5NjVkZGMwOTAyNmVkMTIyYmY3YmFmYTM2MjRmNjI0MWU3MjAzZTc2NzYxM2I4ODQ1MjFi"
@@ -180,18 +183,18 @@ To construct the signing header when making a network request, you can use the `
 
 #### Signature Verification
 To verify a signing header when receiving a network request, you can use the `verifySignatureHeader` method provided by the registry SDK. This method takes the following arguments:
- 
+
+- `body`: the request body of the HTTP request
+- `keyId`: the unique identifier of the requesting node in the regsitry.
 
 ```ts 
     const requestBody = { data: 'Example data' };
-    const isValid = await nodeRegistry.verifySignatureHeader(body, signer, registeredNodeId);
+    const isValid = await nodeRegistry.verifySignatureHeader(body, requestingNodeRegistryId);
     // Example output
     // true
 
     const body = { data: 'Tampered / Modified request' };
-    const isValid = await nodeRegistry.verifySignatureHeader(body, signer, registeredNodeId);
+    const isValid = await nodeRegistry.verifySignatureHeader(body, requestingNodeRegistryId);
     // Example output
     // false
 ```
-
-### Buyer Node: Constructing the Signature Header (Node.js)
