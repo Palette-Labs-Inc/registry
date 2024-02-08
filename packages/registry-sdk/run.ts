@@ -113,7 +113,6 @@ const testNodeQueryTime = async () => {
     console.log(`\nAverage query time: ${averageDuration} ms`);
 };
 
-*/
 
 async function testVerifySignature() {
     const nodeRegistryContractAddress = "0x56e3B524302Ec60Ec7850aF492D079367E03e5fb";
@@ -149,3 +148,5 @@ async function testVerifySignature() {
 // testNodeQueryTime().catch(console.error);
 // register().catch(console.error);
 testVerifySignature().catch(console.error);
+
+*/

@@ -83,7 +83,6 @@ export class NodeRegistry extends Base<NodeRegistryContract> {
         return node;
     }
 
-
     public async constructSignatureHeader(body: any, signer: Signer, keyId: string, expirationDurationSeconds: number = 600): Promise<string> {
         const httpBody = JSON.stringify(body);
         const created = Math.floor(Date.now() / 1000); 

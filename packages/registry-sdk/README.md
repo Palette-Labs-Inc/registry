@@ -29,7 +29,7 @@ pnpm add @palette-labs/registry-sdk
 
 ### Using the SDK
 
-To register a new node, you can use the `registerNode` function provided by the registry SDK. This function takes an object with the following properties:
+To register a new node, you can use the `registerNode` method provided by the registry SDK. This method takes an object with the following properties:
 
 - `name`: The public name of your node.
 - `callbackUrl`: The public endpoint of your deployed server.
@@ -89,7 +89,7 @@ After registering a node, you can use its UID to retrieve it's information.
 
 ### Getting Schema Information
 
-To retrieve the node information for a specific node UID, you can use the `getNode` function provided by the Registry SDK. Here's an example:
+To retrieve the node information for a specific node UID, you can use the `getNode` method provided by the Registry SDK. Here's an example:
 
 ```ts
 import { NodeRegistry } from "@palette-labs/registry-sdk";
@@ -162,4 +162,36 @@ For computing the digest of the request body, the hashing function will use the 
 
 To digitally sign the singing string, the subscribers should use the “secp256k1” signature scheme. The ECDSA algorithm with the secp256k1 elliptical curve is commonly used for signing and verifying messages in the context of Ethereum key-pairs and is also suitable for creating and verifying digital signatures over components of an HTTP message as per the latest RFC standard. Adopting the “secp256k1” signature scheme provides nice interoperability with the protocol networks ethereum registry infrastructure.
 
-## Signature Construction in Typescript
+#### Signature Construction 
+To construct the signing header when making a network request, you can use the `constructSignatureHeader` method provided by the registry SDK. This method takes the following arguments:
+
+- `body`: the POST request body of the network request.
+- `signer`: an eth signer. This signer must be the same signer that registered the node that is making the API request.
+- `keyId`: the unique identifier of your node in the regsitry.
+
+ which should be initialized with the same signer that registered the node that is making the API request.
+
+```ts 
+    const postBody = { data: 'Example data' };
+    const signature = await nodeRegistry.constructSignatureHeader(body, signer, keyId);
+    // Example output 
+    // Signature keyId="0x51b9c9ba8f587224ad89a05aed82d6a4bc21cd306043bd0a5338f2c35891d8b9",algorithm="ecdsa-p256-keccak256",created="1707422045",expires="1707422645",headers="(created) (expires) digest",signature="MHhmZDU2OWViZDMzMGQyMDhkNmQxMmFhZTYzY2U2YjBmYzdiZjgyNWVkYjdlZTk3ZDQwOTBlMDU4MDgzZjBmYWQxMDY3Yzg0Yzg1ODcxNmM5NjVkZGMwOTAyNmVkMTIyYmY3YmFmYTM2MjRmNjI0MWU3MjAzZTc2NzYxM2I4ODQ1MjFi"
+```
+
+#### Signature Verification
+To verify a signing header when receiving a network request, you can use the `verifySignatureHeader` method provided by the registry SDK. This method takes the following arguments:
+ 
+
+```ts 
+    const requestBody = { data: 'Example data' };
+    const isValid = await nodeRegistry.verifySignatureHeader(body, signer, registeredNodeId);
+    // Example output
+    // true
+
+    const body = { data: 'Tampered / Modified request' };
+    const isValid = await nodeRegistry.verifySignatureHeader(body, signer, registeredNodeId);
+    // Example output
+    // false
+```
+
+### Buyer Node: Constructing the Signature Header (Node.js)

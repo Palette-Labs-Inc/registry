@@ -133,7 +133,6 @@ describe('NodeRegistry API', () => {
   });
 
 
-
   describe('Signature Header', function () {
     let keyId:string; 
     let nodeRegistry: NodeRegistry;
@@ -152,7 +151,6 @@ describe('NodeRegistry API', () => {
   
       const tx = await nodeRegistry.registerNode(node);
       keyId = await tx.wait(); 
-      console.log('Registered node keyId: ', keyId);
     });
 
     it('should successfully construct, send, reconstruct, and verify the signature header', async () => {
@@ -166,8 +164,6 @@ describe('NodeRegistry API', () => {
       const originalBody = { data: 'Example data' };
       const tamperedBody = { data: 'Tampered data' }
       const signatureHeader = await nodeRegistry.constructSignatureHeader(originalBody, sender, keyId);
-
-      // Attempt to verify the signature with the tampered body
       const isSignatureValid = await nodeRegistry.verifySignatureHeader(signatureHeader, tamperedBody);
       expect(isSignatureValid).to.be.false;
     });
