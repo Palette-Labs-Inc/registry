@@ -11,18 +11,18 @@ Version 0.0.1:
 
 ## Repository structure
 
-1. **[registry-contracts](./packages/registry-contracts/README.md)**
+### [registry-contracts](./packages/registry-contracts/README.md)
 Contains methods for registering and retrieving nodes.
 
-Features:
+#### Features:
 - smart contracts for node registration and retrieval.
 - example registry contract and deployment information on base-sepolia.
 - unit tests using the Chai assertion framework and Hardhat for development and testing.
 
-1. **[registry-sdk](./packages/registry-sdk//README.md)**
+### [registry-sdk](./packages/registry-sdk//README.md)
 Provides a typed interface and SDK for interacting with the `registry-contracts`. Additionally, the sdk adds functionality to support header signing and verification for server-to-server communication within the network.
 
-Features:
+#### Features:
 - typed interface to interact with registry-contracts.
 - authorization header signing and verification methods for secure communication during server-to-server requests on the network.
 
@@ -31,14 +31,18 @@ Features:
 ### Setting Up Your Environment
 Before diving into development or deployment, ensure your environment is correctly set up by following these steps:
 
-1. **Environment Requirements**: Begin by reviewing the `.env.template` file in `registry-contracts` to understand the required environment variables. 
+1. **Environment Requirements**: 
+Begin by reviewing the `.env.template` file in `registry-contracts` to understand the required environment variables. 
 
-2. **Navigate to Registry Contracts**: Change your directory to the registry contracts package to work with the smart contracts.
+2. **Navigate to Registry Contracts**: 
+Change your directory to the registry contracts package to work with the smart contracts.
 
 ```sh
 cd packages/registry-contracts
 ```
-3. **Recompile Contracts**: If you need to recompile the contract and associated typechain types, particularly after making changes to `/contracts/NodeRegistry.sol`, run:
+
+3. **Recompile Contracts**: 
+If you need to recompile the contract and associated typechain types, particularly after making changes to `/contracts/NodeRegistry.sol`, run:
 
 ```sh
 yarn recompile
@@ -46,13 +50,15 @@ yarn recompile
 
 This ensures that your contracts and TypeScript bindings are up to date.
 
-4. **Run Unit Tests**: It's crucial to run unit tests after making any edits to the smart contracts to ensure that all functionalities work as expected.
+4. **Run Unit Tests**: 
+It's crucial to run unit tests after making any edits to the smart contracts to ensure that all functionalities work as expected.
 
 
 ```sh
 yarn test
 ```
-5. **Test Contract Deployment**: Before an official release, test the deployment process of the contract to catch any potential issues early.
+5. **Test Contract Deployment**: 
+Before an official release, test the deployment process of the contract to catch any potential issues early.
 
 ```sh
 yarn test:deploy
@@ -61,9 +67,11 @@ yarn test:deploy
 ### Preparing for Release: 
 To prepare your contract for a release and ensure a smooth deployment process, follow these steps:
 
-1. **Setup Your Wallet**: The deployment process requires access to a wallet with sufficient funds on the base-sepolia network. Follow [these instructions](https://www.coinbase.com/wallet) for setting up your wallet. Verify that your `.env` file includes the private key for the wallet responsible for deploying the contract.
+1. **Setup Your Wallet**: 
+The deployment process requires access to a wallet with sufficient funds on the base-sepolia network. Follow [these instructions](https://www.coinbase.com/wallet) for setting up your wallet. Verify that your `.env` file includes the private key for the wallet responsible for deploying the contract.
 
-2. **Prepare for Release**: Run the following command to prepare your contract for release. This step might involve flattening the contract, verifying dependencies, or other pre-deployment checks.
+2. **Prepare for Release**: 
+Run the following command to prepare your contract for release. This step might involve flattening the contract, verifying dependencies, or other pre-deployment checks.
 
 ```sh
 yarn prepare:release

@@ -1,8 +1,8 @@
-# TypeScript REgistry SDK
+# Registry-sdk
 
 This repository contains the Registry SDK, used to interact with Nodes in the protocol network.
 
-## Installing the Registry SDK.
+## Installation
 
 To install the EAS SDK, run the following command within your project directory:
 
@@ -122,11 +122,10 @@ import { NodeRegistry } from "@palette-labs/registry-sdk";
 In the output, you will receive an object containing the node UID and it's contents.
 
 
-### Signing Headers
-During registration, a Node Operator creates a public private key pair. The public key is stored on the blockchain in the network registry along with a unique identifier. When communicating with other Node's in the network, a *sending* Node Operator signs the data that they are sending over the network, including the signature hash in the header of the HTTP request. When this message is received by a *receiving* Node, they should query the registry for the *sending* Node's public key and use the signature in the request header to decrypt the message. If the message is successfully decrypted and the status of the *sending* Node is `VERIFIED`, the *receiving* Node Operator can know that the *sending* Node Operator is properly registered and their message has not been tampered. If the *sending* Node Operator's message is unable to be decrypted, the *receiving* Node Operator should respond to the *sending* Node Operators request with an error code. 
-
 --- 
-# HTTP Server-to-server Message Signatures 
+# Signing headers  
+
+During registration, a Node Operator creates a public private key pair. The public key is stored on the blockchain in the network registry along with a unique identifier. When communicating with other Node's in the network, a *sending* Node Operator signs the data that they are sending over the network, including the signature hash in the header of the HTTP request. When this message is received by a *receiving* Node, they should query the registry for the *sending* Node's public key and use the signature in the request header to decrypt the message. If the message is successfully decrypted and the status of the *sending* Node is `VERIFIED`, the *receiving* Node Operator can know that the *sending* Node Operator is properly registered and their message has not been tampered. If the *sending* Node Operator's message is unable to be decrypted, the *receiving* Node Operator should respond to the *sending* Node Operators request with an error code. 
 
 The BSN and PSN is expected to send an Authorization header (as defined in the latest [RFC](https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-message-signatures#name-scheme)  where the “auth-scheme” is “Signature” and the “auth-param” parameters meet the requirements listed in Section 2.3 of [this](https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-message-signatures#section-2.3) document.
 
@@ -194,3 +193,7 @@ To verify a signing header when receiving a network request, you can use the `ve
     // Example output
     // false
 ```
+
+## License
+
+@palette-labs/registry-sdk is open source and distributed under the MIT License (see [`LICENSE`](./LICENSE)).
