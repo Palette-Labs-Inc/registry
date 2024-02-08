@@ -5,19 +5,14 @@ Set up your wallet [here](https://docs.base.org/guides/deploy-smart-contracts/)
 
 Please note that you can also import and use the addresses directly in your code using the `@palette-labs/registry/deployments` deployment artifacts corresponding to your desired network.
 
-### Mainnets
-#### Ethereum
-
-coming soon.
-
 ### Testnets
 
 #### Base Sepolia
 
 Version 0.0.1:
 * **NodeRegistry**:
-  * Contract: [0x90c35b5CC8785C8C963fEDF2Fd15A4286058021f](https://sepolia.basescan.org/address/0x4200000000000000000000000000000000000020)
-  * Deployment and ABI: [NodeRegistry.json](./deployments/base-goerli/NodeRegistry.json)
+  * Contract: [0x56e3B524302Ec60Ec7850aF492D079367E03e5fb](https://sepolia.basescan.org/address/0x56e3B524302Ec60Ec7850aF492D079367E03e5fb)
+  * Deployment and ABI: [NodeRegistry.json](./deployments/base-sepolia/NodeRegistry.json)
 
 * deployment logs
 ```sh
