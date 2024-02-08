@@ -19,10 +19,11 @@
     "lint": "eslint -c .eslintrc --ext .ts src test",
     "format": "prettier --check --write src/**/*.ts test/test/**/*.ts  --config .prettierrc",
     "prepare:release": "yarn lint && yarn test && yarn build",
-    "postinstall": "cd test && yarn install"
+    "postinstall": "cd test && yarn install",
+    "run:sdk": "yarn ts-node run.ts"
   },
   "dependencies": {
-    "@palette-labs/registry-contracts": "*", 
+    "@palette-labs/registry-contracts": "*",
     "ethers": "^6.10.0",
     "js-base64": "^3.7.6",
     "lodash": "^4.17.21",
