@@ -1,7 +1,7 @@
 import { config } from 'dotenv';
 config(); // This loads the .env file at the root of your project into process.env
 
-import { NodeRegistry, getNodeUID} from "@palette-labs/registry-sdk";
+import { getNodeUID, NodeRegistry} from "@palette-labs/registry-sdk";
 import { ethers, JsonRpcProvider } from 'ethers';
 
 
@@ -64,6 +64,8 @@ const register = async () => {
 };
 
 
+
+
 const getNodeDuration = async (nodeRegistry: NodeRegistry) => {
     const uid = '0x6da4e3a839151079116291a9bac3eb762d353e08b08f83ba37af8bf588fd90a1';
 
@@ -79,7 +81,7 @@ const getNodeDuration = async (nodeRegistry: NodeRegistry) => {
 };
 
 
-const testNode = async () => {
+const testNodeQueryTime = async () => {
     // nodeRegistryContractAddress is from yarn deploy:base-sepolia - see README in registry-contracts for the latest address.
     const nodeRegistryContractAddress = "0x56e3B524302Ec60Ec7850aF492D079367E03e5fb";
     const providerUrl = process.env.ETHEREUM_BASE_SEPOLIA_PROVIDER_URL; 
@@ -111,7 +113,6 @@ const testNode = async () => {
     console.log(`\nAverage query time: ${averageDuration} ms`);
 };
 
-// testNode().catch(console.error);
 
 */
 
@@ -146,4 +147,6 @@ async function testVerifySignature() {
     }
 }
 
+// testNodeQueryTime().catch(console.error);
+// register().catch(console.error);
 testVerifySignature().catch(console.error);
