@@ -1,12 +1,25 @@
 import { config } from 'dotenv';
 config(); // This loads the .env file at the root of your project into process.env
 
-import { NodeRegistry, NodeStatus, NodeType } from "@palette-labs/registry-sdk";
+import { NodeRegistry, getNodeUID} from "@palette-labs/registry-sdk";
 import { ethers, JsonRpcProvider } from 'ethers';
-import { NodeEntryStruct } from '@palette-labs/registry-contracts/typechain-types/INodeRegistry';
 
 
-/*const register = async () => {
+/** TEST NODE
+ * Retrieved node: Result(8) [
+  '0xfd71b914f49331197fd1d14d2f5ab68884dac50d9069b94b927c4d38565df0e3',
+  'Example Node 2',
+  'http://example2.com/callback',
+  Result(1) [ '882681a339fffff' ],
+  'EX',
+  '0xd443dDeeC8cD386B6d592b82853738490798922a',
+  0n,
+  0n
+]
+ */
+
+/*
+const register = async () => {
     const nodeRegistryContractAddress = "0x56e3B524302Ec60Ec7850aF492D079367E03e5fb";
 
     // Setup provider and signer using environment variables
@@ -22,8 +35,8 @@ import { NodeEntryStruct } from '@palette-labs/registry-contracts/typechain-type
 
     // Define a new node to register
     const newNode = {
-        name: "Example Node",
-        callbackUrl: "http://example.com/callback",
+        name: "Example Node 2",
+        callbackUrl: "http://example2.com/callback",
         location: ["882681a339fffff"], // Example location
         industryCode: "EX",
         nodeType: 0, // Assuming 0 corresponds to PSN
@@ -49,6 +62,7 @@ import { NodeEntryStruct } from '@palette-labs/registry-contracts/typechain-type
         console.error("Error during node registration or retrieval:", error);
     }
 };
+
 
 const getNodeDuration = async (nodeRegistry: NodeRegistry) => {
     const uid = '0x6da4e3a839151079116291a9bac3eb762d353e08b08f83ba37af8bf588fd90a1';
@@ -110,35 +124,25 @@ async function testVerifySignature() {
 
     const nodeRegistry = new NodeRegistry(nodeRegistryContractAddress, { signerOrProvider: signer });
 
-    // Example data to construct the signature header
-    const url = '/api/node';
-    const method = 'POST';
+    // unique details of a registered node.
+    const nodeName = 'Example Node 2'
+    const nodeCallbackUrl = 'http://example2.com/callback'
+    const nodeIndustry = 'EX'
+    const registeredNodeId = getNodeUID(nodeName,nodeCallbackUrl,nodeIndustry)
+
+    console.log('registedNodeId:',registeredNodeId);
+
     const body = { data: 'Example data' };
-    const node: NodeEntryStruct = {
-        uid: 'example-uid',
-        name: 'Example Node',
-        callbackUrl: 'http://example.com/callback',
-        location: ['882681a339fffff'],
-        industryCode: 'EX',
-        nodeType: NodeType.PSN,
-        status: NodeStatus.INITIATED,
-        owner: signer.address
-    };
+    const signature = await nodeRegistry.constructSignatureHeader(body, signer, registeredNodeId);
 
-    // Construct the signature header
-    const signatureHeader = await nodeRegistry.constructSignatureHeader(url, method, body, signer, node);
+    const tampered_body = { data: 'Example data 12323' };
+    const isSignatureValid = await nodeRegistry.verifySignatureHeader(signature,tampered_body);
 
-    console.log(`Constructed Signature Header: ${signatureHeader}`);
-
-    // Simulate receiving the request and signature header
-    // For the purpose of this test, we'll reuse the `url`, `method`, and `body` used to construct the signature
-    // Normally, you would extract these from the actual received HTTP request
-    const isSignatureValid = await nodeRegistry.verifySignatureHeader(signatureHeader, method, url, body);
 
     if (isSignatureValid) {
         console.log('Signature verification succeeded.');
     } else {
-        console.log('Signature verification failed.');
+        console.error('Signature verification failed.');
     }
 }
 

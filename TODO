@@ -13,6 +13,7 @@
   },
 ```
 
+- [ ] `(unknown custom error)` is being thrown when running registerNode on an existing node. Figure out why this isn't processed properly by the SDK.
 
 - [ ] monitor unit test for location string validation withArgs support 
 - [ ] typechain does not support native enums from solidity. This means that we manually need to update the enums, if we added a new enum this would not be known to the SDK's imported methods. Determine how to convert the typescript enum to bignumberish ethers type.
