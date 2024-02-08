@@ -135,8 +135,8 @@ async function testVerifySignature() {
     const body = { data: 'Example data' };
     const signature = await nodeRegistry.constructSignatureHeader(body, signer, registeredNodeId);
 
-    const tampered_body = { data: 'Example data 12323' };
-    const isSignatureValid = await nodeRegistry.verifySignatureHeader(signature,tampered_body);
+    // const tampered_body = { data: 'Example data 12323' };
+    const isSignatureValid = await nodeRegistry.verifySignatureHeader(signature,body);
 
 
     if (isSignatureValid) {

@@ -2,7 +2,7 @@ import {
     NodeRegistry__factory,
     NodeRegistry as NodeRegistryContract,
 } from '@palette-labs/registry-contracts/typechain-types';
-import { Overrides, TransactionReceipt, Signer, verifyMessage } from 'ethers';
+import { Overrides, TransactionReceipt, Signer, verifyMessage, keccak256, toUtf8Bytes } from 'ethers';
 import { Base, SignerOrProvider, Transaction } from './transaction';
 import { ZERO_BYTES32, base64UrlDecode, base64UrlEncode, getNodeUID, parseAuthorizationHeader } from './utils';
 import { NodeEntryStruct, RegisterNodeEntryParamsStruct } from '@palette-labs/registry-contracts/typechain-types/INodeRegistry';
@@ -84,16 +84,16 @@ export class NodeRegistry extends Base<NodeRegistryContract> {
     }
 
 
-    public async constructSignatureHeader(body: any, signer: Signer, keyId: string): Promise<string> {
+    public async constructSignatureHeader(body: any, signer: Signer, keyId: string, expires: number = 600): Promise<string> {
         const httpBody = JSON.stringify(body);
         const created = Math.floor(Date.now() / 1000); 
-        const expires = created + 600;
+        const digest = keccak256(toUtf8Bytes(httpBody));
     
-        const algorithm = "ecdsa-p256-keccak256"; // TODO: check RFC to see if this is proper setting.
-
-        const signature = await signer.signMessage(httpBody);
+        const signingString = `created: ${created}\nexpires: ${expires}\ndigest: ${digest}`;
+        const signature = await signer.signMessage(signingString);
         const encodedSignature = base64UrlEncode(signature);
     
+        const algorithm = "ecdsa-p256-keccak256";
         const headers = "(created) (expires) digest";
         const authorizationHeader = `Signature keyId="${keyId}",algorithm="${algorithm}",created="${created}",expires="${expires}",headers="${headers}",signature="${encodedSignature}"`;
     
@@ -104,26 +104,34 @@ export class NodeRegistry extends Base<NodeRegistryContract> {
         authorizationHeader: string,
         body: any,
     ): Promise<boolean> {
-        const { signature, expires, keyId } = parseAuthorizationHeader(authorizationHeader);
+        const { signature, created, expires, keyId } = parseAuthorizationHeader(authorizationHeader);
     
         const currentTime = Math.floor(Date.now() / 1000);
         if (currentTime > expires) {
             console.error("Message has expired.");
             return false;
         }
-        
+    
+        const expectedSigner = await this.getNode({ uid: keyId });
+    
         const httpBody = JSON.stringify(body);
-        const decodedSignature = base64UrlDecode(signature);
-        
-        try {
-            const recoveredAddress = verifyMessage(httpBody, decodedSignature);
-            console.log('Recovered Address:', recoveredAddress);
-            const expectedSigner = await this.getNode({ uid: keyId })
-            console.log('Expected Address:', expectedSigner.owner);
+        const digest = keccak256(toUtf8Bytes(httpBody));
 
+        // Reconstructing the signing string exactly as it was during signing
+        const signingString = `created: ${created}\nexpires: ${expires}\ndigest: ${digest}`;
+    
+        const decodedSignature = base64UrlDecode(signature);
+    
+        try {
+            // Verifying the signature against the reconstructed signing string
+            const recoveredAddress = verifyMessage(signingString, decodedSignature);
+            console.log('Recovered Address:', recoveredAddress);
+            console.log('Expected Address:', expectedSigner.owner);
+    
             return recoveredAddress.toLowerCase() === expectedSigner.owner.toString().toLowerCase();
         } catch (error) {
             console.error("Signature verification failed:", error);
+            // return NACK.
             return false;
         }
     }

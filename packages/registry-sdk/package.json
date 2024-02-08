@@ -20,7 +20,7 @@
     "format": "prettier --check --write src/**/*.ts test/test/**/*.ts  --config .prettierrc",
     "prepare:release": "yarn lint && yarn test && yarn build",
     "postinstall": "cd test && yarn install",
-    "r": "yarn ts-node run.ts"
+    "run:test-sdk": "yarn ts-node run.ts"
   },
   "dependencies": {
     "@palette-labs/registry-contracts": "*",
