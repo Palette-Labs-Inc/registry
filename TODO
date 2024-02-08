@@ -13,8 +13,6 @@
   },
 ```
 
-- [ ] `(unknown custom error)` is being thrown when running registerNode on an existing node. Figure out why this isn't processed properly by the SDK.
-
 - [ ] monitor unit test for location string validation withArgs support 
 - [ ] typechain does not support native enums from solidity. This means that we manually need to update the enums, if we added a new enum this would not be known to the SDK's imported methods. Determine how to convert the typescript enum to bignumberish ethers type.
 
@@ -27,43 +25,22 @@
 - [ ] Add some regex testing for the registerNode method in the SDK to validate that the url is valid before registering the smart contract.
 - [ ] add a method for constructing an authorization header signature.
 
-
-### Technical projects
-- [ ] App for registering a node.
-- [ ] Zk proof of protocol adoption.
-
+### Known Issues:
+- [ ] `(unknown custom error)` is being thrown when running registerNode on an existing node. Figure out why this isn't processed properly by the SDK.
 
 ### Organizational
+- [ ] add deployed contract details to root readme.
 - [ ] write a README that describes the structure of the repository.
-- [ ] improve structure of `registry-sdk/test` to not have it's own package.json. It feels similar to the tests in the `registry-contracts` folder. See what can be re-useable.
-- [ ] Remove EAS README from `registry-sdk` package.
-- [ ] Update the **overview of registration process** below to mirror updates and add to root README.
-
+ 
 ### Future TODO
-- [ ] determine how to deploy internal packages to npm from  monorepo structure.
+- [ ] determine CI/CD for how to deploy internal packages to npm from  monorepo structure.
 
 
-### Overview of registration process
-
-###  Option 1
-1. **Modify the Smart Contract to Include Public Keys**:
-    
-    - Add a `bytes publicKey` field to your `NodeEntry` struct.
-    - Adjust the `registerNode` function to accept a public key as an argument and store it in the registry.
-    - The contract must verify that the public key belongs to the address of the signer.
-
-1. **Registration Process**:
-    
-    - Registrants sign a message (e.g., their Ethereum address or a nonce provided during the registration process) off-chain using their private key.
-    - The signed message and the public key are sent to the registry contract during the registration process.
-    - The smart contract stores the public key and associates it with the registrant's node entry.
-3. **Verification Process (Off-Chain using SDK or Backend)**:
-    - Provide a method in the SDK or backend service that takes a signature, the original message, and the registrant's `uid`. We can also generate the ID from the context header using the getNodeUID method.
-    - Use ethers.js to recover the address from the signature and the original message.
-    - Fetch the registrant's public key from the smart contract using the provided `uid`.
-    - Compare the recovered address against the address derived from the public key stored on-chain to ensure they match.
-    - If they match, the signature is valid, and the registrant is verified as being listed in the registry.
-
+### Contribution requests / Technical projects
+- [ ] App for registering a node.
+- [ ] Zk proof of protocol adoption.
+- [ ] Add an Indexer service.
+- [ ] Web application for setting up a wallet, registering and managing a node.
 
 
 ### Need a way to move an "INITIATED" Node to a "VERIFIED" Node. In Beckn this is the /on_subscribe handshake.
