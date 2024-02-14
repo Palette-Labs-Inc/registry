@@ -4,7 +4,7 @@ This repository contains the Registry SDK, used to interact with Nodes in the pr
 
 ## Installation
 
-To install the EAS SDK, run the following command within your project directory:
+To install the SDK, run the following command within your project directory:
 
 ```sh
 yarn add @palette-labs/registry-sdk
