@@ -1,0 +1,31 @@
+import * as TypeGraphQL from "type-graphql";
+import * as GraphQLScalars from "graphql-scalars";
+import { Prisma } from "@prisma/client";
+import { DecimalJSScalar } from "../../scalars";
+import { NestedEnumNodeTypeFilter } from "../inputs/NestedEnumNodeTypeFilter";
+import { NodeType } from "../../enums/NodeType";
+
+@TypeGraphQL.InputType("EnumNodeTypeFilter", {
+  isAbstract: true
+})
+export class EnumNodeTypeFilter {
+  @TypeGraphQL.Field(_type => NodeType, {
+    nullable: true
+  })
+  equals?: "PSN" | "BSN" | "GP" | undefined;
+
+  @TypeGraphQL.Field(_type => [NodeType], {
+    nullable: true
+  })
+  in?: Array<"PSN" | "BSN" | "GP"> | undefined;
+
+  @TypeGraphQL.Field(_type => [NodeType], {
+    nullable: true
+  })
+  notIn?: Array<"PSN" | "BSN" | "GP"> | undefined;
+
+  @TypeGraphQL.Field(_type => NestedEnumNodeTypeFilter, {
+    nullable: true
+  })
+  not?: NestedEnumNodeTypeFilter | undefined;
+}
