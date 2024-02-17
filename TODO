@@ -34,10 +34,10 @@
  
 ### Future TODO
 - [ ] determine CI/CD for how to deploy internal packages to npm from  monorepo structure.
-
+- [ ] MODIFY registry h3 index to be array of byte32 strings. If any of your string fields are <=32 chars you can use bytes32 to save significant storage gas.
 
 ### Contribution requests / Technical projects
-- [ ] App for registering a node.
+- [ ] App or interface for registering a node.
 - [ ] Zk proof of protocol adoption.
 - [ ] Add an Indexer service.
 - [ ] Web application for setting up a wallet, registering and managing a node.
@@ -48,3 +48,6 @@
 - description: 'Validates a subscriber. In this API the Registry generates a random string, encrypts it with the subscriber\''s encryption public key and sends it to the subscriber\''s callback URL. The subscriber then decrypts the string using it''s encryption private key and sends back the decypted value to the registry. If the decrypted value is the same as the sent value, the subscriber get''s added to the registry with a ```status = "SUBSCRIBED"```'
 
 
+### registry-indexing-service
+- [ ] See the notes in the README there is an issue with generating graphQL types with the latest prisma version. 
+- [ ] Add support for H3 Index [bindings](https://github.com/zachasme/h3-pg) in postgres to do complex H3 queries. 

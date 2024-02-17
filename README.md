@@ -31,6 +31,13 @@ Provides a typed interface and SDK for interacting with the `registry-contracts`
 ### Setting Up Your Environment
 Before diving into development or deployment, ensure your environment is correctly set up by following these steps:
 
+#### Node Version:
+Make sure you're using `node version v18.16.0`. You can install node version v18.16.0 by running:
+```bash
+nvm install v18.16.0
+nvm use v18.16.0
+```
+
 #### Environment Requirements: 
 Begin by reviewing the `.env.template` file in `registry-contracts` to understand the required environment variables. 
 

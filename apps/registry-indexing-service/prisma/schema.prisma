@@ -1,0 +1,43 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+// Define the NodeType enum
+enum NodeType {
+  PSN // Provider Supporting Node
+  BSN // Buyer Supporting Node
+  GP  // Gateway Provider
+}
+
+// Define the NodeStatus enum
+enum NodeStatus {
+  INITIATED
+  VERIFIED
+  INVALID
+}
+
+model NodeEntry {
+  uid           String      @id
+  name          String
+  callbackUrl   String
+  location      String[]    
+  industryCode  String
+  owner         String      
+  nodeType      NodeType
+  status        NodeStatus
+}
+
+
+
+model ServiceStat {
+  name  String @id
+  value String
+}
