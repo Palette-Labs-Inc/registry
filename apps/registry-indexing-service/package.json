@@ -6,7 +6,6 @@
   
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "typechain --target ethers-v5 ./abis/*.json",
     "start": "ts-node start.ts",
     "prisma:generate": "SKIP_PRISMA_VERSION_CHECK=true npx prisma generate",
     "prisma:migrate": "npx prisma migrate dev",

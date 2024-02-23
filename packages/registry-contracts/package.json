@@ -42,11 +42,12 @@
     "verify": "hardhat verify",
     "flatten": "hardhat flatten",
     "clean": "rm -rf artifacts cache dist coverage typechain-types out",
-    "prepare": "yarn compile",
+    "prepare": "yarn compile && yarn export-types",
     "export-types": "yarn delete-test-types && tsc -p tsconfig.release.json && copyfiles -u 1 \"typechain-types/**/*.d.ts\" dist/typechain-types && yarn restore-test-types",
     "delete-test-types": "sed -i.bak '/tests/d' typechain-types/index.ts",
     "restore-test-types": "mv typechain-types/index.ts.bak typechain-types/index.ts",
-    "prepare:release": "yarn prepare && yarn export-types && yarn lint && yarn test"
+    "prepare:release": "yarn prepare && yarn export-types && yarn lint && yarn test",
+    "postinstall": "yarn prepare"
   },
   "dependencies": {
     "hardhat": "2.19.1"
