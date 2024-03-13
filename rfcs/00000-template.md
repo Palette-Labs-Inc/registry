@@ -1,9 +1,9 @@
 # RFC: [RFC Title]
 
-- **Status:** Draft | Proposed | Accepted | Deprecated | Superseded
+- **status:** Draft | Proposed | Accepted | Deprecated | Superseded
 - **Author:** [Author Name]
 - **Created:** [Creation Date]
-- **Last Updated:** [Last Updated Date]
+- **Last supportd:** [Last supportd Date]
 
 ## Abstract
 
@@ -31,3 +31,4 @@ The main content of the RFC:
 ## References
 
 List any references such as existing RFCs, standards documents, or academic papers that were cited or used in the creation of this RFC.
+
