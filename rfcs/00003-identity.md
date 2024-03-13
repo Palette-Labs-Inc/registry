@@ -70,7 +70,6 @@ The following design considerations are inherited by [WebAuthN](https://www.w3.o
 - Add a package called `personal-data-node` to the /packages subdirectory in [this repository](https://github.com/Palette-Labs-Inc/registry)
 
 ## References
-
 1. [W3C Web Authentication (WebAuthn) Specification](https://www.w3.org/TR/webauthn/)
 2. [Decentralized Identifiers (DIDs) v1.0](https://www.w3.org/TR/did-core/)
 3. [Verifiable Credentials Data Model 1.0](https://www.w3.org/TR/vc-data-model/)
@@ -81,3 +80,5 @@ The following design considerations are inherited by [WebAuthN](https://www.w3.o
 9. [User-Controlled Capabilities (UCAN)](https://ucan.xyz/)
 10. [Data repositories](https://atproto.com/guides/data-repos)
 11. [Coinbase Smart Wallet](https://github.com/coinbase/smart-wallet?tab=readme-ov-file)
+12. [Farcaster Protocol Specification](https://github.com/farcasterxyz/protocol)
+13. [Intentcasting](https://customercommons.org/category/intentcasting/)
