@@ -1,4 +1,4 @@
-# RFC: Self-Sovereign Identity Proposal in p2p Commercial Networks
+# RFC: Self-Sovereign Identity in p2p Commercial Networks
 
 - **status:** Draft
 - **Author:** Michael Perhats
@@ -29,26 +29,41 @@ The proposed solution aims to achieve the following:
 - **Privacy-Preserving Interactions**: Ensure that users can selectively disclose relevant information while protecting sensitive data, such as addresses or personal identifiers
 
 ## Agent Contracts
-Users create a global identity within the network by going through a registration procedure and interfacing with on-chain smart contracts. This document defines the set of contracts that help a user bootstrap their identity key pairs, and delegated signing patterns. Delegated signatures allow users to easily interact with the network and it's avilable services while delegating the signing process to a client that represents their interests. Delegated signatures allow clients to automate the signature process so the user does not have to present their private key during every stage in the transaction lifecycle; optimizing for usability.
+Agents create a global identity within the network by going through a registration procedure and interfacing with on-chain smart contracts. This document defines the set of contracts that help a user bootstrap their identity and delegated signers. Delegated signatures allow users to easily interact with the network and it's avilable services while delegating the signing process to a client that represents their interests. Delegated signatures allow clients to automate the signature process so the user does not have to present their private key during every stage in the transaction lifecycle; optimizing for usability.
+
+```mermaid
+graph TD
+
+    subgraph Nodes["Off-Chain"]
+    Node(Protocol Server 1)
+    Node2(Protocol Server 2)
+    Node3(Protocol Server N)
+    end
+
+    subgraph ETHL2["L2 Identity Contracts"]
+    BN(Bundler) --> IG(Agent Gateway)
+    BN --> KG(Sig. Authority Gateway)
+    IG --> IR(Agent Registry)
+    KG --> KR(Sig. Authority Registry)
+    KR --> SKRV(Signed Key Request Validator)
+    KR --> IR
+    RP(RecoveryProxy) --> IG
+
+    end
+    ETHL2 --> Nodes
+```
 
 **General Patterns**
  You will notice that the identity contracts are broken into *Gateway* and *Registry* patterns. Gateway contracts are used exclusively as entry points into each of the identity management systems. Registry contracts are typically used to maintain existing records.
 
-**The networks identity and security infrastructure includes the following on-chain and off-chain elements:**
+**The networks identity infrastructure includes the following on-chain and off-chain elements:**
 - Agent Registry
 - Agent Gateway
-
-
-- Node Operator Registry
-- Node Operator Gateway
-
 - Signature Authority Registry
 - Signature Authority Gateway
-
 - Validators
 - Bundler
 - Recovery Proxy
-
 - Node Operators / Protocol Servers
 
 ### Agent Registry
@@ -62,9 +77,6 @@ The Agent Registry generates an autoincrementing nonce that represents an indivi
 
 **Administration**
 The `custody address` has unilateral authority to pause and unpause the contract, which prevents all methods (registration, transfer, and recovery) from executing. 
-
-#### Methods
-
 
 
 ### Agent Gateway
@@ -170,54 +182,33 @@ A `recovery proxy` can change its owner, and may be owned by an EOA, multisig, o
 __ 
 
 ## Node Registry
-We make the simplifying assumption that, in order to make the network economical, traditional webservers will be required to perform basic computational and routing tasks for the network such as: providing app views, verifying intents, routing transaction intents, and indexing the network.
+We make the simplifying assumption that, in order to make the network economical, traditional webservers will be required to perform basic computational and routing tasks for the network such as: providing app views, verifying intents, routing transactions, and indexing the network's participants.
 
 `Node Operators` are webservers that store data on behalf of `agent identifiers`, track the `Agent Registry` to know the `custody addresses` that relate to an `agent identifier`, and the `Signature Authority Registry` to find out which key pairs can sign intents on behalf of an agent.
 
+`Buyer Supporting Nodes` interface with `Provider Supporting Nodes` during a `Buyers` transaction lifecycle. These interactions are transport layer agnostic, POST-only,signed, server to server requests. 
+
+An RFC for the `Node Registry` contracts can be found [here](00002-node-registry.md) 
+
 ___
 
-### Personal Data Repositories, MST and Data Definitions
-
-
+## Overview Of Contract Methods
+TODO: add methods.
 
 ### WebAuthN and Elliptical Curve Translations
 - [eip-7212](https://eips.ethereum.org/EIPS/eip-7212)
 - coinbase smart wallet github
 
-
-## Examples (see docs https://docs.farcaster.xyz/reference/contracts/reference/id-registry)
-
-(Optional) If applicable, provide details about the implementation of the proposal, including any prototypes, code snippets, or reference implementations.
-
-Side by side code snippers and typescript SDK. 
-
 ## Additional Context
 
-#### EdDSA Signature Patterns:
 
-Partially covered by [does TLS 1.3 use ECDSA-Sig-Value encoded signatures for Ed25519 / Ed448?](https://crypto.stackexchange.com/questions/59917/does-tls-1-3-use-ecdsa-sig-value-encoded-signatures-for-ed25519-ed448) but to add a little, [rfc8032 describes EdDSA's advantages as](https://www.rfc-editor.org/rfc/rfc8032#section-1):
-
-> 1. EdDSA provides high performance on a variety of platforms;
-> 2. The use of a unique random number for each signature is not required;
-> 3. It is more resilient to side-channel attacks;
-> 4. EdDSA uses small public keys (32 or 57 bytes) and signatures (64 or 114 bytes) for Ed25519 and Ed448, respectively;
+#### EdDSA Signature Reasoning:
+> 1. EdDSA provides high performance on a variety of platforms
+> 2. The use of a unique random number for each signature is not required
+> 3. It is more resilient to side-channel attacks
+> 4. EdDSA uses small public keys (32 or 57 bytes) and signatures (64 or 114 bytes) for Ed25519 and Ed448, respectively
 > 5. The formulas are "complete", i.e., they are valid for all points on the curve, with no exceptions. This obviates the need for EdDSA to perform expensive point validation on untrusted public values; and
 > 6. EdDSA provides collision resilience, meaning that hash-function collisions do not break this system.
-
-
-#### ID registry Migration
-The IdRegistry is deployed in a trusted state where keys may not be registered by anyone except the owner. The owner will populate the KeyRegistry with existing state by using bulk operations. Once complete, the owner will call `migrate()` to set a migration timestamp and `emit` an event. Node operators watch for the Migrated event and 24 hours after it is emitted, they cut over to this contract as the source of truth. 
-
-Migration happens when a new contract needs to be deployed. This could happen because of a bug, etc. In such an instance, infrastructure nodes must listen for the emission event and modify their environment to point to the new contract. If node operators fail to update the reference contract, the infrastructure nodes risk relying on outdated or potentially insecure data, which could compromise the integrity of the system or network they are part of. This failure to update their references to the new contract means they will not be synchronized with the latest state, leading to inconsistencies in data validation, ID verification, or any other functionalities reliant on the IdRegistry.
-
-#### ID registry Upgrades
-The IdRegistry contract may need to be upgraded in case a bug is discovered or the logic needs to be changed. In such cases:
-
-1. A new IdRegistry contract is deployed.
-2. The current IdRegistry contract is paused.
-3. The new IdRegistry is seeded with all the registered identifiers in the old contract.
-4. The KeyRegistry is updated to point to the new IdRegistry.
-5. A new Bundler contract is deployed, pointing to the correct contracts.
 
 
 ## References

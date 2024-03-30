@@ -19,7 +19,7 @@ To prevent such undesirable dynamics, we develop structures for a [self-authenti
 
 ## Motivation
 
-The proposed solution aims to achieve the following goals:
+The proposed solution aims to achieve the following:
 
 - **ID provisioning** Users should be able to create global IDs which are stable across services. These IDs should rarely change to ensure that links to their data are stable.
 - **Public key distribution** Distributed systems rely on cryptography to prove the authenticity of data and provide end-to-end privacy. The identity system must publish their public keys with strong security.

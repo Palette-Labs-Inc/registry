@@ -1,30 +1,28 @@
-# RFC: Decentralized Registry Infrastructure
+# RFC: Node Registry Infrastructure
 
 - **status:** Draft
 - **Author:** Michael Perhats
-- **Created:** 02-24-2024
-- **Last supportd:** 02-24-2024
-
+- **Created:** 03-30-2024
+- **Last supportd:** 03-30-2024
 
 ## Abstract
-
-This document outlines a proposal for a decentralized registry infrastructure. This proposal advocates for permissionless registration onto an EVM compatible blockchain, leveraging existing cryptographic standards (`secp256k1` for signing and `keccak256` for hashing) to simplify Authorization signatures between [Node Operators](./lifecycle-apis.md#node-operator) during server-to-server requests.
+This document outlines a proposal for a decentralized registry infrastructure. This proposal advocates for permissionless registration onto an EVM compatible blockchain, leveraging existing cryptographic standards (`secp256k1` for signing and `keccak256` for hashing) to simplify Authorization signatures between [`Node Operator`s](./lifecycle-apis.md#node-operator) during server-to-server requests.
 
 For technical details on the registration process, please see the [@palette-labs/registry repository](https://github.com/Palette-Labs-Inc/registry/)
 
 ### Motivation
-The motivation behind this proposal is to overcome the limitations of centralized registries and improve the security and efficiency of server-to-server communication in a distributed network. 
+The motivation behind this proposal is to overcome the limitations of centralized registries and to ensure that server-to-server communication in a distributed network can be reliably verified between registered parties.
 
 ## Introduction
 
 ### About the Network Registry Infrastructure
 We are designing a server-to-server architecture for commercial markets. The design supports an interoperable network of independently hosted `Provider Supporting Nodes` and `Buyer Supporting Nodes` that are responsible for onboarding participants on either side of the network.
 
-The network registry is a decentralized public ledger that maintains the records of Node Operators (network servers), agents, their supported Industry Codes, and the geographical regions that they represent. The registry is queried for a Producers products or services during the search phase of a Buyers transaction lifecycle. 
+The network registry is a decentralized public ledger that maintains the records of `Node Operator`s (network servers), agents, their supported Industry Codes, and the geographical regions that they represent. The registry is queried for a Producers products or services during the search phase of a Buyers transaction lifecycle. 
 
-During registration into the network, a Node Operator creates an ethereum key pair. The public key is stored on the blockchain in the network registry along with a unique identifier. When communicating with other Node's in the network, a *sending* Node Operator signs the data that they are sending over the network, including the signature hash in the header of the HTTP request. When this message is received by a *receiving* Node, they should query the registry for the *sending* Node's public key and use the signature in the request header to decrypt the message. If the message is successfully decrypted, the *receiving* Node Operator can know that the *sending* Node Operator is VERIFIED and properly registered. If the *sending* Node Operator's message is unable to be decrypted, the *receiving* Node Operator should respond to the *sending* Node Operators request with an error code. 
+During registration into the network, a `Node Operator` creates an ethereum key pair. The public key is stored on the blockchain in the network registry along with a unique identifier. When communicating with other Node's in the network, a *sending* `Node Operator` signs the data that they are sending over the network, including the signature hash in the header of the HTTP request. When this message is received by a *receiving* Node, they should query the registry for the *sending* Node's public key and use the signature in the request header to decrypt the message. If the message is successfully decrypted, the *receiving* `Node Operator` can know that the *sending* `Node Operator` is VERIFIED and properly registered. If the *sending* `Node Operator`'s message is unable to be decrypted, the *receiving* `Node Operator` should respond to the *sending* `Node Operator`s request with an error code. 
 
-All registered Node Operators self-maintain a `location` field in the registry table. The location field supports an array of strings that represent a [`Hexagonal Hierarchical Spatial Index`](https://github.com/uber/h3). 
+All registered `Node Operator`s self-maintain a `location` field in the registry table. The location field supports an array of strings that represent a [`Hexagonal Hierarchical Spatial Index`](https://github.com/uber/h3). 
 
 ## Proposal
 
@@ -145,7 +143,7 @@ An HTTP Message Signature is a signature over a string generated from a subset o
 
 Because all server-to-server communications in the network are async POST requests, we can simplify what gets signed during server-to-server communications by simply signing a base64URL encoded JSON string of the request body. 
 
-During registration, a Node Operator creates a public private key pair. The public key is stored on the blockchain in the network registry along with a unique identifier. When communicating with other Node's in the network, a *sending* Node Operator signs the data that they are sending over the network, including the signature hash in the header of the HTTP request. When this message is received by a *receiving* Node, they should query the registry for the *sending* Node's public key and use the signature in the request header to decrypt the message. If the message is successfully decrypted and the status of the *sending* Node is `VERIFIED`, the *receiving* Node Operator can know that the *sending* Node Operator is properly registered and their message has not been tampered. If the *sending* Node Operator's message is unable to be decrypted, the *receiving* Node Operator should respond to the *sending* Node Operators request with an error code. 
+During registration, a `Node Operator` creates a public private key pair. The public key is stored on the blockchain in the network registry along with a unique identifier. When communicating with other Node's in the network, a *sending* `Node Operator` signs the data that they are sending over the network, including the signature hash in the header of the HTTP request. When this message is received by a *receiving* Node, they should query the registry for the *sending* Node's public key and use the signature in the request header to decrypt the message. If the message is successfully decrypted and the status of the *sending* Node is `VERIFIED`, the *receiving* `Node Operator` can know that the *sending* `Node Operator` is properly registered and their message has not been tampered. If the *sending* `Node Operator`'s message is unable to be decrypted, the *receiving* `Node Operator` should respond to the *sending* `Node Operator`s request with an error code. 
 
 The BSN and PSN is expected to send an Authorization header (as defined in the latest [RFC](https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-message-signatures#name-scheme)  where the “auth-scheme” is “Signature” and the “auth-param” parameters meet the requirements listed in Section 2.3 of [this](https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-message-signatures#section-2.3) document.
 
