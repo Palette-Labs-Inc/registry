@@ -7,27 +7,29 @@
 
 ## Abstract
 
-This RFC proposes a self-sovereign identity and data portability framework for decentralized commercial networks, using WebAuthn, personal data stores, and decentralized identifiers (DIDs).
+This RFC proposes a self-sovereign identity and data portability framework for decentralized commercial networks, using WebAuthn, personal data repositories, and global decentralized identities for actors. 
 
 ## Introduction
 
-[Our design](./00001-lifecycle-apis.md) supports an interoperable network of independently hosted Provider Supporting Nodes and Buyer Supporting Nodes that are responsible for onboarding participants on either side of the network, storing their data, and communicating with other nodes in the network. We are not strictly a p2p network in that we assume nodes are necessary for performing computationally heavy tasks. We also assume that most users will not want to host their infrastructure. 
-
 In centralized networks, central servers own a users identity and, as such, their relationship to the network. As the network grows, and power accumulates to central authorities, platforms begin to extract from stakeholders - usually through increasingly high take rates in commercial settings.
 
-To prevent such undesirable dynamics, we develop structures for a [self-authenticating](https://en.wiktionary.org/wiki/self-authenticating) protocol. Our design grants users the ability to "switch" between managed-hosts (nodes), grant permissions to nodes, and revoke authorizations from nodes, shifting control to individual agents within the network.
+To prevent such undesirable dynamics, we develop structures for a [self-authenticating](https://en.wiktionary.org/wiki/self-authenticating) protocol. Our design grants users the ability to "switch" between managed-hosts (nodes), grant permissions to nodes, and revoke authorizations from nodes, shifting control to individual agents within the network. Therefore, the rent that any infrastructure provider might charge to an agent in the network will fall to it's market clearing price. As such, most of the value created by the network will accrue to the edges, maximally benefiting the networks participants as the network matures.
+
+[Our design](./00001-lifecycle-apis.md) supports an interoperable network of independently hosted `Provider Supporting Nodes` and `Buyer Supporting Nodes` that are responsible for onboarding participants on either side of the network, storing their data, and relaying transaction intents to other nodes in the network. We are not strictly a p2p network; we assume webservers are necessary for performing computational tasks for filtering information and providing app views. We also assume that most users will not want to host their infrastructure, although this is entirely possible within the standard.
 
 ## Motivation
 
 The proposed solution aims to achieve the following goals:
 
-1. **User Control of Identity and Data**: Enable users to maintain control over their identities and personal data. Users who want to switch providers can transfer their data at their convenience, including to their own infrastructure
-2. **Privacy-Preserving Interactions**: Ensure that users can selectively disclose relevant information while protecting sensitive data, such as addresses or personal identifiers
-3. **Seamless Migration between Hosts**: Allow users to switch between managed hosts (nodes) seamlessly, without losing their identity or data, and without requiring permission from their existing host
-4. **Content-Addressed Data Structures**: Enabling users to carry their data between different nodes and platforms
-6. **Decentralized Identity Management**: Compatibble with existing decentralized identifiers (DIDs) and Verifiable Credentials (VCs)
-7. **Self-Custody**: Genuine digital ownership where users have exclusive control over their assets
-8. **EVM Compatible**: Identity primitives should be compatible with EVM's and server as a users wallet. Users must be able to earn blockchain tokens
+- **ID provisioning** Users should be able to create global IDs which are stable across services. These IDs should rarely change to ensure that links to their data are stable.
+- **Public key distribution** Distributed systems rely on cryptography to prove the authenticity of data and provide end-to-end privacy. The identity system must publish their public keys with strong security.
+- **Key rotation** Users must be able to rotate their key material without disrupting their identity.
+- **Service discovery** To interact with users, applications must be able to discover the services in use by a given user.
+- **Usability** Users should not have to remember a seed phrase or perform other cognitively demanding tasks to receive the benefits of their decentralized identity.  
+- **Portability** Identities should be portable across services. Changing a provider should not cause a user to lose their identity, social graph, or content.
+- **Self-Custody**: Users should have full digital control of their identity and their relationship to infrastructure and services within the network.
+- **EVM Compatible**: Identity primitives should be compatible with EVM's and server as a users wallet. Users must be able to earn blockchain tokens
+- **Privacy-Preserving Interactions**: Ensure that users can selectively disclose relevant information while protecting sensitive data, such as addresses or personal identifiers
 
 ## Proposal
 
