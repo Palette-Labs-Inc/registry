@@ -1,4 +1,4 @@
-# RFC: Self-Sovereign Identity in p2p Commercial Networks
+# RFC: A Self-Sovereign Identity proposal in p2p Commercial Networks
 
 - **status:** Draft
 - **Author:** Michael Perhats
@@ -29,7 +29,7 @@ The proposed solution aims to achieve the following:
 - **Privacy-Preserving Interactions**: Ensure that users can selectively disclose relevant information while protecting sensitive data, such as addresses or personal identifiers
 
 ## Agent Contracts
-Agents create a global identity within the network by going through a registration procedure and interfacing with on-chain smart contracts. This document defines the set of contracts that help a user bootstrap their identity and delegated signers. Delegated signatures allow users to easily interact with the network and it's avilable services while delegating the signing process to a client that represents their interests. Delegated signatures allow clients to automate the signature process so the user does not have to present their private key during every stage in the transaction lifecycle; optimizing for usability.
+Agents create a global identity within the network by going through a registration procedure and interfacing with on-chain smart contracts. This document defines the set of contracts that help a user bootstrap their identity and their delegated signers. Delegated signatures allow users to easily interact with the network and it's avilable services while delegating the signing process to a client that represents their interests. Delegated signatures allow clients to automate the signature process so the user does not have to present their private key during every stage in the transaction lifecycle; optimizing for usability.
 
 ```mermaid
 graph TD
