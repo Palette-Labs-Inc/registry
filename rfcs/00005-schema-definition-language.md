@@ -18,6 +18,8 @@ An open network like nosh needs a way to agree on data structures, transport, an
 
 For example, the company will initially define the basic data models and API definitions for food-delivery, rideshare, and other e-commerce networks but it is unliekly that we will be able to create the schemas for all categories of commercial applications. In order for the network to grow into many new categories independently, we need a common way for developers to describe data. Further, this schema language enables code-generation with types and validation which makes life very easy for developers. 
 
+We considered adopting [RDF standards](https://www.w3.org/RDF/) but the generality and lack of strictness felt uncomfortable here. RDF is good for generic or easily generalizable use cases but this felt wrong for the highly contractually commercial setting in which applications building here require. We wanted a more strict schema language that was easy for developers to use and offer assurances for strongly typed APIs with runtime correctness validations against over HTTP. 
+
 ## Proposal
 Here, we introduce "Lexicon", a schema [interface definition language](https://en.wikipedia.org/wiki/Interface_description_language) used to describe records, HTTP endpoints, and event stream messages (websockets). This RFC builds on top of the [Data Models](./00004-data-models.md) RFC.
 
@@ -268,7 +270,7 @@ Implementations "should" validate that the semantics of the datetime are valid. 
 
 Valid examples:
 
-```text
+```shell
 # preferred
 1985-04-12T23:20:50.123Z
 1985-04-12T23:20:50.123456Z
@@ -285,7 +287,7 @@ Valid examples:
 
 Invalid examples:
 
-```text
+```shell
 1985-04-12
 1985-04-12T23:20Z
 1985-04-12T23:20:5Z
@@ -360,7 +362,6 @@ An array of H3 geospatial indices. The H3 system is a framework for geospatial i
 
 This JSON snippet represents an array of H3 indices, each pointing to a specific hexagonal cell.
 
-
 ## When to use `$type`
 Data objects sometimes include a `$type` field which indicates their Lexicon type. The general principle is that this field needs to be included any time there could be ambiguity about the content type when validating data.
 
@@ -375,9 +376,7 @@ As a reminder, `main` types must be referenced in `$type` fields as just the
 
 ## Examples
 
-(Optional) If applicable, provide details about the implementation of the proposal, including any prototypes, code snippets, or reference implementations.
 
 ## References
-
-List any references such as existing RFCs, standards documents, or academic papers that were cited or used in the creation of this RFC.
+- [Bsky](https://atproto.com/guides/lexicon)
 
