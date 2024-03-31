@@ -37,11 +37,10 @@ nosh.client.provider.catalog
 **example api call**:
 ```ts
 await nosh.server.buyer.updatePreferences({
-  user: 'alice.com',
+  user: 'alice',
 })
 ```
-
-In the above API call, Lexicon establishes a shared method id (`nosh.server.buyer.updatePreferences`) and the expected query params, input body, and output body. By using Lexicon the call inherits runtime checks on the inputs and outputs.
+In the above API call, Lexicon establishes a shared method id (`nosh.server.buyer.updatePreferences`) and the expected query params, input body, and output body. By using Lexicon the call inherits runtime checks on the inputs, outputs, and contexts of all calls which is vital in distributed systems.
 
 ## Proposal
 Here, we introduce "Lexicon", a schema [interface definition language](https://en.wikipedia.org/wiki/Interface_description_language) used to describe records, HTTP endpoints, and event stream messages (websockets). This RFC builds on top of the [Data Models](./00004-data-models.md) RFC.
@@ -65,8 +64,8 @@ Here, we introduce "Lexicon", a schema [interface definition language](https://e
 | `unknown`    |                 | meta       |
 | `record`     |                 | primary    |
 | `query`      |                 | primary    |
-| `context`    |                 | primary    |
 | `procedure`  |                 | primary    |
+| `context`    |                 | primary    |
 | `subscription`|                | primary    |
 
 
@@ -106,7 +105,7 @@ Type-specific fields:
 - `key` (string, required): specifies the [Record Key type](https://atproto.com/specs/record-key)
 - `record` (object, required): a schema definition with type `object`, which specifies this type of record
 
-### Query and Procedure
+### Query, Procedure, and Context
 Type-specific fields:
 - `parameters` (object, optional): a schema definition with type `params`, describing the HTTP query parameters for this endpoint
 - `output` (object, optional): describes the HTTP response body
