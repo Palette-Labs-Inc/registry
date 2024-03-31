@@ -6,7 +6,7 @@
 - **Last supportd:** 03-31-2024
 
 ## Abstract
-Records and messages need to be stored, transmitted, encoded, and decoded in a consistent way to promote interoperability in distributed systems. This document proposes the adoption of the [IPLD standard]([Interplanetary Linked Data (IPLD)](https://ipld.io/docs/data-model/)) for the networks data models.
+Records and messages need to be stored, transmitted, encoded, and decoded in a consistent way to promote interoperability in distributed systems. This document proposes the adoption of a slightly modified [Interplanetary Linked Data (IPLD)](https://ipld.io/docs/data-model/) specification for the networks data models.
 
 ## Motivation
 The IPLD data model is similar to JSON -- with addiditional types for bytes, and links. These additional properties are useful for defining linked data structures in distributed systems and allowing anyone to explore data regardless of the underlying protocol. Common type representations can then be easily representable by common programming languages. Such a standard creates low friction for tooling and libraries within the protocol network.
@@ -28,7 +28,7 @@ For our purposes, we modify the raw IPLD formats as follows:
 
 ### Data Types
 
-| Nosh Type    | IPLD Type | JSON                 | CBOR                    | Mods                    |
+| Lexicon Type | IPLD Type | JSON                 | CBOR                    | Mods                    |
 | ------------ | --------- | -------------------- | ----------------------- | ----------------------- |
 | `null`       | null      | Null                 | Special Value (major 7) | strict IPLD format      |
 | `boolean`    | boolean   | Boolean              | Special Value (major 7) | strict IPLD format      |
