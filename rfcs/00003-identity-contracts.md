@@ -13,7 +13,7 @@ In centralized networks, central servers own a users identity and, as such, thei
 
 To prevent such undesirable dynamics, we develop structures for a [self-authenticating](https://en.wiktionary.org/wiki/self-authenticating) protocol. Our design grants users the ability to "switch" between managed-hosts (nodes), grant permissions to nodes, and revoke authorizations from nodes, shifting control to individual agents within the network. Therefore, the rent that any infrastructure provider might charge to an agent in the network will fall to it's market clearing price. As such, most of the value created by the network will accrue to the edges, maximally benefiting the networks participants as the network matures.
 
-[Our design](./00001-lifecycle-apis.md) supports an interoperable network of independently hosted `Provider Supporting Nodes` and `Buyer Supporting Nodes` that are responsible for onboarding participants on either side of the network, storing their data, and relaying transaction intents to other nodes in the network. We are not strictly a p2p network; we assume webservers are necessary for performing computational tasks for filtering information and providing app views. We also assume that most users will not want to host their infrastructure, although this is entirely possible within the standard.
+[Our design](./00001-lifecycle-apis.md) supports an interoperable network of independently hosted `Provider Supporting Nodes` and `Buyer Supporting Nodes` that are responsible for onboarding participants on either side of the network, storing their data, and relaying transaction `messages` to other nodes in the network. We are not strictly a p2p network; we assume webservers are necessary for performing computational tasks for filtering information and providing app views. We also assume that most users will not want to host their infrastructure, although this is entirely possible within the standard.
 
 ## Motivation
 The proposed solution aims to achieve the following:
@@ -114,9 +114,9 @@ recover() - recover (move) an `agent identifier` to a new custody address
 
 
 ### Signature Authority Registry
-The `Signature Authority Registry` contract lets addresses with an `agent identifier` register or remove public keys to sign on their behalf in the network. This delegated signature pattern is useful to avoid the requirement of agents presenting their private key for every `intent` created during their checkout experience. The `Signature Authority Registry` allows for temporary or permanent delegation of intent signing to a `client` that represents the `agent` during their transaction lifecycle.
+The `Signature Authority Registry` contract lets addresses with an `agent identifier` register or remove public keys to sign on their behalf in the network. This delegated signature pattern is useful to avoid the requirement of agents presenting their private key for every `message` created during their checkout experience. The `Signature Authority Registry` allows for temporary or permanent delegation of `message` signing to a `client` that represents the `agent` during their transaction lifecycle.
 
-Keys added on-chain are tracked by `Node Operator`s and can be used to validate a users `intent`s and data. The same key can be added by different `agent identifier`s (permitting a single `client` to represent many `agent`s) and can exist in different states. Keys contain a key type that indicates how they should be interpreted and used when verifying signatures. During registration, metadata can also be emitted to provide additional context about the key. Keys contain a metadata type indicating how this metadata should be validated and interpreted. 
+Keys added on-chain are tracked by `Node Operator`s and can be used to validate a users `message`s and data. The same key can be added by different `agent identifier`s (permitting a single `client` to represent many `agent`s) and can exist in different states. Keys contain a key type that indicates how they should be interpreted and used when verifying signatures. During registration, metadata can also be emitted to provide additional context about the key. Keys contain a metadata type indicating how this metadata should be validated and interpreted. 
 
 **Key Types**
 The only key type today is TYPE_1 that indicates that a key is an [EdDSA](https://www.w3.org/TR/vc-di-eddsa/) key and should be allowed to sign messages on behalf of an `agent identifier`.
@@ -182,9 +182,9 @@ A `recovery proxy` can change its owner, and may be owned by an EOA, multisig, o
 __ 
 
 ## Node Registry
-We make the simplifying assumption that, in order to make the network economical, traditional webservers will be required to perform basic computational and routing tasks for the network such as: providing app views, verifying intents, routing transactions, and indexing the network's participants.
+We make the simplifying assumption that, in order to make the network economical, traditional webservers will be required to perform basic computational and routing tasks for the network such as: providing app views, verifying `messages`, routing transactions, and indexing the network's participants.
 
-`Node Operators` are webservers that store data on behalf of `agent identifiers`, track the `Agent Registry` to know the `custody addresses` that relate to an `agent identifier`, and the `Signature Authority Registry` to find out which key pairs can sign intents on behalf of an agent.
+`Node Operators` are webservers that store data on behalf of `agent identifiers`, track the `Agent Registry` to know the `custody addresses` that relate to an `agent identifier`, and the `Signature Authority Registry` to find out which key pairs can sign `messages` on behalf of an agent.
 
 `Buyer Supporting Nodes` interface with `Provider Supporting Nodes` during a `Buyers` transaction lifecycle. These interactions are transport layer agnostic, POST-only,signed, server to server requests. 
 
@@ -223,4 +223,4 @@ TODO: add methods.
 - [Data repositories](https://atproto.com/guides/data-repos)
 - [Coinbase Smart Wallet](https://git`Node Operator`.com/coinbase/smart-wallet?tab=readme-ov-file)
 - [Farcaster Protocol Specification](https://git`Node Operator`.com/farcasterxyz/protocol)
-- [Intentcasting](https://customercommons.org/category/intentcasting/)
+- [messagecasting](https://customercommons.org/category/messagecasting/)
