@@ -20,6 +20,29 @@ For example, the company will initially define the basic data models and API def
 
 We considered adopting [RDF standards](https://www.w3.org/RDF/) but the generality and lack of strictness felt uncomfortable here. RDF is good for generic or easily generalizable use cases but this felt wrong for the highly contractually commercial setting in which applications building here require. We wanted a more strict schema language that was easy for developers to use and offer assurances for strongly typed APIs with runtime correctness validations against over HTTP. 
 
+## Examples
+
+**example namespace methods**:
+```ts
+nosh.server.buyer.updatePreferences()
+nosh.client.buyer.getPreferences()
+```
+
+**example record types**:
+ ```ts
+nosh.server.buyer.address
+nosh.client.provider.catalog
+```
+
+**example api call**:
+```ts
+await nosh.server.buyer.updatePreferences({
+  user: 'alice.com',
+})
+```
+
+In the above API call, Lexicon establishes a shared method id (`nosh.server.buyer.updatePreferences`) and the expected query params, input body, and output body. By using Lexicon the call inherits runtime checks on the inputs and outputs.
+
 ## Proposal
 Here, we introduce "Lexicon", a schema [interface definition language](https://en.wikipedia.org/wiki/Interface_description_language) used to describe records, HTTP endpoints, and event stream messages (websockets). This RFC builds on top of the [Data Models](./00004-data-models.md) RFC.
 
@@ -373,8 +396,6 @@ The specific rules are:
 Note that `blob` objects always include `$type`, which allows generic processing.
 
 As a reminder, `main` types must be referenced in `$type` fields as just the `Namespace Identifier`, not including a `#main` suffix.
-
-## Examples
 
 
 ## References
