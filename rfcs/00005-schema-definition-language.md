@@ -1,4 +1,4 @@
-# RFC: Introducting Lexicons, a network specific Schema Definition Language
+# RFC: Lexicons, a network specific Schema Definition Language
 
 - **status:** Draft
 - **Author:** Michael Perhats
@@ -102,7 +102,7 @@ Each primary definition schema object includes these fields:
 
 ### Record
 Type-specific fields:
-- `key` (string, required): specifies the [Record Key type](https://atproto.com/specs/record-key)
+- `key` (string, required): specifies the [Record Key type](./00006-record-keys.md)
 - `record` (object, required): a schema definition with type `object`, which specifies this type of record
 
 ### Query, Procedure, and Context
@@ -395,7 +395,6 @@ The specific rules are:
 Note that `blob` objects always include `$type`, which allows generic processing.
 
 As a reminder, `main` types must be referenced in `$type` fields as just the `Namespace Identifier`, not including a `#main` suffix.
-
 
 ## References
 - [Bsky](https://atproto.com/guides/lexicon)
