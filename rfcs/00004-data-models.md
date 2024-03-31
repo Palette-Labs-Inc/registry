@@ -51,8 +51,9 @@ For our purposes, we modify the raw IPLD formats as follows:
 **The following types are removed from the original IPLD Data model definitions:**
 - [Float kind](https://ipld.io/docs/data-model/kinds/#float-kind)
 
+
 **Notes on floats**:
-It is [explicitly stated](https://ipld.io/design/tricky-choices/numeric-domain/#floating-point) in the IPLD Float Kind documentation to completely avoid Floats when developing systems on IPLD. To make things easier, we simply remove the reference to avoid complexities in implementations of the protocol. Content-addressing works best where the content being addressed has a stable meaning for the address it produces. Alternative methods for representing this meaning, or for encoding fractional numbers with greater precision and less variability, are used instead. What this means in practice is that currency values are represented universally in the lowest common denominator of the local currency. 
+It is [explicitly stated](https://ipld.io/design/tricky-choices/numeric-domain/#floating-point) in the IPLD Float Kind documentation to completely avoid Floats when developing systems on IPLD. To make things easier, we simply remove the reference to avoid complexities in implementations of the protocol. Content-addressing works best where the content being addressed has a stable meaning for the address it produces. Alternative methods for representing this meaning, or for encoding fractional numbers with greater precision and less variability, are used instead. What this means in practice is that currency values are represented universally in the lowest common denominator of the local currency.
 
 
 **The following types are modified from the original IPLD Data model definitions:**
@@ -64,21 +65,62 @@ It is [explicitly stated](https://ipld.io/design/tricky-choices/numeric-domain/#
 - blob
 
 ### Nullable and False-y
-In our data model proposal there is a semantic difference between explicitly setting an map field to `null` and not including the field at all. Both JSON and CBOR have the same distinction.
-
-Null or missing fields are also distinct from "false-y" value like `false` (for booleans), `0` (for integers), empty lists, or empty objects.
-We add a blob type to represent a specific IPLD map for content. This type is specifically useful for descriptions of arbitrary physical objects or entitites within the network such as catalog items. Blobs are self-describing data structures that include references to metadata about the file object.
+Null or missing fields are distinct from "false-y" value like `false` (for booleans), `0` (for integers), empty lists, or empty objects just as they are in JSON and CBOR. 
 
 ### Extended `blob` Type Notes
+We add a blob type to represent a specific IPLD map for file content. This additional type is specifically useful for descriptions of arbitrary physical objects or entities within the network such as catalog items that can be represented in a variety of media formats. Blobs are self-describing data structures that include references to metadata about the object.
+
 Blob nodes are objects with following fields:
 - `$type` (string, required): fixed value `blob`. Note that this is not a valid NSID.
 - `ref` (link, required): CID reference to blob, with multicodec type `raw`. In JSON, encoded as a `$link` object as usual
 - `mimeType` (string, required, not empty): content type of blob. `application/octet-stream` if not known
 - `size` (integer, required, positive, non-zero): length of blob in bytes
 
+### Working with JSON
+We do not implement [IPLD DAG-JSON](https://ipld.io/docs/codecs/known/dag-json/) directly. 
+
+The [DAG-JSON specification](https://ipld.io/docs/codecs/known/dag-json/) mentions that the only difference from regular JSON is that if you want to encode a link, you take the [CID](https://ipld.io/glossary/#cid), encode it in base58 (or base32, for CIDv0), and flank it in a map with a `"/"` key -- so it looks like this:
+
+**Confusing DAG-JSON exmple with link refernce**
+ ```json
+{
+    "/":"Qmfoo"
+}
+```
+
+**Confusing DAG_JSON example with bytes reference**
+```json
+"data": {
+    "/": {
+      "bytes": "iVBORK21"
+    }
+  }
+```
+
+We introduce a modified field key for each of these two types, so only `link` and `bytes` types are in need of special treatment.
+
+### `link`
+For example, a node with a single field `"exampleLink"` with type `link` would encode in JSON and substitute `$link` as the key name instead of `/`. 
+```bash
+{
+  "exampleLink": 
+  {
+    "$link": "GgoAAAA38G"
+  }
+}
+```
+
+And a node with a single field `"exampleBytes"` with type `bytes` would encode in JSON and substitute `$bytes`  instead of two nested objects, with outer key `/`  inner key bytes, and the same base64 encoding scheme referenced in [RFC-4648, section 4](https://datatracker.ietf.org/doc/html/rfc4648#section-4).
+```bash
+{
+  "exampleBytes": 
+  {
+    "$bytes": "IaxDIBKe032"
+  }
+}
+```
 
 ## Examples
-
 (Optional) If applicable, provide details about the implementation of the proposal, including any prototypes, code snippets, or reference implementations.
 
 ## References
