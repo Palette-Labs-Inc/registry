@@ -15,7 +15,6 @@ A data repository is a collection of data stored (publicly or privately) by a us
 
 3. *Trust*: Self-authenticating data allows trust to reside in the data itself, widening the set of storage and computational possibilities to a much broader set of possible providers. Such features significantly widen the possibility of the network. Society can contribute idle cognitive resources (say an algorithm), or idle computational resources (unallocated compute on local devices). Such properties allow most value for the network to accrue to it's users. 
 
-
 ## Introduction
 Data repositories are essentially your own personal git repository that only you (or a [delegated signer](./00003-identity-contracts.md#signature-authority-registry)) are able to modify.   
 

@@ -1,4 +1,4 @@
-# RFC: Lexicons, a network specific Schema Definition Language
+# RFC: Lexicons, a Nosh Protocol specific Schema Definition Language
 
 - **status:** Draft
 - **Author:** Michael Perhats
@@ -146,8 +146,8 @@ When included as an HTTP query parameter, should be rendered as `true` or `fa
 
 ### `integer`
 A signed integer number.
-
 Type-specific fields:
+- `format` (integer, optional): integer format restriction
 - `minimum` (integer, optional): minimum acceptable value
 - `maximum` (integer, optional): maximum acceptable value
 - `enum` (array of integers, optional): a closed set of allowed values
@@ -156,7 +156,6 @@ Type-specific fields:
 
 ### `string`
 Type-specific fields:
-
 - `format` (string, optional): string format restriction
 - `maxLength` (integer, optional): maximum length of value, in UTF-8 bytes
 - `minLength` (integer, optional): minimum length of value, in UTF-8 bytes
@@ -258,20 +257,19 @@ No type-specific fields.
 ## String Formats
 Strings can optionally be constrained to one of the following `format` types:
 
-- `at-identifier`: either a [Handle](https://atproto.com/specs/handle) or a [DID](https://atproto.com/specs/did), details described below
-- `at-uri`: [AT-URI](https://atproto.com/specs/at-uri-scheme)
-- `cid`: CID in string format, details specified in [Data Model](https://atproto.com/specs/data-model)
+- `nosh-uri`: [NOSH-URI](./00008-uri-standards.md#full-nosh-uri-syntax)
+- `cid`: CID in string format, details specified in [Data Model](./00004-data-models.md)
 - `datetime`: timestamp, details specified below
-- `did`: generic [DID Identifier](https://atproto.com/specs/did)
-- `handle`: [Handle Identifier](https://atproto.com/specs/handle)
-- ``NSID``: [Namespaced Identifier](https://atproto.com/specs/`NSID`)
+- `nsid`: a [Namespaced Identifier](./00009-namespace-identifiers.md)
 - `uri`: generic URI, details specified below
 - `language`: language code, details specified below
+- `currency`: currency code, details specified below
+- `country`: country code, details specified below
+- `eth`: the `custody address` of an `Agent Identifier`
+- `h3`: a string of hexidecimal characters representing a [geospatial index](https://github.com/uber/h3)
 
-For the various identifier formats, when doing Lexicon schema validation the most expansive identifier syntax format should be permitted. Problems with identifiers which do pass basic syntax validation should be reported as application errors, not lexicon data validation errors. For example, data with any kind of DID in a `did` format string field should pass Lexicon validation, with unsupported DID methods being raised separately as an application error.
-
-### `at-identifier`
-A string type which is either a DID (type: did) or a handle (handle). Mostly used in XRPC query parameters. It is unambiguous whether an at-identifier is a handle or a DID because a DID always starts with did:, and the colon character (:) is not an allowed in handles.
+### `nosh-identifier`
+A string type which is either an [`Agent Identifier`](./00003-identity-contracts.md#agent-identifiers) or the ethereum address of an `Agent Identifier`
 
 ### `datetime`
 Full-precision date and time, with timezone information.
@@ -338,6 +336,16 @@ Invalid examples:
 1985-00-12T23:20:50.123Z
 ```
 
+### `nsid`
+Represents a syntactically valid [Namespace Identifier](./00009-namespace-identifiers.md)
+
+#### Examples:
+- `nosh.example.fooBar`
+- `users.alice.hello`
+- `a-0.b-1.f`
+- `x.y.z`
+- `xn.2.test.thing`
+
 ### `uri`
 Flexible to any URI schema, following the generic RFC-3986 on URIs. This includes, but isn’t limited to: `did`, `https`, `wss`, `ipfs` (for CIDs), `dns`, and of course `at`. Maximum length in Lexicons is 8 KBytes.
 
@@ -369,20 +377,27 @@ A country code, in the two-letter format of [ISO 3166](https://www.iso.org/iso-3
 - `JP` for Japan
 - `GB` for United Kingdom
 
-### `H3Array`
-An array of H3 geospatial indices. The H3 system is a framework for geospatial indexing that divides the world into a hexagonal grid. Each cell in the grid is identified by a unique index, represented as a 15-character hexadecimal string. This array can be used for various applications, including mapping, spatial analysis, and geospatial data management.
-
-#### Properties
-- **Type**: `array`
-- **Items Type**: `string`
-- **Items Description**: An H3 index represented as a 15-character hexadecimal string. Each index corresponds to a specific hexagon in the global grid.
+### `eth`
+An ethereum address representing the `custody address` or `recovery address` of a registered agent in the nosh-protocol network.
 
 #### Example
-```json
-[   "8f2830828052d25",   "8f283082a30e623",   "8f283082a6edfff" ]
-```
+- `0xb794f5ea0ba39494ce839613fffba74279579268` - represents a hexagonal representation of a physical global position
 
-This JSON snippet represents an array of H3 indices, each pointing to a specific hexagonal cell.
+### `h3`
+An array of H3 geospatial indices. The H3 system is a framework for geospatial indexing that divides the world into a hexagonal grid. Each cell in the grid is identified by a unique index, represented as a 15-character hexadecimal string. This array can be used for various applications, including mapping, spatial analysis, and geospatial data management.
+
+#### Example
+- `8f2830828052d25` - represents a hexagonal representation of a physical global position
+
+## Integer Formats
+Integers can be constrained to the following `format` type:
+- `aid`: generic [Agent Identifier](./00003-identity-contracts.md#agent-identifiers)
+
+### `aid`
+A shorthand format for an [`Agent Identifier`](./00003-identity-contracts.md#agent-identifiers)
+
+#### Examples
+- `198663` an integer nonce representing registered agent 198663 in the [`Identity Contracts`](./00003-identity-contracts.md)
 
 ## When to use `$type`
 Data objects sometimes include a `$type` field which indicates their Lexicon type. The general principle is that this field needs to be included any time there could be ambiguity about the content type when validating data.
