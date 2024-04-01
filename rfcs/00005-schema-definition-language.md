@@ -256,7 +256,6 @@ No type-specific fields.
 
 ## String Formats
 Strings can optionally be constrained to one of the following `format` types:
-
 - `nosh-uri`: [NOSH-URI](./00008-uri-standards.md#full-nosh-uri-syntax)
 - `cid`: CID in string format, details specified in [Data Model](./00004-data-models.md)
 - `datetime`: timestamp, details specified below

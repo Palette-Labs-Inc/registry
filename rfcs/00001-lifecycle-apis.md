@@ -32,10 +32,8 @@ An organization with a Catalog of products or services available for sale.
 
 The primary role of the `PSN` is to maintain inventory lists for `Producers` so that when a `Buyer` searches for a service, the `PSN` can respond with a list of `Providers` that are capable of fulfilling the `Buyers` request. `PSNs` can charge a fee for providing tools for `Producers` that help them maintain their inventory and accept more orders. For example a `PSN` might make it easier for `Producers` to manage their inventory via a point-of-sale solution. Some `Producers` may choose to run their own `PSN` instance, although this behavior is unexpected. 
 
-#### Node Operator
-A `PSN` or `BSN` providing services to a Buyer or `Provider` within the network, occupying a record in the Registry. 
-
-`BSNs` and `PSNs` are organizations, universities, businesses or any other entity that host user data, like Gmail and Outlook host email. These managed hosts can offer features that would be impractical for users to run independently at scale. They can provide better user experiences, and we should expect most people to use them instead of running their own servers.
+#### Personal Data Stores (PDS)
+A `PSN` or `BSN` storing information and proxying requests on bahelf of `Buyers` or `Providers` within the network, occupying a record in the `Node Registry`. 
 
 ### Public Network Infrastructure
 
