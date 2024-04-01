@@ -37,56 +37,52 @@ The content of a repository is stored in a [Merkle Search Tree (MST)](https://h
 Every node is an [IPLD](https://ipld.io/) object ([dag-cbor](https://ipld.io/docs/codecs/known/dag-cbor/)).
 
 ## Proposal
+In the nosh-protocol architecture, the authoritative location of an account's repository is an `agents` associated **Personal Data Stores (PDS)**. An [`Agents`] current PDS location is authoritatively indicated in the `Agent Registry`
+
 We propose a repository data structure that is content-addressed (a [Merkle-tree](https://en.wikipedia.org/wiki/Merkle_tree)), and where every mutation of repository contents (eg, addition, removal, and updates to records) results in a new commit `data` hash value (CID). Commits are cryptographically signed, with rotatable signing keys, which allows recursive validation of content as a whole or in part (beginning from a specific branch in the tree).
 
-Public nosh-protocol content (**records**) is stored in per-account repositories (frequently shortened to **repo**). All currently active records are stored in the repository, and current repository contents are publicly available, but both content deletions and account deletions are fully supported. 
+User records are stored in per-account repositories (frequently shortened to **repo**). All currently active records are stored in the repository, and current repository contents are publicly available, but both record deletions and account deletions are fully supported.
 
 **Important Note**, we are working on E2EE solutions and session-based user controls to securely store private data in repos without disclosing information about addresses and other sensitive information.
 
 The repository data structure is content-addressed (a [Merkle-tree](https://en.wikipedia.org/wiki/Merkle_tree)), and every mutation of repository contents (eg, addition, removal, and updates to records) results in a new commit `data` hash value (CID). Commits are cryptographically signed, with rotatable signing keys, which allows recursive validation of content as a whole or in part.
 
-Repositories and their contents are canonically stored in binary [DAG-CBOR](https://ipld.io/docs/codecs/known/dag-cbor/) format, as a graph of [IPLD](https://ipld.io/docs/data-model/) data objects referencing each other by content hash (CID Links). Large binary blobs are not stored directly in repositories, though they are referenced by hash ([CID](https://github.com/multiformats/cid)). This includes images and other media objects. Repositories can be exported as [CAR](https://ipld.io/specs/transport/car/carv1/) files for offline backup, account migration, or other purposes.
+Repositories and their contents are canonically stored in binary [DAG-CBOR](https://ipld.io/docs/codecs/known/dag-cbor/) format, as a graph of [IPLD](https://ipld.io/docs/data-model/) data objects referencing each other by content hash (CID Links). Large binary blobs are not stored directly in repositories, though they are referenced by hash ([CID](https://github.com/multiformats/cid)). This includes media objects and files as represented by blobs. Repositories can be exported as [CAR](https://ipld.io/specs/transport/car/carv1/) files for offline backup, account migration, or other purposes.
 
-In the nosh-protocol architecture, the authoritative location of an account's repository is the associated Personal Data Server (PDS). An account's current PDS location is authoritatively indicated in the DID Document.
+In real-world use, it is expected that individual repositories will contain anywhere from dozens to millions of records, depending on the commercial setting.
 
-In real-world use, it is expected that individual repositories will contain anywhere from dozens to millions of records.
-
-## Repo Data Structure (v3)
-This describes version `3` of the repository binary format.
-
-Version `2` had a slightly different commit object schema, but is mostly compatible with `3`.
-
-Version `1` had a different MST fanout configuration, and an incompatible schema for commits and repository metadata. Version `1` is deprecated, no repositories in this format exist in the network, and implementations do not need to support it.
-
+## Repo Data Structure
 At a high level, a repository is a key/value mapping where the keys are path names (as strings) and the values are records (DAG-CBOR objects).
 
-A **Merkle Search Tree** (MST) is used to store this mapping. This content-addressed deterministic data structure stores data in key-sorted order. It is reasonably efficient for key lookups, key range scans, and appends (assuming sorted record paths). The properties of MSTs in general are described in this academic publication:
-
+A **Merkle Search Tree** (MST) is used to store this mapping. This content-addressed deterministic data structure stores data in key-sorted order. It is reasonably efficient for key lookups, key range scans, and appends (assuming sorted record paths). The properties of MSTs in general are well described here:
 > Alex Auvolat, François Taïani. Merkle Search Trees: Efficient State-Based CRDTs in Open Networks. SRDS 2019 - 38th IEEE International Symposium on Reliable Distributed Systems, Oct 2019, Lyon, France. pp.1-10, ff10.1109/SRDS.2019.00032 ([pdf](https://inria.hal.science/hal-02303490/document))
 
 The specific details of the MST as used in nosh-protocol repositories are described below.
 
 Repo paths are strings, while MST keys are byte arrays. Neither may be empty (zero-length). While repo path strings are currently limited to a subset of ASCII (making encoding a no-op), the encoding is specified as UTF-8.
 
-Repo paths currently have a fixed structure of `<collection>/<record-key>`. This means a valid, normalized [NSID](https://nosh-protocol.com/specs/nsid), followed by a `/`, followed by a valid [Record Key](https://nosh-protocol.com/specs/record-key). The path should not start with a leading `/`, and should always have exactly two path segments. The ASCII characters allowed in the entire path string are currently: letters (`A-Za-z`), digits (`0-9`), slash (`/`), period (`.`), hyphen (`-`), underscore (`_`), and tilde (`~`). The specific path segments `.` and `..` are not valid NSIDs or Record Keys, and will always be disallowed in repo paths.
+Repo paths currently have a fixed structure of `<collection>/<record-key>`. This means a valid, normalized [NSID](./00009-namespace-identifiers.md), followed by a `/`, followed by a valid [Record Key](./00007-record-keys.md). The path should not start with a leading `/`, and should always have exactly two path segments. The ASCII characters allowed in the entire path string are currently: letters (`A-Za-z`), digits (`0-9`), slash (`/`), period (`.`), hyphen (`-`), underscore (`_`), and tilde (`~`). The specific path segments `.` and `..` are not valid NSIDs or Record Keys, and will always be disallowed in repo paths.
 
 Note that repo paths for all records in the same collection are sorted together in the MST, making enumeration (via key scan) and export efficient. Additionally, the TID Record Key scheme was intentionally selected to provide chronological sorting of MST keys within the scope of a collection. Appends are more efficient than random insertions/mutations within the tree, and when enumerating records within a collection they will be in chronological order (assuming that TID generation was done correctly, which cannot be relied on in general).
 
 ### Commit Objects
-The top-level data object in a repository is a signed commit. The IPLD schema fields are:
-
-- `did` (string, required): the account DID associated with the repo, in strictly normalized form (eg, lowercase as appropriate)
-- `version` (integer, required): fixed value of `3` for this repo format version
+The top-level data object in a repository is a signed commit. The [IPLD schema](https://ipld.io/docs/schemas/) fields are:
+- `aid` (string, required): the [`agent identifier`](./00003-identity-contracts.md#agent-identifiers) associated with the repo
+- `version` (integer, required): fixed value of `1` for this repo format version
 - `data` (CID link, required): pointer to the top of the repo contents tree structure (MST)
-- `rev` (string, TID format, required): revision of the repo, used as a logical clock. Must increase monotonically. Recommend using current timestamp as TID; `rev` values in the "future" (beyond a fudge factor) should be ignored and not processed.
-- `prev` (CID link, nullable): pointer (by hash) to a previous commit object for this repository. Could be used to create a chain of history, but largely unused (included for v2 backwards compatibility). In version `3` repos, this field must exist in the CBOR object, but is virtually always `null`. NOTE: previously specified as nullable and optional, but this caused interoperability issues.
-- `sig` (byte array, required): cryptographic signature of this commit, as raw bytes
+- `rev` (string, TID format, required): revision of the repo, used as a logical clock. Must increase monotonically. Recommend using current timestamp as [TID](./00007-record-keys.md#record-key-type-tid); `rev` values in the "future" (beyond a fudge factor) should be ignored and not processed.
+- `prev` (CID link, nullable): pointer (by hash) to a previous commit object for this repository. Could be used to create a chain of history, but largely unused (included for v2 backwards compatibility). In version `1` repos, this field must exist in the CBOR object, but is virtually always `null`.
+- `sig` (byte array, required): cryptographic signature of this commit, as raw bytes.
 
-An UnsignedCommit data object has all the same fields except for `sig`. The process for signing a commit is to populate all the data fields, and then serialize the UnsignedCommit with DAG-CBOR. The output bytes are then hashed with SHA-256, and the binary hash output (without hex encoding) is then signed using the current "signing key" for the account. The signature is then stored as raw bytes in a commit object, along with all the other data fields.
+An `UnsignedCommit` data object has all the same fields except for `sig`. The process for signing a commit is to populate all the data fields, and then serialize the `UnsignedCommit` with [DAG-CBOR](https://ipld.io/docs/codecs/known/dag-cbor/). The output bytes are then hashed with [SHA-256](https://en.wikipedia.org/wiki/SHA-2), and the binary hash output (without hex encoding) is then signed using the current "private key" (signing key) for the account or the signing key of a [delegated signature authority](./00003-identity-contracts.md#signature-authority-registry) for the account. The signature is then stored as raw bytes in a commit object, along with all the other data fields.
 
-The CID for a commit overall is generated by serializing a _signed_ commit object as DAG-CBOR. See notes on the "blessed" CID format below, and in particular be sure to use the `dag-cbor` multicodec for CIDs linking to commit objects.
+The CID for a commit is generated by serializing a _signed_ commit object as [DAG-CBOR](https://ipld.io/docs/codecs/known/dag-cbor/). See notes on the "blessed" CID format below, and in particular be sure to use the `dag-cbor` multicodec for CIDs linking to commit objects.
 
-Note that neither the signature itself nor the signed commit indicate either the type of key used (curve type), or the specific public key used. That information must be fetched from the account's DID document. With key rotation, verification of older commit signatures can become ambiguous. The most recent commit should always be verifiable using the current DID document. This implies that a new repository commit should be created every time the signing key is rotated. Such a commit does not need to update the `data` CID link.
+Note that neither the signature itself nor the signed commit inform the type of key used (the elliptical curve type), or the public key used. That information must be fetched from the [`Identity Contracts`](./00003-identity-contracts.md).
+
+With key rotation or [revoked delegation to a signature authority](./00003-identity-contracts.md#signature-authority-registry), verification of older commit signatures can become ambiguous. In future versions, we plan to improve verification methods of old commits based on global revokation timestamps emitted from the [`Signautre Authority Registry`](./00003-identity-contracts.md#signature-authority-registry). When an `Agent` revokes a delegated signer, all commits signed by the signing key of the delegated signer that occur after the revokation timestamp should be invalidated.
+
+The most recent commit should always be verifiable using the current [`Identity Contracts`](./00003-identity-contracts.md). This implies that a new repository commit should be created every time the signing key is rotated. Key rotation commits do not need to update the `data` CID link.
 
 ### MST Structure
 At a high level, the repository MST is a key/value mapping where the keys are non-empty byte arrays, and the values are CID links to records. The MST data structure should be fully reproducible from such a mapping of bytestrings-to-CIDs, with exactly reproducible root CID hash (aka, the `data` field in commit object).
@@ -96,7 +92,6 @@ Every node in the tree structure contains a set of key/CID mappings, as well as 
 An empty repository with no records is represented as a single MST node with an empty array of entries. This is the only situation in which a tree may contain an empty leaf node which does not either contain keys ("entries") or point to a sub-tree containing entries. The top of the tree must not be a an empty node which only points to a sub-tree. Empty intermediate nodes are allowed, as long as they point to a sub-tree which does contain entries. In other words, empty nodes must be pruned from the top and bottom of the tree, but empty intermediate nodes must be kept, such that sub-tree links do not skip a level of depth. The overall structure and shape of the MST is deterministic based on the current key/value content, regardless of the history of insertions and deletions that lead to the current contents.
 
 For the nosh-protocol MST implementation, the hash algorithm used is SHA-256 (binary output), counting "prefix zeros" in 2-bit chunks, giving a fanout of 4. To compute the depth of a key:
-
 - hash the key (a byte array) with SHA-256, with binary output
 - count the number of leading binary zeros in the hash, and divide by two, rounding down
 - the resulting positive integer is the depth of the key
@@ -124,7 +119,7 @@ The IPFS CID specification is very flexible, and supports a wide variety of hash
 
 The blessed format for commit objects and MST node objects, when linking to commit objects, MST nodes (aka, `data`, or MST internal links), or records (aka, MST leaf nodes to records), is:
 - CIDv1
-- Multibase: binary serialization within DAG-CBOR (or `base32` for JSON mappings)
+- Multibase: binary serialization within [DAG-CBOR](https://ipld.io/docs/codecs/known/dag-cbor/) (or `base32` for JSON mappings)
 - Multicodec: `dag-cbor` (0x71)
 - Multihash: `sha-256` with 256 bits (0x12)
 
@@ -156,3 +151,5 @@ The efficiency of the MST data structure depends on key hashes being relatively 
 When importing CAR files, the completeness of the repository structure should be verified. Additional unrelated blocks might be included in the CAR structure; care should be taken when injecting CAR contents directly in to backend block storage, to ensure resources are not wasted on un-referenced blocks. There may also be issues with cross-account contamination from CAR imports, for example previously-deleted records re-appearing via CAR import from an unrelated account.
 
 ## References
+- [IPLD schema](https://ipld.io/docs/schemas/)
+- [SHA-256](https://en.wikipedia.org/wiki/SHA-2)
