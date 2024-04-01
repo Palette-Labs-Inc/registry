@@ -125,13 +125,13 @@ def calculate_depth_corrected(key: str) -> int:
 # Test the function with the provided keys
 key1 = '2653ae71'
 key2 = 'nosh'
-key3 = "nosh.psn.provider.catalog/1"
+key3 = "xyz.nosh.buyer.address/s"
 
 depth1 = calculate_depth_corrected(key1)
 depth2 = calculate_depth_corrected(key2)
 depth3 = calculate_depth_corrected(key3)
 
-depth1, depth2, depth3 # outputs (0, 1, 3), representing the unique depths for each key input
+depth1, depth2, depth3 # outputs (0, 1, 2), representing the unique depths for each key input
 ```
 There are many MST nodes in repositories, so it is important that they have a compact binary representation, for storage efficiency. Within every node, keys (byte arrays) are compressed by omitting common prefixes, with each entry indicating how many bytes it shares with the previous key in the array. The first entry in the array for a given node must contain the full key, and a common prefix length of 0. This key compaction is internal to nodes, it does not extend across multiple nodes in the tree. The compaction scheme is mandatory, to ensure that the MST structure is deterministic across implementations.
 

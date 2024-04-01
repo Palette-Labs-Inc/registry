@@ -91,7 +91,7 @@ Refer to [RFC-3986](https://www.rfc-editor.org/rfc/rfc3986) for generic rules 
 
 **Valid NOSH URIs (both general and Lexicon syntax)**:
 ```shell
-nosh://1673/nosh.server.buyer.address/3jwdwj2ctlk26
+nosh://foo.com/com.example.foo/123
 ```
 
 **Valid general NOSH URI syntax, invalid in current Lexicon**:

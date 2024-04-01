@@ -24,14 +24,14 @@ We considered adopting [RDF standards](https://www.w3.org/RDF/) but the generali
 
 **example namespace methods**:
 ```ts
-nosh.bsn.buyer.updateAddress()
-nosh.psn.provider.getCatalog()
+xyz.nosh.buyer.updateAddress()
+xyz.nosh.provider.getCatalog()
 ```
 
 **example record types**:
  ```ts
-nosh.bsn.buyer.address
-nosh.psn.provider.catalog
+xyz.nosh.buyer.address
+xyz.nosh.provider.catalog
 ```
 
 **example api call**:
@@ -40,7 +40,7 @@ await nosh.server.buyer.updatePreferences({
   user: 'alice',
 })
 ```
-In the above API call, Lexicon establishes a shared method id (`nosh.bsn.buyer.updateAddress`) and the expected query params, input body, and output body. By using Lexicon the call inherits runtime checks on the inputs, outputs, and contexts of all calls which is vital in distributed systems.
+In the above API call, Lexicon establishes a shared method id (`xyz.nosh.buyer.updateAddress`) and the expected query params, input body, and output body. By using Lexicon the call inherits runtime checks on the inputs, outputs, and contexts of all calls which is vital in distributed systems.
 
 ## Proposal
 Here, we introduce "Lexicon", a schema [interface definition language](https://en.wikipedia.org/wiki/Interface_description_language) used to describe records, HTTP endpoints, and event stream messages (websockets). This RFC builds on top of the [Data Models](./00004-data-models.md) RFC.
