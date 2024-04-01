@@ -107,17 +107,6 @@ nosh://foo.com/                // trailing slash
 nosh://user:pass@foo.com       // userinfo not currently supported
 ```
 
-### Usage and Implementation Guidelines
-Generic URI and URL parsing libraries can sometimes be used with NOSH URIs, but not always. A key requirement is the ability to work with the authority (or origin) part of the URI as a simple string, without being parsed in to userinfo, host, and port sub-parts. Specifically: the Python 3 `urllib` module (from the standard library) works; the Javascript `url-parse` package works; the Golang `net/url` package does not work; and most of the popular Rust URL parsing crates do not work.
-
-When referencing records, especially from other repositories, best practice is to use an `agent-identifier` in the authority part. 
-
-When a _strong_ reference to another record is required, best practice is to use a CID hash in addition to the NOSH URI.
-
-In Lexicons (APIs, records, and other contexts), sometimes a specific variant of A NOSH URI is required, beyond the general purpose `nosh-uri` string format. For example, references to records from inside records usually require an `agent-identifier` in the authority section, and the URI must include the collection and rkey path segments. URIs not meeting these criteria will fail to validate.
-
-Do not confuse the JSON Path fragment syntax with the Lexicon reference syntax. They both use `#`-based fragments to reference other fields in JSON documents, but, for example, JSON Path syntax starts with a slash (`#/key`).
-
 ## References
 - [Uniform Resource Identifier (URI)](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier)
 - [RFC-3986](https://www.rfc-editor.org/rfc/rfc3986)

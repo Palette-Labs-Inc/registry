@@ -83,9 +83,3 @@ number(3)
 "quote"
 dHJ1ZQ==
 ```
-
-### Usage and Implementation Guidelines
-Implementations should not rely on global uniqueness of TIDs, and should not trust TID timestamps as actual record creation timestamps. Record Keys are "user-controlled data" and may be arbitrarily selected by hostile accounts.
-
-Most software processing repositories and records should be agnostic to the Record Key type and values, and usually treat them as simple strings. For example, relying on TID keys to decode as `base32` into a unique `uint64` makes it tempting to rely on this for use as a database key, but doing so is not resilient to key format changes and is discouraged.
-
