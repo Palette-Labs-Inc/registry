@@ -104,7 +104,6 @@ For the nosh-protocol MST implementation, the hash algorithm used is SHA-256 (bi
 Some examples, with the given ASCII strings mapping to byte arrays:
 ```python
 import hashlib
-
 def calculate_depth_corrected(key: str) -> int:
     # Convert the key to a byte array
     key_bytes = key.encode('utf-8')
@@ -135,8 +134,7 @@ depth3 = calculate_depth_corrected(key3)
 
 depth1, depth2, depth3 # outputs (0, 1, 3), representing the unique depths for each key input
 ```
-
-There are many MST nodes in repositories, so it is important that they have a compact binary representation, for storage efficiency. Within every node, keys (byte arrays) are compressed by eliding common prefixes, with each entry indicating how many bytes it shares with the previous key in the array. The first entry in the array for a given node must contain the full key, and a common prefix length of 0. This key compaction is internal to nodes, it does not extend across multiple nodes in the tree. The compaction scheme is mandatory, to ensure that the MST structure is deterministic across implementations.
+There are many MST nodes in repositories, so it is important that they have a compact binary representation, for storage efficiency. Within every node, keys (byte arrays) are compressed by omitting common prefixes, with each entry indicating how many bytes it shares with the previous key in the array. The first entry in the array for a given node must contain the full key, and a common prefix length of 0. This key compaction is internal to nodes, it does not extend across multiple nodes in the tree. The compaction scheme is mandatory, to ensure that the MST structure is deterministic across implementations.
 
 The node IPLD schema fields are:
 - `l` ("left", CID link, optional): link to sub-tree Node on a lower level and with all keys sorting before keys at this node
@@ -146,10 +144,10 @@ The node IPLD schema fields are:
     - `v` ("value", CID Link, required): link to the record data (CBOR) for this entry
     - `t` ("tree", CID Link, optional): link to a sub-tree Node at a lower level which has keys sorting after this TreeEntry's key (to the "right"), but before the next TreeEntry's key in this Node (if any)
 
-When parsing MST data structures, the depth and sort order of keys should be verified. This is particularly true for untrusted inputs, but is simplest to just verify every time. Additional checks on node size and other parameters of the tree structure also need to be limited; see the "Security Considerations" section of this document.
+When parsing MST data structures, the depth and sort order of keys should be verified. This is particularly true for untrusted inputs, but is simplest to just verify every time. Additional checks on node size and other parameters of the tree structure also need to be limited; see [Security Considerations](#security-considerations).
 
 ### CID Formats
-The IPFS CID specification is very flexible, and supports a wide variety of hash types, a field indicating the type of content being linked to, and various string encoding options. These features are valuable to allow evolution of the repo format over time, but to maximize interoperability among implementations, only a specific "blessed" set of CID types are allowed.
+The [IPFS CID](https://docs.ipfs.tech/concepts/content-addressing/#what-is-a-cid) specification is very flexible, and supports a wide variety of hash types, a field indicating the type of content being linked to, and various string encoding options. These features are valuable to allow evolution of the repo format over time, but to maximize interoperability among implementations, only a specific "blessed" set of CID types are allowed.
 
 The blessed format for commit objects and MST node objects, when linking to commit objects, MST nodes (aka, `data`, or MST internal links), or records (aka, MST leaf nodes to records), is:
 - CIDv1
@@ -180,10 +178,11 @@ Repositories are untrusted input: accounts have full control over repository con
 
 Generic precautions should be followed with CBOR decoding: a maximum serialized object size, a maximum recursion depth for nested fields, maximum memory budget for deserialized data, etc. Some CBOR libraries include these precautions by default, but others do not.
 
-The efficiency of the MST data structure depends on key hashes being relatively randomly dispersed. Because accounts have control over Record Keys, they can mine for sets of record keys with particular depths and sorting order, which result in inefficient tree shapes, which can cause both large storage overhead, and network amplification in the context of federation streams. To protect against these attacks, implementations should limit the number of TreeEntries per Node to a statistically unlikely maximum length. It may also be necessary to limit the overall depth of the repo, or other parameters, to prevent more sophisticated key mining attacks.
+The efficiency of the MST data structure depends on key hashes being relatively randomly dispersed. Because accounts have control over [Record Keys](./00007-record-keys.md), they can mine for sets of record keys with particular depths and sorting order, which result in inefficient tree shapes, which can cause both large storage overhead, and network amplification in the context of federation streams. To protect against these attacks, implementations should limit the number of TreeEntries per Node to a statistically unlikely maximum length. It may also be necessary to limit the overall depth of the repo, or other parameters, to prevent more sophisticated key mining attacks. We intend to develop tooling to help developers implement solutions to common attacks.
 
-When importing CAR files, the completeness of the repository structure should be verified. Additional unrelated blocks might be included in the CAR structure; care should be taken when injecting CAR contents directly in to backend block storage, to ensure resources are not wasted on un-referenced blocks. There may also be issues with cross-account contamination from CAR imports, for example previously-deleted records re-appearing via CAR import from an unrelated account.
+When importing CAR files, the completeness of the repository structure should be verified. Additional unrelated blocks might be included in the CAR structure; care should be taken when injecting CAR contents directly into block storage, to ensure resources are not wasted on un-referenced blocks. There may also be issues with cross-account contamination from CAR imports, for example previously-deleted records re-appearing via CAR import from an unrelated account.
 
 ## References
 - [IPLD schema](https://ipld.io/docs/schemas/)
 - [SHA-256](https://en.wikipedia.org/wiki/SHA-2)
+- [IPFS CID](https://docs.ipfs.tech/concepts/content-addressing/#what-is-a-cid)
