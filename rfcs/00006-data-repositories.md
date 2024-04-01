@@ -91,16 +91,50 @@ Every node in the tree structure contains a set of key/CID mappings, as well as 
 
 An empty repository with no records is represented as a single MST node with an empty array of entries. This is the only situation in which a tree may contain an empty leaf node which does not either contain keys ("entries") or point to a sub-tree containing entries. The top of the tree must not be a an empty node which only points to a sub-tree. Empty intermediate nodes are allowed, as long as they point to a sub-tree which does contain entries. In other words, empty nodes must be pruned from the top and bottom of the tree, but empty intermediate nodes must be kept, such that sub-tree links do not skip a level of depth. The overall structure and shape of the MST is deterministic based on the current key/value content, regardless of the history of insertions and deletions that lead to the current contents.
 
-For the nosh-protocol MST implementation, the hash algorithm used is SHA-256 (binary output), counting "prefix zeros" in 2-bit chunks, giving a fanout of 4. To compute the depth of a key:
-- hash the key (a byte array) with SHA-256, with binary output
-- count the number of leading binary zeros in the hash, and divide by two, rounding down
-- the resulting positive integer is the depth of the key
+For the nosh-protocol MST implementation, the hash algorithm used is SHA-256 (binary output), counting "prefix zeros" in 2-bit chunks, giving a fanout of 4. 
+
+**Hash the Key:** First, the key, which is a byte array (an array of bytes, with each byte representing a character or part of binary data), is hashed using the SHA-256 algorithm. SHA-256 is a cryptographic hash function that outputs a fixed-length (256-bit) binary string. This output is referred to as the hash or the digest of the input data.
+
+**Count Leading Zeros:** The binary output of the SHA-256 hash is then examined to count the number of leading zeros. However, instead of counting each zero individually, they are counted in 2-bit chunks. This means you look at the hash output in groups of two bits and count how many of these groups consist entirely of zeros starting from the beginning of the hash.
+
+**Calculate Depth:** The count of leading zeros (in 2-bit chunks) is then divided by two, rounding down if necessary. The result of this division is a positive integer that represents the depth of the key within the MST.
+
+**Fanout of 4:** The method of counting leading zeros in 2-bit chunks relates to the tree's fanout of 4. A fanout of 4 means each node in the tree can have up to four children. The depth calculated based on the leading zeros effectively places each key at a specific level in the tree, ensuring a balanced distribution of keys across the tree's depth, based on their hash values.
 
 Some examples, with the given ASCII strings mapping to byte arrays:
-- `2653ae71`: depth "0"
-- `blue`: depth "1"
-- `app.bsky.feed.post/454397e440ec`: depth "4"
-- `app.bsky.feed.post/9adeb165882c`: depth "8"
+```python
+import hashlib
+
+def calculate_depth_corrected(key: str) -> int:
+    # Convert the key to a byte array
+    key_bytes = key.encode('utf-8')
+    
+    # Hash the key using SHA-256
+    hash_bytes = hashlib.sha256(key_bytes).digest()
+    
+    leading_zeros = 0
+    for byte in hash_bytes:
+        if byte < 64: leading_zeros += 1
+        if byte < 16: leading_zeros += 1
+        if byte < 4: leading_zeros += 1
+        if byte == 0:
+            leading_zeros += 1
+            continue
+        break
+    
+    return leading_zeros
+
+# Test the function with the provided keys
+key1 = '2653ae71'
+key2 = 'nosh'
+key3 = "nosh.psn.provider.catalog/1"
+
+depth1 = calculate_depth_corrected(key1)
+depth2 = calculate_depth_corrected(key2)
+depth3 = calculate_depth_corrected(key3)
+
+depth1, depth2, depth3 # outputs (0, 1, 3), representing the unique depths for each key input
+```
 
 There are many MST nodes in repositories, so it is important that they have a compact binary representation, for storage efficiency. Within every node, keys (byte arrays) are compressed by eliding common prefixes, with each entry indicating how many bytes it shares with the previous key in the array. The first entry in the array for a given node must contain the full key, and a common prefix length of 0. This key compaction is internal to nodes, it does not extend across multiple nodes in the tree. The compaction scheme is mandatory, to ensure that the MST structure is deterministic across implementations.
 
