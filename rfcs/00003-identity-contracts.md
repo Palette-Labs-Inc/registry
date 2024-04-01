@@ -6,16 +6,12 @@
 - **Last supportd:** 03-30-2024
 
 ## Abstract
-This RFC proposes a self-sovereign identity and data portability framework for decentralized commercial networks using WebAuthn, personal data repositories, and global decentralized identities for a distributed network of agents on either side of a two-sided commercial transaction. 
-
-## Introduction
-In centralized networks, central servers own a users identity and, as such, their relationship to the network. As the network grows, and power accumulates to central authorities, platforms begin to extract from stakeholders - usually through increasingly high take rates in commercial settings.
-
-To prevent such undesirable dynamics, we develop structures for a [self-authenticating](https://en.wiktionary.org/wiki/self-authenticating) protocol. Our design grants users the ability to "switch" between managed-hosts (nodes), grant permissions to nodes, and revoke authorizations from nodes, shifting control to individual agents within the network. Therefore, the rent that any infrastructure provider might charge to an agent in the network will fall to it's market clearing price. As such, most of the value created by the network will accrue to the edges, maximally benefiting the networks participants as the network matures.
-
-[Our design](./00001-lifecycle-apis.md) supports an interoperable network of independently hosted `Provider Supporting Nodes` and `Buyer Supporting Nodes` that are responsible for onboarding participants on either side of the network, storing their data, and relaying transaction `messages` to other nodes in the network. We are not strictly a p2p network; we assume webservers are necessary for performing computational tasks for filtering information and providing app views. We also assume that most users will not want to host their infrastructure, although this is entirely possible within the standard.
+This RFC proposes a self-sovereign identity framework for decentralized commercial networks and identity primitives for a distributed network of agents on either side of a two-sided commercial transaction. 
 
 ## Motivation
+The motiviation for a decentralized identity standard is to shift control back to the users within the network.
+
+## Introduction
 The proposed solution aims to achieve the following:
 
 - **ID provisioning** Users should be able to create global IDs which are stable across services. These IDs should rarely change to ensure that links to their data are stable.
@@ -66,6 +62,9 @@ graph TD
 - Recovery Proxy
 - Node Operators / Protocol Servers
 
+### Agent Identifiers
+The `agent identifier` is a globally unique, canonical identifier for the holder of an ethereum address that has registered in the `Agent Registry`
+
 ### Agent Registry
 The Agent Registry generates an autoincrementing nonce that represents an individual agents unique `agent identifier`. The contract increments a global integer value and assigns this integer as a unique, global, and canonical value for the holder of an ethereum address. The relationship between the `agent identifier` and an ethereum address is 1:1. The ethereum address that registers a new `agent identifier` is known as the `custody address`. A single `custody address` can only ever own a single `agent identifier`. The holder of the `custody address` may elect a single `recovery address` that can transfer the `agent identifier` to a new `custody address`. The registering `custody address` has unilateral authority to modify or remove the `recovery address` at will. Under no circumstances can any third party modify or remove the `recovery address` on behalf of the owner.
 
@@ -77,7 +76,6 @@ The Agent Registry generates an autoincrementing nonce that represents an indivi
 
 **Administration**
 The `custody address` has unilateral authority to pause and unpause the contract, which prevents all methods (registration, transfer, and recovery) from executing. 
-
 
 ### Agent Gateway
 The Agent Gateway registers new Agent IDs and adds them to the `Agent Registry`.

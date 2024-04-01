@@ -1,9 +1,9 @@
-# RFC: [RFC Title]
+# RFC: Namespace Identifiers (NSID)
 
-- **status:** Draft | Proposed | Accepted | Deprecated | Superseded
-- **Author:** [Author Name]
-- **Created:** [Creation Date]
-- **Last supportd:** [Last supportd Date]
+- **status:** Draft
+- **Author:** Michael Perhats
+- **Created:** 04-01-2024
+- **Last supportd:** 04-01-2024
 
 ## Abstract
 A brief summary of the proposal, including the problem it addresses and the proposed solution or innovation.

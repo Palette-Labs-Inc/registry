@@ -9,7 +9,7 @@
 The protocol will define data types and messages that can be universally referenced within the network. This document proposes the adoption of a schema definition language called "Lexicon" to define data schemas that represent objects related to events in the lifecycle of a commercial transaction, or otherwise the entities that are engaged in the transaction. Lexicon is similar to an [OpenAPI](https://en.wikipedia.org/wiki/OpenAPI_Specification) specification with added semantic nice-to-haves that are useful for our architecture.
 
 ## Introduction
-Lexicon is used to define RPC methods and record types. Lexicons give developers a uniform method and process to write and define new data structures for the network. Schemas are defined using `Namespace Identifiers`. `Namespace Identifiers` support a network wide domain categorization of methods and [Data Models](./00004-data-models.md).
+Lexicon is used to define RPC methods and record types. Lexicons give developers a uniform method and process to write and define new data structures for the network. Schemas are defined using `NSID`s. `NSID`s support a network wide domain categorization of methods and [Data Models](./00004-data-models.md).
 
 ## Motivation
 Our motivation for a schema definition language is largely the same as the [raw IPLD Schema motivation](https://ipld.io/docs/schemas/#motivation). A standard for the networks data will make coordinating groups of developers and their applications much easier. IPLD Schemas have rich support for describing immutable document graphs based on [content-addressable](https://ipld.io/glossary/#content-addressing) [linking](https://ipld.io/glossary/#link) in distributed systems.  
@@ -70,23 +70,23 @@ Here, we introduce "Lexicon", a schema [interface definition language](https://e
 
 
 ### Lexicon Files
-Lexicons are JSON files associated with a single `Namespace Identifier`. A file contains one or more definitions, each with a distinct short name. A definition with the name `main` optionally describes the "primary" definition for the entire file. A Lexicon with zero definitions is invalid.
+Lexicons are JSON files associated with a single `NSID`. A file contains one or more definitions, each with a distinct short name. A definition with the name `main` optionally describes the "primary" definition for the entire file. A Lexicon with zero definitions is invalid.
 
 A Lexicon JSON file is an object, similar to a `.yaml` or `.json` file in [OpenAPI](https://en.wikipedia.org/wiki/OpenAPI_Specification). Each Lexicon JSON file defines a specific piece of information or communication method for the network. Lexicon JSON files universally define client-to-server interactions and server-to-server interactions in the network.
 
 - `lexicon` (integer, required): indicates Lexicon language version. In this version, a fixed value of `1` is used
-- `id` (string, required): the `Namespace Identifier` of the Lexicon
+- `id` (string, required): the `NSID` of the Lexicon
 - `revision` (integer, optional): indicates the version of this Lexicon, if changes have occurred
 - `description` (string, optional): a description of the Lexicon, usually one or two sentences useful for developers to understand
 - `defs` (map of strings-to-objects, required): set of definitions, each with a distinct name (key)
 
 Schema definitions under `defs` all have a `type` field to distinguish their type. A file can have at most one definition with one of the "primary" types. Primary types should always have the name `main`. It is possible for `main` to describe a non-primary type.
 
-References to specific definitions within a Lexicon use fragment syntax, like `com.example.defs#someView`. If a `main` definition exists, it can be referenced without a fragment, just using the `Namespace Identifier`. For references in the `$type` fields in data objects themselves (eg, records or contents of a union), this is a "must" (use of a `#main` suffix is invalid). For example, `com.example.record` not `com.example.record#main`.
+References to specific definitions within a Lexicon use fragment syntax, like `com.example.defs#someView`. If a `main` definition exists, it can be referenced without a fragment, just using the `NSID`. For references in the `$type` fields in data objects themselves (eg, records or contents of a union), this is a "must" (use of a `#main` suffix is invalid). For example, `com.example.record` not `com.example.record#main`.
 
 The semantics of the `revision` field have not been worked out yet, but are intended to help third parties identify the most recent among multiple versions or copies of a Lexicon.
 
-Related Lexicons are often grouped together in a `Namespace Identifier` hierarchy, for example a `Buyer` entity might have it's own namespace to group data models under a single `Buyer` domain. As a convention, any definitions used by multiple Lexicons are defined in a dedicated `*.defs` Lexicon (eg, `com.atproto.server.defs`) within the group. A `*.defs` Lexicon should generally not include a definition named `main`, though it is not strictly invalid to do so.
+Related Lexicons are often grouped together in a `NSID` hierarchy, for example a `Buyer` entity might have it's own namespace to group data models under a single `Buyer` domain. As a convention, any definitions used by multiple Lexicons are defined in a dedicated `*.defs` Lexicon (eg, `com.atproto.server.defs`) within the group. A `*.defs` Lexicon should generally not include a definition named `main`, though it is not strictly invalid to do so.
 
 ## Primary Type Definitions
 The primary types are:
@@ -194,7 +194,7 @@ Type-specific fields:
 In theory arrays have homogeneous types (meaning every element as the same type). However, with union types this restriction is meaningless, so implementations can not assume that all the elements have the same type.
 
 ### `object`
-A generic object schema which can be nested i`Namespace Identifier`e other definitions by reference.
+A generic object schema which can be nested i`NSID`e other definitions by reference.
 
 Type-specific fields:
 
@@ -234,7 +234,7 @@ Type-specific fields:
 
 - `ref` (string, required): reference to another schema definition
 
-Refs are a mechanism for re-using a schema definition in multiple places. The `ref` string can be a global reference to a Lexicon type definition (an `Namespace Identifier`, optionally with a `#`-delimited name indicating a definition other than `main`), or can indicate a local definition within the same Lexicon file (a `#` followed by a name).
+Refs are a mechanism for re-using a schema definition in multiple places. The `ref` string can be a global reference to a Lexicon type definition (an `NSID`, optionally with a `#`-delimited name indicating a definition other than `main`), or can indicate a local definition within the same Lexicon file (a `#` followed by a name).
 
 ### `union`
 Type-specific fields:
@@ -264,7 +264,7 @@ Strings can optionally be constrained to one of the following `format` types:
 - `datetime`: timestamp, details specified below
 - `did`: generic [DID Identifier](https://atproto.com/specs/did)
 - `handle`: [Handle Identifier](https://atproto.com/specs/handle)
-- ``Namespace Identifier``: [Namespaced Identifier](https://atproto.com/specs/`Namespace Identifier`)
+- ``NSID``: [Namespaced Identifier](https://atproto.com/specs/`NSID`)
 - `uri`: generic URI, details specified below
 - `language`: language code, details specified below
 
@@ -394,7 +394,7 @@ The specific rules are:
 
 Note that `blob` objects always include `$type`, which allows generic processing.
 
-As a reminder, `main` types must be referenced in `$type` fields as just the `Namespace Identifier`, not including a `#main` suffix.
+As a reminder, `main` types must be referenced in `$type` fields as just the `NSID`, not including a `#main` suffix.
 
 ## References
 - [Bsky](https://atproto.com/guides/lexicon)

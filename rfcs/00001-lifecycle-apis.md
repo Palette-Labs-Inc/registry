@@ -9,14 +9,10 @@
 This document proposes an overview of different actors who can work together to build open e-commerce networks across which `Providers` and their services are universally discoverable from any protocol-enabled application.
 
 ## Introduction
-We believe there is a generational opportunity to decentralize internet infrastructure for commercial markets. Of all of the possible places that one could focus on, we believe that commercial markets are the largest category with the most disrupt-able incumbents.
-
-Traditionally, platforms capitalize on [network effects](https://en.wikipedia.org/wiki/Network_effect), benefiting Providers and Buyers as their transactions increase. However, the growth of such platforms often leads to high rents due to increased market power. To address this, we propose a decentralized network co-owned by market participants. We introduce algorithms for distributing platform ownership based on the unique contributions of a variety of actors within the network. Our design aims to incentivize Providers to join as co-owners and actively contribute to the platform’s success by marketing it to buyers and recruiting additional Providers. This document defines the different actors within the network, and their unique roles.  
+A `Buyer` or `Provider` on either side of a two-sided market can discover one another and engage in purchasing through basic server-to-server communications in a peer-to-peer network. Peers are discoverable through a global, public, decentralized [registry](./00002-node-registry.md). 
 
 ## Motivation
-The building blocks for commercial markets should exist outside of private companies as public digital infrastructure, like the Internet itself. An open, decentralized protocol for commercial markets gives `Buyers` and `Providers` a choice in their experience, `Providers` control over their relationships with `Buyers`, and developers the freedom to innovate without requiring access from any authority. 
-
-By removing entry requirements, the network allows for independent actors to introduce local optimizations, taking advantage of societies collective cognitive surplus to fill economic incentive gaps in markets. Ease of entry into the network will give rise to currently inconceivable consumer experiences.
+The building blocks for commercial markets should exist outside of private companies as public digital infrastructure, like the Internet itself. An open, decentralized protocol for commercial markets gives `Buyers` and `Providers` a choice in their experience, `Providers` control over their relationships with `Buyers`, and developers access to the pre-existing network effects of the network.
 
 ### Network Participants
 
