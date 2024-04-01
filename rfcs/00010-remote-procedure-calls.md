@@ -80,7 +80,7 @@ The set of endpoints requiring admin auth is likely to get out of date in this s
 - `com.nosh-protocol.server.createInviteCodes`
 
 ### Client-to-Server Authentication Signing Headers (server-to-server signatures)
-The `PDS` acts as a generic proxy between clients and other nosh-protocol services.
+The `PDS` acts as a generic proxy between clients and other nosh-protocol services. 
 
 In order to be discovered in the nosh-protocol network, a `PDS` creates a key pair and registers with the [Node Registry](./00002-node-registry.md) as either a `BSN` or `PSN`. The public key is stored on the blockchain in the network registry along with a unique identifier. When communicating with other Node's in the network, a *sending* `PDS` signs the data that they are sending over the network, including the signature hash in the header of the HTTP request. When this message is received by a *receiving* Node, the receiving should query the registry for the *sending* Node's public key and use the signature in the request header to verify the message. If the message is successfully verified, the *receiving* `PDS` can know that the *sending* `PDS` is properly registered and their message has not been tampered. If the *sending* `PDS`'s message is unable to be verified, the *receiving* `PDS` should respond to the *sending* `PDS`s request with an error code. 
 
