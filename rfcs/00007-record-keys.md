@@ -57,16 +57,16 @@ Record Keys are case-sensitive.
 - `_`
 
 **Invalid Record Keys:**
-- `alpha/beta` - Contains disallowed character `/`
-- `.` - Disallowed key value
-- `..` - Disallowed key value
-- `#extra` - Contains disallowed character `#`
-- `any space` - Contains disallowed character ` ` (space)
-- `any+space` - Contains disallowed character `+`
-- `number[3]` - Contains disallowed characters `[` and `]`
-- `number(3)` - Contains disallowed characters `(` and `)`
-- `"quote"` - Contains disallowed character `"`
-- `dHJ1ZQ==` - Invalid base32 encoding (contains padding characters)
+- `alpha/beta` - contains disallowed character `/`
+- `.` - disallowed key value
+- `..` - disallowed key value
+- `#extra` - contains disallowed character `#`
+- `any space` - contains disallowed character ` ` (space)
+- `any+space` - contains disallowed character `+`
+- `number[3]` - contains disallowed characters `[` and `]`
+- `number(3)` - contains disallowed characters `(` and `)`
+- `"quote"` - contains disallowed character `"`
+- `dHJ1ZQ==` - invalid base32 encoding (contains padding characters)
 
 ## References
 - [RFC-3986, section 3.3](https://datatracker.ietf.org/doc/html/rfc3986#section-3.3).
