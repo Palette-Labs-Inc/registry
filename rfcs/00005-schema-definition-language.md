@@ -82,11 +82,11 @@ A Lexicon JSON file is an object, similar to a `.yaml` or `.json` file in [OpenA
 
 Schema definitions under `defs` all have a `type` field to distinguish their type. A file can have at most one definition with one of the "primary" types. Primary types should always have the name `main`. It is possible for `main` to describe a non-primary type.
 
-References to specific definitions within a Lexicon use fragment syntax, like `com.example.defs#someView`. If a `main` definition exists, it can be referenced without a fragment, just using the `NSID`. For references in the `$type` fields in data objects themselves (eg, records or contents of a union), this is a "must" (use of a `#main` suffix is invalid). For example, `com.example.record` not `com.example.record#main`.
+References to specific definitions within a Lexicon use fragment syntax, like `com.referenceDomain.defs#someView`. If a `main` definition exists, it can be referenced without a fragment, just using the `NSID`. For references in the `$type` fields in data objects themselves (eg, records or contents of a union), this is a "must" (use of a `#main` suffix is invalid). For example, `com.referenceDomain.record` not `com.referenceDomain.record#main`.
 
 The semantics of the `revision` field have not been worked out yet, but are intended to help third parties identify the most recent among multiple versions or copies of a Lexicon.
 
-Related Lexicons are often grouped together in a `NSID` hierarchy, for example a `Buyer` entity might have it's own namespace to group data models under a single `Buyer` domain. As a convention, any definitions used by multiple Lexicons are defined in a dedicated `*.defs` Lexicon (eg, `com.atproto.server.defs`) within the group. A `*.defs` Lexicon should generally not include a definition named `main`, though it is not strictly invalid to do so.
+Related Lexicons are often grouped together in a `NSID` hierarchy, for example a `Buyer` entity might have it's own namespace to group data models under a single `Buyer` domain. As a convention, any definitions used by multiple Lexicons are defined in a dedicated `*.defs` Lexicon (eg, `com.referenceDomain.psn.defs`) within the group. A `*.defs` Lexicon should generally not include a definition named `main`, though it is not strictly invalid to do so.
 
 ## Primary Type Definitions
 The primary types are:
@@ -181,7 +181,7 @@ Type-specific fields:
 ### `cid-link`
 No type-specific fields.
 
-See [Data Model spec](https://atproto.com/specs/data-model) for CID restrictions.
+See [Data Model spec](./00004-data-models.md) for CID restrictions.
 
 ### `array`
 Type-specific fields:
@@ -264,18 +264,15 @@ Strings can optionally be constrained to one of the following `format` types:
 - `language`: language code, details specified below
 - `currency`: currency code, details specified below
 - `country`: country code, details specified below
-- `eth`: the `custody address` of an `Agent Identifier`
+- `eth`: the `custody address` for an `account identifier`
 - `h3`: a string of hexidecimal characters representing a [geospatial index](https://github.com/uber/h3)
-
-### `nosh-identifier`
-A string type which is either an [`Agent Identifier`](./00003-identity-contracts.md#agent-identifiers) or the ethereum address of an `Agent Identifier`
 
 ### `datetime`
 Full-precision date and time, with timezone information.
 
 This format is intended for use with computer-generated timestamps in the modern computing era (eg, after the UNIX epoch). If you need to represent historical or ancient events, ambiguity, or far-future times, a different format is probably more appropriate. Datetimes before the Current Era (year zero) as specifically disallowed.
 
-Datetime format standards are notoriously flexible and overlapping. Datetime strings in atproto should meet the [intersecting](https://ijmacd.github.io/rfc3339-iso8601/) requirements of the [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339), [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601), and [WHATWG HTML](https://html.spec.whatwg.org/#dates-and-times) datetime standards.
+Datetime format standards are notoriously flexible and overlapping. Datetime strings should meet the [intersecting](https://ijmacd.github.io/rfc3339-iso8601/) requirements of the [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339), [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601), and [WHATWG HTML](https://html.spec.whatwg.org/#dates-and-times) datetime standards.
 
 The character separating "date" and "time" parts must be an upper-case `T`.
 
@@ -346,7 +343,7 @@ Represents a syntactically valid [Namespace Identifier](./00009-namespace-identi
 - `xn.2.test.thing`
 
 ### `uri`
-Flexible to any URI schema, following the generic RFC-3986 on URIs. This includes, but isn’t limited to: `did`, `https`, `wss`, `ipfs` (for CIDs), `dns`, and of course `at`. Maximum length in Lexicons is 8 KBytes.
+Flexible to any URI schema, following the generic RFC-3986 on URIs. This includes, but isn’t limited to: `https`, `wss`, `ipfs` (for CIDs), `dns`, and [`nosh`](./00008-uri-standards.md). Maximum length in Lexicons is 8 KBytes.
 
 ### `language`
 A string formatted as an [IETF Language Tag](https://en.wikipedia.org/wiki/IETF_language_tag), adhering to the [BCP 47](https://www.rfc-editor.org/info/bcp47) standard as outlined in [RFC 5646](https://www.rfc-editor.org/rfc/rfc5646.txt) ("Tags for Identifying Languages"). This standard is utilized across various web technologies, including HTTP and HTML, for language identification. The string must be a "well-formed" language tag per the RFC's definition. "Well-formed" tags that are not "valid" per the RFC should be disregarded by clients.
@@ -377,7 +374,7 @@ A country code, in the two-letter format of [ISO 3166](https://www.iso.org/iso-3
 - `GB` for United Kingdom
 
 ### `eth`
-An ethereum address representing the `custody address` or `recovery address` of a registered agent in the nosh-protocol network.
+An `custody address` representing the `custody address` or `recovery address` of a registered account in the nosh-protocol network.
 
 #### Example
 - `0xb794f5ea0ba39494ce839613fffba74279579268` - represents a hexagonal representation of a physical global position
@@ -390,13 +387,13 @@ An array of H3 geospatial indices. The H3 system is a framework for geospatial i
 
 ## Integer Formats
 Integers can be constrained to the following `format` type:
-- `aid`: generic [Agent Identifier](./00003-identity-contracts.md#agent-identifiers)
+- `aid`: generic [Account Identifier](./00003-identity-contracts.md#account-identifiers)
 
 ### `aid`
-A shorthand format for an [`Agent Identifier`](./00003-identity-contracts.md#agent-identifiers)
+A shorthand format for an [`Account Identifier`](./00003-identity-contracts.md#account-identifiers)
 
 #### Examples
-- `198663` an integer nonce representing registered agent 198663 in the [`Identity Contracts`](./00003-identity-contracts.md)
+- `198663` an integer nonce representing registered account 198663 in the [`Identity Contracts`](./00003-identity-contracts.md)
 
 ## When to use `$type`
 Data objects sometimes include a `$type` field which indicates their Lexicon type. The general principle is that this field needs to be included any time there could be ambiguity about the content type when validating data.
@@ -411,5 +408,4 @@ Note that `blob` objects always include `$type`, which allows generic process
 As a reminder, `main` types must be referenced in `$type` fields as just the `NSID`, not including a `#main` suffix.
 
 ## References
-- [Bsky](https://atproto.com/guides/lexicon)
 

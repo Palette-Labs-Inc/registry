@@ -22,15 +22,24 @@ An individual with a need to purchase a product or service at a given moment in 
 #### Provider 
 An organization with a Catalog of products or services available for sale. 
 
+#### Client
+An application that provides a user interface to a `User`, allowing them to interact with the nosh-protocol.
+
+#### User
+An `Buyer` or a `Provider` that uses a `Client`. Commonly called an `account` in the system. Represented canonically as having an `aid` in the nosh-protocol network after registration in the `Account Registry`
+
+#### Account
+A `User` with an account identifier in the `Account Registry`
+
 #### Buyer Servicing Node (BSN)
 `BSNs` build software applications & store Buyer data for the network. BSNs can be managed by individual developers or organizations who intend to offer experiences to consumers but do not care to maintain inventory lists of `Providers`.  
 
-`BSNs` can be managed by individual developers or organizations who intend to offer experiences to consumers. `BSNs` might have a new idea for a new application, like a video-first shopping app, a social-commerce app, or a spatial-computing shopping experience. `BSNs` implement the protocol because it gives them instant access to a network of `Producers`. They can implement the protocol standard and get access to these `Producers` without ever having to formally onboard the `Producer` or communicate with them. 
+`BSNs` can be managed by individual developers or organizations who intend to offer experiences to consumers. `BSNs` might have a new idea for a new application, like a video-first shopping app, a social-commerce app, or a spatial-computing shopping experience. `BSNs` implement the protocol because it gives them instant access to a network of `Providers`. They can implement the protocol standard and get access to these `Providers` without ever having to formally onboard the `Provider` or communicate with them. 
 
 #### Provider Servicing Node (PSN)
 `PSN`s onboard the `Provider` side of the network. PSNs can be managed by a local chamber of commerce, a small business cooperative, individual restaurants or retailers, taxi-networks, big tech companies, etc. The primary role of the `PSN` in the open network is to attain and maintain fresh inventory lists for `Providers` such that when a `Buyer` broadcasts an intent to transact, they can be sure that their request to avail services/products is fulfilled by the `Provider` 
 
-The primary role of the `PSN` is to maintain inventory lists for `Producers` so that when a `Buyer` searches for a service, the `PSN` can respond with a list of `Providers` that are capable of fulfilling the `Buyers` request. `PSNs` can charge a fee for providing tools for `Producers` that help them maintain their inventory and accept more orders. For example a `PSN` might make it easier for `Producers` to manage their inventory via a point-of-sale solution. Some `Producers` may choose to run their own `PSN` instance, although this behavior is unexpected. 
+The primary role of the `PSN` is to maintain inventory lists for `Providers` so that when a `Buyer` searches for a service, the `PSN` can respond with a list of `Providers` that are capable of fulfilling the `Buyers` request. `PSNs` can charge a fee for providing tools for `Providers` that help them maintain their inventory and accept more orders. For example a `PSN` might make it easier for `Providers` to manage their inventory via a point-of-sale solution. Some `Providers` may choose to run their own `PSN` instance, although this behavior is unexpected. 
 
 #### Personal Data Stores (PDS)
 A `PSN` or `BSN` storing information and proxying requests on bahelf of `Buyers` or `Providers` within the network, occupying a record in the `Node Registry`. 
@@ -72,7 +81,7 @@ sequenceDiagram
  ```
 
 #### Registry 
-A decentralized public ledger that maintains the records of `Node Operators`, their supported Industry Codes, and the geographical regions that they represent. The registry is queried for a `Providers` products or services by `Gateways` and `Buyer Servicing Nodes` during the search phase of a `Buyers` transaction lifecycle 
+A decentralized public ledger that maintains the records of `Personal Data Stores`, their supported Industry Codes, and the geographical regions that they represent. The registry is queried for a `Providers` products or services by `Gateways` and `Buyer Servicing Nodes` during the search phase of a `Buyers` transaction lifecycle 
 
 During the server-to-server communication node's are expected to send a signed digest of the request body using the private key that was used to register their node in the reigistry. When a server recives a new request, it verifies the signature header and message contents by looking up the public key of the signer in the registry and verifying the signature.
 
@@ -104,9 +113,9 @@ Modern platforms use sophisticated services for: search and discovery, personali
 -  a routing or logistics service could inform which drivers are returned by a `PSN` when a `Buyer` searches for a mobility or rideshare service.  
 - a recommendation service could inform which `Providers` are returned by the network when a `Buyer` searches for a book written by a specific author. 
 
-Independent parties can write `Service Modules` for various computational needs and sell them to `Node Operators`.  There should be ways for services to be discovered by `Node Operators` and used at any point during the transaction lifecycle. A network token can function as a micro-payments layer to facilitate the exchange of services. It also introduces a novel business model for publishing algorithms that provide utility for the network. This approach enables the development of a diverse range of services, enhancing the network's possibilities. 
+Independent parties can write `Service Modules` for various computational needs and sell them to `Personal Data Stores`.  There should be ways for services to be discovered by `Personal Data Stores` and used at any point during the transaction lifecycle. A network token can function as a micro-payments layer to facilitate the exchange of services. It also introduces a novel business model for publishing algorithms that provide utility for the network. This approach enables the development of a diverse range of services, enhancing the network's possibilities. 
 
-Independent third parties should be able to list their services in a publicly discoverable registry. Their services should be computationally verifiable and self-authenticating. This could be designed similarly to [custom feeds](https://github.com/bluesky-social/feed-generator) in ATProto (Bsky).
+Independent third parties should be able to list their services in a publicly discoverable registry. Their services should be computationally verifiable and self-authenticating. 
 
 ```mermaid
 sequenceDiagram
@@ -144,7 +153,7 @@ the order is fulfilled. A `Buyer` can track the status of their order.
 ### Post-Fulfill
 a `Buyer` can review or request support for their order in the case that they are dissatisfied.
 
-The network's core working groups and community will work on and publish standards for each API with unique schema definitions tailored to the specific service types for a variety of industries. All APIs are implemented as a series of signed, asynchronous POST requests between `Node Operators`.  
+The network's core working groups and community will work on and publish standards for each API with unique schema definitions tailored to the specific service types for a variety of industries. All APIs are implemented as a series of signed, asynchronous POST requests between `Personal Data Stores`.  
 
 ## Discovery APIs (search, on_search)
 
@@ -232,7 +241,6 @@ sequenceDiagram
 7. **Client Application:** 
    - Retrieves the catalog information from the BSN.
    - Updates the user interface to display the `Provider`'s catalog to Alice, allowing her to browse the offerings.
-
    
 ```mermaid
 sequenceDiagram

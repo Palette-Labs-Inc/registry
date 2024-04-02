@@ -42,7 +42,7 @@ The most common value is `self`, specified as `literal:self` in a Lexicon sch
 ### Record Key Type: `any`
 Any string meeting the overall Record Key schema requirements (see below) is allowed. This is the most flexible type of Record Key.
 
-This may be used to encode semantics in the name, for example, a domain name, integer, or (transformed) AT URI. This enables de-duplication and known-URI lookups.
+This may be used to encode semantics in the name, for example, a domain name, integer, or (transformed) NOSH URI. This enables de-duplication and known-URI lookups.
 
 ### Record Key Syntax
 Regardless of the type, Record Keys must fulfill some baseline syntax constraints:

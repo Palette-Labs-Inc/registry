@@ -40,9 +40,9 @@ The error type should map to an error name defined in the endpoint's Lexicon sch
 ### Blob Upload and Download
 Blobs are something of a special case because they can have any MIME type and are not stored directly in repositories, and thus are not directly associated with an NSID or Lexicon (though they do end up referenced from Lexicons).
 
-The convention for working with blobs is for clients to upload them via the `com.nosh-protocol.repo.uploadBlob` endpoint, which returns a `blob` JSON object containing a CID and basic metadata about the blob. Client can then include this `blob` data in future requests (eg, include in new records). Constraints like MIME type and file size are only validated at this second step. The server may implement content type sniffing at the upload step and return a MIME type different from any `Content-Type` header provided, but a `Content-Type` header is still expected on the upload HTTP request.
+The convention for working with blobs is for clients to upload them via the `xyz.nosh.repo.uploadBlob` endpoint, which returns a `blob` JSON object containing a CID and basic metadata about the blob. Client can then include this `blob` data in future requests (eg, include in new records). Constraints like MIME type and file size are only validated at this second step. The server may implement content type sniffing at the upload step and return a MIME type different from any `Content-Type` header provided, but a `Content-Type` header is still expected on the upload HTTP request.
 
-Blobs for a specific account can be listed and downloaded using endpoints in the `com.nosh-protocol.sync.*` NSID space. These endpoints give access to the complete original blob, as uploaded. A common pattern is for applications to mirror both the original blob and any downsized thumbnail or preview versions via separate URLs (eg, on a CDN), instead of deep-linking to the `getBlob` endpoint on the original PDS.
+Blobs for a specific account can be listed and downloaded using endpoints in the `xyz.noshl.sync.*` NSID space. These endpoints give access to the complete original blob, as uploaded. A common pattern is for applications to mirror both the original blob and any downsized thumbnail or preview versions via separate URLs (eg, on a CDN), instead of deep-linking to the `getBlob` endpoint on the original PDS.
 
 ### Cursors and Pagination
 A common pattern in Lexicon design is to include a `cursor` parameter for pagination. The client should not include the `cursor` parameter in the first request, and should keep all other parameters fixed between requests. If a cursor is included in a response, the next batch of responses can be fetched by including that value in a follow-on, continuing until the cursor is not included any longer, indicating the end of the result set has been reached.
@@ -51,25 +51,24 @@ A common pattern in Lexicon design is to include a `cursor` parameter for pagi
 TODO
 
 ### Client-to-Server Authentication:
-When an `agent` (either a Buyer or Provider) uses a protocol enabled client application, they will authorize the client to sign transactions on their behalf by adding a *Signer* to the [`Signature Authority Registry`](./00003-identity-contracts.md#signature-authority-registry). A _Signer_ is an Ed25519[1](https://github.com/farcasterxyz/protocol/blob/main/docs/SPECIFICATION.md#user-content-fn-ed25519-20ca98ebc54d674b56cc47326c811976) key pair that clients can use to authorize messages (http requests) to the network.
+When an `account` (user) (either a Buyer or Provider) uses a protocol enabled client application, they will authorize the client to sign transactions on their behalf by adding a *Signer* to the [`Signature Authority Registry`](./00003-identity-contracts.md#signature-authority-registry). A _Signer_ is an Ed25519[1](https://github.com/farcasterxyz/protocol/blob/main/docs/SPECIFICATION.md#user-content-fn-ed25519-20ca98ebc54d674b56cc47326c811976) key pair that clients can use to authorize messages (http requests) to the network.
 
-An agent authorizes a clients key as a delegated signer (called a *Signer* in this doc) with a signature from their `custody address` currently holding their Agent Identifier `aid`. The client can use the Signer to authorize actions within the network on behalf of the agent. Agents can revoke a Signer at any time with a signature from their `custody address`. A Signer is added or removed by registering the public key of the signer to an `aid` with a smart contract. Signers can only be added for the `aid` owned by the caller of the contract.
+An account authorizes a clients key as a delegated signer (called a *Signer* in this doc) with a signature from their `custody address` currently holding their Account Identifier `aid`. The client can use the Signer to authorize actions within the network on behalf of the account. Accounts can revoke a Signer at any time with a signature from their `custody address`. A Signer is added or removed by registering the public key of the signer to an `aid` with a smart contract. Signers can only be added for the `aid` owned by the caller of the contract.
 
 The `PDS` can then verify the signatures from the client and ensure the Signer is valid against the [`Signature Authority Registry`](./00003-identity-contracts.md#signature-authority-registry).
 
-A protocol enabled client makes HTTP requests, and uses a *Signer* to sign requests for the agent that they are currently representing. Clients can choose a 1:1, or 1:N relationship between users and Signers. 
+A protocol enabled client makes HTTP requests, and uses a *Signer* to sign requests for the account that they are currently representing. Clients can choose a 1:1, or 1:N relationship between users and Signers. 
 
 Clients generate a short-lived JWT that they include in the in the HTTP request within an `Authorization` signature header.
 
 The JWT parameters are:
 - `alg` header field: indicates the signing key type (see [Cryptography](TODO))
     - Use `EdDSA` for Ed25519 keys, all requests are signed with the EdDSA algorithm (Ed25519 signing).
-- `aud` body field: service DID associated with the service that the request is being sent to
+- `aud` body field: the uid for an entry in the [`Node Registry`](./00002-node-registry.md) associated with the service that the request is being sent to
 - `exp` body field: token expiration time, as a UNIX timestamp with seconds precision. 
-- `aid` body field: the [`Agent Identifier`](./00003-identity-contracts.md#agent-identifiers).
- 
+- `aid` body field: the [`Account Identifier`](./00003-identity-contracts.md#account-identifiers).
 
-The client-signed request is then sent to the `agents` `PDS`. The PDS verifies the client's JWT using the public key listed in the [`Signature Authority Registry`](./00003-identity-contracts.md#signature-authority-registry).  
+The client-signed request is then sent to the `accounts` `PDS`. The PDS verifies the client's JWT using the public key listed in the [`Signature Authority Registry`](./00003-identity-contracts.md#signature-authority-registry).  
 
 
 ### Server-to-Server Authentication:
@@ -100,7 +99,7 @@ The JWT parameters are:
 The signature for both client-to-server and server-to-server requests is written in Typescript like this:
 ```ts
 const headerPayload = utf8ToBase64Url(jsonStringify(header)) + '.' + utf8ToBase64Url(jsonString(body))
-const signature = hashAndSign(accountSigningKey, utf8Bytes(headerPayload))
+const signature = hashAndSign(signingKey, utf8Bytes(headerPayload))
 const jwt = headerPayload + '.' + bytesToBase64Url(signature)
 ```
 
@@ -134,7 +133,6 @@ Clients can use the following request headers:
 - `502 Bad Gateway`: The server received an invalid response from an upstream server.
 - `503 Service Unavailable`: The server is currently unavailable (due to overload or maintenance).
 - `504 Gateway Timeout`: The server did not receive a timely response from an upstream server.
-
 
 ## References 
 - [HTTP](https://en.wikipedia.org/wiki/HTTP)

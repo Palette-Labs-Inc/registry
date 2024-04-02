@@ -9,7 +9,7 @@
 Records and messages need to be stored, transmitted, encoded, and decoded in a consistent way to promote interoperability in distributed systems. This document proposes the adoption of a slightly modified [Interplanetary Linked Data (IPLD)](https://ipld.io/docs/data-model/) specification for the networks data models.
 
 ## Motivation
-The IPLD data model is similar to JSON -- with addiditional types for bytes, and links. These additional properties are useful for defining linked data structures in distributed systems and allowing anyone to explore data regardless of the underlying protocol. Common type representations can then be easily representable by common programming languages. Such a standard creates low friction for tooling and libraries within the protocol network.
+The IPLD data model is similar to JSON -- with addiditional types for bytes, and links. These additional properties are useful for defining linked data structures in distributed systems and allowing anyone to explore data regardless of the underlying protocol. Common type representations can then be easily representable by common programming languages. Such a standard creates low friction for tooling and libraries within the nosh-protocol network.
 
 Our motivation for standardizing data models is largely the same as the [raw IPLD Data Model motivation](https://ipld.io/docs/data-model/#motivation). 
 
@@ -127,6 +127,5 @@ And a node with a single field `"exampleBytes"` with type `bytes` would enco
 - [IPLD Data Model Documentation](https://ipld.io/docs/data-model/)
 - [IPLD Schemas Documentation](https://ipld.io/docs/schemas/)
 - [IPLD Data Model Documentation](https://ipld.io/docs/data-model/)
-- [Bsky](https://atproto.com/specs/data-model#data-model)
 - [Directed Acyclical Graphs (DAG)](https://en.wikipedia.org/wiki/Directed_acyclic_graph)
 - [Merkle Trees](https://en.wikipedia.org/wiki/Merkle_tree)
