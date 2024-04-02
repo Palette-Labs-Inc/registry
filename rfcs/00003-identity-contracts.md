@@ -31,9 +31,9 @@ Users create a global identity within the network by going through a registratio
 graph TD
 
     subgraph Nodes["Off-Chain"]
-    Node(Protocol Server 1)
-    Node2(Protocol Server 2)
-    Node3(Protocol Server N)
+    Node(PDS 1)
+    Node2(PDS 2)
+    Node3(PDS N)
     end
 
     subgraph ETHL2["L2 Identity Contracts"]
