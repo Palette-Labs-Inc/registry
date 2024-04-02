@@ -115,7 +115,7 @@ Type-specific fields:
     - `name` (string, required): short name for the error type, with no whitespace
     - `description` (string, optional): short description, one or two sentences
 
-### Subscription (Event Stream)
+### Subscription (Events)
 Type-specific fields:
 - `parameters` (object, optional): same as Query and Procedure
 - `message` (object, optional): specifies what messages can be
@@ -136,12 +136,12 @@ No additional fields.
 ### `boolean`
 Type-specific fields:
 - `default` (boolean, optional): a default value for this field
-- `const` (boolean, optional): a fixed (constant) value for this field
+- `const` (boolean, optional): a constant value for this field
 
-When included as an HTTP query parameter, should be rendered as `true` or `false` (no quotes).
+When included as an HTTP query parameter, should be rendered as `true` or `false` (raw text with no quotes).
 
 ### `integer`
-A signed integer number.
+A signed positive (+) or negative (-) integer number.
 Type-specific fields:
 - `format` (integer, optional): integer format restriction
 - `minimum` (integer, optional): minimum acceptable value
@@ -162,11 +162,11 @@ Type-specific fields:
 - `default` (string, optional): a default value for this field
 - `const` (string, optional): a fixed (constant) value for this field
 
-Strings are Unicode. For non-Unicode encodings, use `bytes` instead. The basic `minLength`/`maxLength` validation constraints are counted as UTF-8 bytes. Note that Javascript stores strings with UTF-16 by default, and it is necessary to re-encode to count accurately. The `minGraphemes`/`maxGraphemes` validation constraints work with Grapheme Clusters, which have a complex technical and linguistic definition, but loosely correspond to "distinct visual characters" like Latin letters, CJK characters, punctuation, digits, or emoji (which might comprise multiple Unicode codepoints and many UTF-8 bytes).
+Strings must be in Unicode. If using non-Unicode encodings, switch to bytes. The minLength and maxLength constraints are measured in UTF-8 bytes, but remember, JavaScript defaults to UTF-16 for strings, so conversion for accurate counts is necessary. The minGraphemes and maxGraphemes constraints are based on Grapheme Clusters, essentially "visual characters" such as emojis, which may encompass multiple Unicode codepoints and a larger number of UTF-8 bytes.
 
-`format` constrains the string format and provides additional semantic context. Refer to the Data Model specification for the available format types and their definitions.
+`format` constrains the string format for further validation assurances. Refer to the [Data Model](./00004-data-models.md) specification for the available format types and their definitions.
 
-`const` and `default` are mutually exclusive.
+`default` and `const` are mutually exclusive, and therefore invalidated if both are provided.
 
 ### `bytes`
 Type-specific fields:
@@ -182,40 +182,33 @@ Type-specific fields:
 - `minLength` (integer, optional): minimum count of elements in array
 - `maxLength` (integer, optional): maximum count of elements in array
 
-In theory arrays have homogeneous types (meaning every element as the same type). However, with union types this restriction is meaningless, so implementations can not assume that all the elements have the same type.
+Although arrays are usually homogeneous (all elements share the same type), the introduction of union types renders this constraint obsolete. Becayse if unions, implementations *should not* to presume uniformity in element types within an array.
 
 ### `object`
-A generic object schema which can be nested inside other definitions by reference.
-
+A generic object schema
 Type-specific fields:
 - `properties` (map of strings-to-objects, required): defines the properties (fields) by name, each with their own schema
 - `required` (array of strings, optional): indicates which properties are required
 - `nullable` (array of strings, optional): indicates which properties can have `null` as a value
 
-As described in the data model specification, there is a semantic difference in data between omitting a field; including the field with the value `null`; and including the field with a "false-y" value (`false`, `0`, empty array, etc).
+Following the [data model](./00004-data-models.md) guidelines, there's a crucial distinction in how data is interpreted based on whether a field is omitted, included with a `null` value, or included with a "false-y" value (such as `false`, `0`, or an empty array).
 
 ### `blob`
 Type-specific fields:
-- `accept` (array of strings, optional): list of acceptable MIME types. Each may end in `*` as a glob pattern (eg, `image/*`). Use `*/*` to indicate that any MIME type is accepted.
-- `maxSize` (integer, optional): maximum size in bytes
+- `accept` (array of strings, optional): Specifies a list of acceptable MIME types. Entries can utilize `*` as a wildcard, allowing glob patterns like `image/*`. To accept any MIME type, use `*/*`.
+- `maxSize` (integer, optional): Defines the maximum allowable size in bytes for the blob.
 
 ### `params`
-This is a limited-scope type which is only ever used for the `parameters` field on `query`, `procedue`, and `subscription` primary types. These map to HTTP query parameters.
+This type is specifically designed for use with the `parameters` field found in the primary types `query`, `procedure`, and `subscription`. It corresponds to HTTP query parameters, indicating a narrow scope.
 
 Type-specific fields:
 - `required` (array of strings, optional): same semantics as field on `object`
 - `properties`: similar to properties under `object`, but can only include the types `boolean`, `integer`, `string`, and `unknown`; or an `array` of one of these types
 
-Note that unlike `object`, there is no `nullable` field on `params`.
+in contrast to the `object` type, the `params` type does not include a `nullable` field. This distinction underscores a specific design choice in how `params` handles the presence or absence of values differently from `object`.
 
 ### `token`
-Tokens are empty data values which exist only to be referenced by name. They are used to define a set of values with specific meanings. The `description` field should clarify the meaning of the token.
-
-Tokens are similar to the concept of a "symbol" in some programming languages, distinct from strings, variables, built-in keywords, or other identifiers.
-
-For example, tokens could be defined to represent the state of an entity (in a state machine), or to enumerate a list of categories.
-
-No type-specific fields.
+Tokens are like the "symbol" in certain programming languages, serving as unique identifiers separate from strings, variables, keywords, or any other form of identification. They're used for representing discrete values like in a state machine or enumerated a set of categories.
 
 ### `ref`
 Type-specific fields:
@@ -247,7 +240,7 @@ Strings can optionally be constrained to one of the following `format` types:
 - `nosh-uri`: [NOSH-URI](./00008-uri-standards.md#full-nosh-uri-syntax)
 - `cid`: CID in string format, details specified in [Data Model](./00004-data-models.md)
 - `datetime`: timestamp, details specified below
-- `rdsid`: a [Namespaced Identifier](./00009-namespace-identifiers.md)
+- `rdsid`: a [reverse domain schema identifier](./00009-namespace-identifiers.md)
 - `uri`: generic URI, details specified below
 - `language`: language code, details specified below
 - `currency`: currency code, details specified below
@@ -258,19 +251,17 @@ Strings can optionally be constrained to one of the following `format` types:
 ### `datetime`
 Full-precision date and time, with timezone information.
 
-This format is intended for use with computer-generated timestamps in the modern computing era (eg, after the UNIX epoch). If you need to represent historical or ancient events, ambiguity, or far-future times, a different format is probably more appropriate. Datetimes before the Current Era (year zero) as specifically disallowed.
+This format is specifically intended for use with computer-generated timestamps after the UNIX epoch. Datetimes before year zero or in distant future times are disallowed and you should opt for a different format.
 
-Datetime format standards are notoriously flexible and overlapping. Datetime strings should meet the [intersecting](https://ijmacd.github.io/rfc3339-iso8601/) requirements of the [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339), [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601), and [WHATWG HTML](https://html.spec.whatwg.org/#dates-and-times) datetime standards.
+Datetime format standards vary widely and often overlap. Datetime strings are expected to conform to the intersecting requirements of [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339), [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601), and [WHATWG HTML](https://html.spec.whatwg.org/#dates-and-times) datetime standards.
 
 The character separating "date" and "time" parts must be an upper-case `T`.
 
-Timezone specification is required. It is _strongly_ preferred to use the UTC timezone, and to represent the timezone with a simple capital `Z` suffix (lower-case is not allowed). While hour/minute suffix syntax (like `+01:00` or `-10:30`) is supported, "negative zero" (`-00:00`) is specifically disallowed (by ISO 8601).
+Timezone specification is mandatory. It is highly recommended to use the UTC timezone and represent it with a capital `Z` suffix. The use of lowercase `z` is not allowed. While the hour/minute suffix syntax (e.g., `+01:00` or `-10:30`) is supported, "negative zero" (`-00:00`) is disallowed according to [ISO 8601](https://www.w3.org/TR/NOTE-datetime).
 
-Whole seconds precision is required, and arbitrary fractional precision digits are allowed. Best practice is to use at least millisecond precision, and to pad with zeros to the generated precision (eg, trailing `:12.340Z` instead of `:12.34Z`). Not all datetime formatting libraries support trailing zero formatting. Both millisecond and microsecond precision have reasonable cross-language support; nanosecond precision does not.
+Whole seconds precision is mandatory, with the allowance for arbitrary fractional precision digits. It's recommended to adhere to at least millisecond precision and fill with zeros to match the generated precision. For instance, use trailing `:12.340Z` instead of `:12.34Z`. 
 
-Implementations should be aware when round-tripping records containing datetimes of two ambiguities: loss-of-precision, and ambiguity with trailing fractional second zeros. If de-serializing Lexicon records in to native types, and then re-serializing, the string representation may not be the same, which could result in broken hash references, sanity check failures, or repository update churn. A safer thing to do is to deserialize the datetime as a simple string, which ensures round-trip re-serialization.
-
-Implementations "should" validate that the semantics of the datetime are valid. For example, a month or day `00` is invalid.
+Implementations "should" ensure that the semantics of the datetime are valid. For instance, dates with a month or day set to 00 should be considered invalid.
 
 Valid examples:
 
@@ -321,7 +312,7 @@ Invalid examples:
 ```
 
 ### `rdsid`
-Represents a syntactically valid [Namespace Identifier](./00009-namespace-identifiers.md)
+Represents a syntactically valid [Reverse Domain Schema Identifier](./00009-namespace-identifiers.md)
 
 #### Examples:
 - `nosh.example.fooBar`
@@ -334,11 +325,9 @@ Represents a syntactically valid [Namespace Identifier](./00009-namespace-identi
 Flexible to any URI schema, following the generic RFC-3986 on URIs. This includes, but isn’t limited to: `https`, `wss`, `ipfs` (for CIDs), `dns`, and [`nosh`](./00008-uri-standards.md). Maximum length in Lexicons is 8 KBytes.
 
 ### `language`
-A string formatted as an [IETF Language Tag](https://en.wikipedia.org/wiki/IETF_language_tag), adhering to the [BCP 47](https://www.rfc-editor.org/info/bcp47) standard as outlined in [RFC 5646](https://www.rfc-editor.org/rfc/rfc5646.txt) ("Tags for Identifying Languages"). This standard is utilized across various web technologies, including HTTP and HTML, for language identification. The string must be a "well-formed" language tag per the RFC's definition. "Well-formed" tags that are not "valid" per the RFC should be disregarded by clients.
+A string formatted as an [IETF Language Tag](https://en.wikipedia.org/wiki/IETF_language_tag) should adhere to the [BCP 47](https://www.rfc-editor.org/info/bcp47) standard outlined in [RFC 5646](https://www.rfc-editor.org/rfc/rfc5646.txt). This standard is widely used in web technologies like HTTP and HTML for language identification. The string must be a "well-formed" language tag as defined by the RFC. Clients should disregard "well-formed" tags that are not considered "valid" according to the RFC's specifications.
 
-Language tags can incorporate ISO 639 codes in two or three characters, presented in lowercase (e.g., `ja` for Japanese, `ban` for Balinese), possibly extended with regional sub-tags (e.g., `pt-BR` for Brazilian Portuguese) and additional subtags (e.g., `hy-Latn-IT-arevela`).
-
-These language codes are intended for semantic parsing, normalization, and matching rather than simple string comparison. For instance, a search engine might reduce language tags to their ISO 639 codes for the purposes of indexing and filtering, whereas a client application may utilize the complete language code for local text rendering.
+Language tags can include ISO 639 code. These codes may be extended with regional sub-tags (e.g., `pt-BR` for Brazilian Portuguese) and additional subtags (e.g., `hy-Latn-IT-arevela`).
 
 #### Examples
 - `en` for English
@@ -346,12 +335,11 @@ These language codes are intended for semantic parsing, normalization, and match
 - `zh-Hant` for Traditional Chinese
 
 ### `currency`
-A currency code in [ISO 4217](https://www.iso.org/iso-4217-currency-codes.html) format. This format is used internationally to define the codes of currencies. For example, the currency code for US dollars is `USD`. The value should be a three-letter uppercase string that adheres to the ISO 4217 standard.
+A currency code in [ISO 4217](https://www.iso.org/iso-4217-currency-codes.html) format. This format is used internationally to define the codes of currencies. The value should be a three-letter uppercase string that adheres to the ISO 4217 standard.
 
 #### Examples
-- `USD` for US Dollar
-- `EUR` for Euro
-- `JPY` for Japanese Yen
+The US dollar is represented as `USD` – the US coming from the ISO 3166 country code and the D for dollar.
+The Swiss franc is represented by `CHF` – the CH being the code for Switzerland in the ISO 3166 code and F for franc.
 
 ### `country`
 A country code, in the two-letter format of [ISO 3166](https://www.iso.org/iso-3166-country-codes.html). These codes are internationally recognized codes assigned to each country and certain territories. They are two-letter codes written in uppercase. This is often used for setting locales, addressing, and other internationalization functions.
@@ -384,16 +372,16 @@ A shorthand format for an [`Account Identifier`](./00003-identity-contracts.md#a
 - `198663` an integer nonce representing registered account 198663 in the [`Identity Contracts`](./00003-identity-contracts.md)
 
 ## When to use `$type`
-Data objects sometimes include a `$type` field which indicates their Lexicon type. The general principle is that this field needs to be included any time there could be ambiguity about the content type when validating data.
+In data objects, the `$type` field indicates their Lexicon type. This field is necessary whenever there could be ambiguity about the content type during data validation.
 
-The specific rules are:
+The rules regarding the `$type` field are as follows:
 
-- `record` objects must always include `$type`. While the type is often known from context (eg, the collection part of the path for records stored in a repository), record objects can also be passed around outside of repositories and need to be self-describing
-- `union` variants must always include `$type`, except at the top level of `subscription` messages
+- `record` objects must always include `$type`. Even though the type is often inferred from context (such as the collection part of the path for records stored in a repository), record objects may be passed around outside of repos and therefore need to be self-describing.
+- `union` variants must always include `$type`, except when they are at the top level of `subscription` messages.
 
-Note that `blob` objects always include `$type`, which allows generic processing.
+It's important to note that `blob` objects always include `$type`, facilitating generic processing.
 
-As a reminder, `main` types must be referenced in `$type` fields as just the `RDSID`, not including a `#main` suffix.
+As a reminder, `main` types must be referenced in `$type` fields using only the `RDSID`, without including a `#main` suffix.
 
 ## References
 
