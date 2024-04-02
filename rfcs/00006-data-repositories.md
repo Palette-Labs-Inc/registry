@@ -1,4 +1,4 @@
-# RFC: Data Repositories
+# Data Repositories
 
 - **status:** Draft
 - **Author:** Michael Perhats

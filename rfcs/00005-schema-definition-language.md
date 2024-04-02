@@ -1,4 +1,4 @@
-# RFC: NSDL, a Nosh Protocol specific Schema Definition Language
+# NSDL, a protocol-specific Schema Definition Language
 
 - **status:** Draft
 - **Author:** Michael Perhats

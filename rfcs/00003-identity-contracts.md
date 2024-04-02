@@ -1,4 +1,4 @@
-# RFC: A Self-Sovereign Identity proposal in p2p Commercial Networks
+# Self-Sovereign Identity primitives for p2p Commercial Networks
 
 - **status:** Draft
 - **Author:** Michael Perhats

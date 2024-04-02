@@ -1,4 +1,4 @@
-# RFC: Node Registry Infrastructure
+# Node Registry, Discovery Infrastructure
 
 - **status:** Draft
 - **Author:** Michael Perhats

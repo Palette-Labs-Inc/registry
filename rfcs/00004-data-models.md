@@ -1,4 +1,4 @@
-# RFC: Data Models
+# Data Models
 
 - **status:** Draft
 - **Author:** Michael Perhats

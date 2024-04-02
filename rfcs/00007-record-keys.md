@@ -1,4 +1,4 @@
-# RFC: Record Keys
+# Record Keys
 
 - **status:** Draft
 - **Author:** Michael Perhats

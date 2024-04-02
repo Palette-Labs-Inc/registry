@@ -1,4 +1,4 @@
-# RFC: XRPC, A Lighteight HTTP Runtime Validation Wrapper for [The NSDL](./00005-schema-definition-language.md)
+# XRPC, A Lighteight HTTP Runtime Validation Wrapper for [The NSDL](./00005-schema-definition-language.md)
 
 - **status:** Draft
 - **Author:** Michael Perhats

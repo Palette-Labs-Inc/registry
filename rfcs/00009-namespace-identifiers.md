@@ -1,4 +1,4 @@
-# RFC: RDSID, Reverse Domain Schema Identifiers
+# RDSID, Reverse Domain Schema Identifiers
 
 - **status:** Draft
 - **Author:** Michael Perhats

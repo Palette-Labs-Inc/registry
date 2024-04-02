@@ -1,4 +1,4 @@
-# RFC: Transaction Lifecycle APIs
+# Transaction Lifecycles
 
 - **status:** Draft
 - **Author:** Michael Perhats

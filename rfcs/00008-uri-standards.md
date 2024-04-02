@@ -1,4 +1,4 @@
-# RFC: URI Standards
+# URI Standards
 - **status:** Draft
 - **Author:** Michael Perhats
 - **Created:** 03-31-2024
