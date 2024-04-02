@@ -217,6 +217,6 @@ TODO: add methods.
 - [Solid MIT Project](https://solidproject.org/)
 - [Zero-Knowledge Proofs](https://en.wikipedia.org/wiki/Zero-knowledge_proof)
 - [User-Controlled Capabilities (UCAN)](https://ucan.xyz/)
-- [Coinbase Smart Wallet](https://git`Personal Data Store`.com/coinbase/smart-wallet?tab=readme-ov-file)
-- [Farcaster Protocol Specification](https://git`Personal Data Store`.com/farcasterxyz/protocol)
+- [Coinbase Smart Wallet](https://github.com/coinbase/smart-wallet?tab=readme-ov-file)
+- [Farcaster Protocol Specification](https://github.com/farcasterxyz/protocol)
 - [messagecasting](https://customercommons.org/category/messagecasting/)
