@@ -5,7 +5,9 @@ Web2 marketplaces tend to be [rent-seeking](https://en.wikipedia.org/wiki/Rent-s
 
 We develop structures for a [self-authenticating](https://en.wiktionary.org/wiki/self-authenticating) protocol specification; a new communication standard, set of rules, and technical specifications for building open e-commerce networks across which providers and their services are universally discoverable from any protocol-enabled application.
 
-Our design grants users the ability to "switch" between managed-hosts, shifting control to individuals within the network. This simple design modification ensures that the rent that any infrastructure provider might charge to an account in the network will fall to it's market clearing price. As such, most of the value created by the network will accrue to the edges, maximally benefiting the networks participants as the network matures.
+Our design supports an interoperable network of independently hosted `Provider Supporting Nodes` and `Buyer Supporting Nodes` - generically referred to as a `Personal Data Stores (PDS)` - that are responsible for onboarding participants on either side of a market, storing their data, and relaying transaction `intents` to services in the network.
+
+Our design grants users the ability to "switch" between managed-hosts (PDS), shifting control to individuals within the network. This simple design modification ensures that the rent that any infrastructure provider might charge to an account in the network will fall to it's market clearing price. As such, most of the value created by the network will accrue to the edges, maximally benefiting the networks participants as the network matures.
 
 *Our design optimizes for:*
 - **User Choice**: if any Personal Data Store fails to maintain it's service, begins charging high fees, or has performance failures, users are free to switch to a new managed host (Personal Data Store)
@@ -30,7 +32,9 @@ We introduce a [self-sovereign identity](https://en.wikipedia.org/wiki/Self-sove
 Users create a global identity within the network by going through a registration procedure and interfacing with on-chain smart contracts. A users identity is a numeric identifier like `423987` controlled by a key pair, and is called the `account identifier`. We also introduce the concept of a `delegated signer`. Delegated signing allows a user to easily interact with the network and it's avilable services while delegating the signing process to a client that represents their interests. Delegated signatures allow clients to automate the signature process so the user does not have to present their private key during every stage in their transaction lifecycle. Users can unilaterally revoks signature delegation at any time.
 
 ## Personal Data Stores
-The PDS is a webserver containing a content-addressed personal data repository for a user's account. This repository represents a collection of records stored by a user and signed by the users delegated signature authority (delegated signer). Repositories contain self-authenticating data structures, meaning each creation or update of a piece of content is signed, canonical, live, transactable, and can be independently verified by any third party regardless of the storage location of the data.
+We assume webservers are necessary for performing computational tasks for filtering information and providing app-views. We also assume that most users will not want to host their infrastructure, although this is entirely possible within the standard.
+
+Each user has a PDS. A PDS is a webserver containing a content-addressed personal data repository for a user's account. This repository represents a collection of records stored by a user and signed by the users delegated signature authority (delegated signer). Repositories contain self-authenticating data structures, meaning each creation or update of a piece of content is signed, canonical, live, transactable, and can be independently verified by any third party regardless of the storage location of the data.
 
 If any `Personal Data Store` fails to maintain it's service, begins charging high fees, or has performance failures, users are free to switch to a new managed host provider (`Personal Data Store`), including to their own infrastructure. Because, 1. it is easy to switch hosts, 2. it is easy for anyone to operate a `Personal Data Stores`, `Personal Data Stores` will be able to charge *the exact rent* that their service can justify in an open market. 
 
@@ -48,7 +52,7 @@ An open network like nosh needs a way to agree on data structures, transport, an
 
 The NSDL is used to define RPC methods and record types, providing developers with a standardized approach and workflow for crafting and specifying new data structures within the network. Such a standard allows protocol implementations to have strong guarantee as the network matures into new categories. 
 
-## Future Work
+## Getting to Permissionless
 - Insurance, Arbitration, and Disputes
 - Indexers, Gateways
 - Payments
