@@ -21,7 +21,7 @@ When data needs to be authenticated (signed), referenced (linked by content hash
 
 When data needs to have authentication (signing), referencing (via content hash linking), or storage, it is encoded in [Concise Binary Object Representation (CBOR)](https://cbor.io/). CBOR is an [IETF](https://www.ietf.org/about/introduction/) standard and draws its design principles from JSON. The [Interplanetary Linked Data (IPLD)](https://ipld.io/docs/data-model/) introduces a specialized version of CBOR known as **[DAG-CBOR](https://ipld.io/docs/codecs/known/dag-cbor/), which is what we intend to use. DAG-CBOR is typically considered to be fast. It's a binary, length-prefixed format. These traits usually associate with good performance.[[1](https://ipld.io/docs/codecs/known/dag-cbor/#performance)]. DAG-CBOR is not very human friendly. It's a binary, length-prefixed format. While these traits contribute to its performance, they do not make it easy to edit.[[2](https://ipld.io/docs/codecs/known/dag-cbor/#human-friendliness)]. Because of the on-demand nature of the hypothesized transactions within the nosh-protocol network (like rideshare or delivery), we optimize for performance. Depending on feedback from the community, we may update these standards to help with human-friendliness and logging.
 
-In IPLD, **[nodes](https://ipld.io/docs/data-model/node/),** are a very central concept, which refers to points in a graph of data. When encoded in binary (DAG-CBOR) result in a **[block](https://ipld.io/docs/data-model/node/#nodes-vs-blocks).** A node may have internal nested structure (maps or lists). 
+In IPLD, **[nodes](https://ipld.io/docs/data-model/node/),** refer to points in a graph of data. When encoded in binary (DAG-CBOR) result in a **[block](https://ipld.io/docs/data-model/node/#nodes-vs-blocks).** 
 
 In IPLD, nodes can reference by URL or URI (as in standard JSON), and they can *also* reference each other strongly by hash, referred to in IPLD as a **link.** A set of referenced Nodes can form, [DAGs](https://en.wikipedia.org/wiki/Directed_acyclic_graph), [Merkle Trees](https://en.wikipedia.org/wiki/Merkle_tree), or other complex linked data types that are useful when defining distibuted networking topologies and distributed computing architectures.
 
@@ -29,7 +29,7 @@ We inherit most properties from the [IPLD Data Model](https://ipld.io/docs/data-
 
 ### Data Types
 
-| Lexicon Type | IPLD Type | JSON                 | CBOR                    | Mods                    |
+| NSDL Type    | IPLD Type | JSON                 | CBOR                    | Mods                    |
 | ------------ | --------- | -------------------- | ----------------------- | ----------------------- |
 | `null`       | null      | Null                 | Special Value (major 7) | strict IPLD format      |
 | `boolean`    | boolean   | Boolean              | Special Value (major 7) | strict IPLD format      |

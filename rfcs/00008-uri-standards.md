@@ -28,7 +28,7 @@ The full, general structure of a NOSH URI is:
 ```
 The **authority** part of the URI can be either an `custody address` or an [Account Identifier](./00003-identity-contracts.md#account-identifiers), indicating the identity associated with the repository. 
 
-In current nosh-protocol Lexicon use, the **query** and **fragment** parts are not yet supported, and only a fixed pattern of paths are allowed:
+In [NSDL](./00009-namespace-identifiers.md) use, the **query** and **fragment** parts are not yet supported, and only a fixed pattern of paths are allowed:
 
 ```shell
 "nosh://" AUTHORITY [ "/" COLLECTION [ "/" RKEY ] ]
@@ -64,7 +64,7 @@ The full syntax for NOSH URIs is flexible to a variety of future use cases, incl
 - An optional fragment part is allowed, using JSON Path syntax
 
 ### Restricted NOSH URI Syntax
-A restricted sub-set of valid NOSH URIs are currently used in Lexicons for the `nosh-uri` type. Query parameters and fragments are not currently used. Trailing slashes are not allowed, including a trailing slash after the authority with no other path. The URI should be in normalized form (see "Normalization" section), with all of the individual sub-identifiers also normalized.
+A restricted sub-set of valid NOSH URIs are currently used in NSDL for the `nosh-uri` type. Query parameters and fragments are not currently used. Trailing slashes are not allowed, including a trailing slash after the authority with no other path. The URI should be in normalized form (see "Normalization" section), with all of the individual sub-identifiers also normalized.
 
 ```shell
 NOSH-URI        = "nosh://" AUTHORITY [ "/" COLLECTION [ "/" RKEY ] ]
@@ -83,18 +83,18 @@ Particularly when included in nosh-protocol records, strict normalization should
 - No duplicate slashes or "dot" sections in path part (`/./` or `/abc/../` for example)
 - RDSID in path: domain authority part lowercased
 - Record Key is case-sensitive and not normalized
-- Query and fragment parts should not be included when referencing repositories or records in Lexicon records
+- Query and fragment parts should not be included when referencing repositories or records
 
 Refer to [RFC-3986](https://www.rfc-editor.org/rfc/rfc3986) for generic rules to normalize paths and remove `..` / `.` relative references.
 
 ### Examples
 
-**Valid NOSH URIs (both general and Lexicon syntax)**:
+**Valid NOSH URIs (both general and NSDL syntax)**:
 ```shell
 nosh://foo.com/com.example.foo/123
 ```
 
-**Valid general NOSH URI syntax, invalid in current Lexicon**:
+**Valid general NOSH URI syntax, invalid in NSDL**:
 ```shell
 nosh://foo.com/example/123     // invalid RDSID
 nosh://computer                // not a valid account identifier or `custody address`

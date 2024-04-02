@@ -153,7 +153,7 @@ The specification for [IPFS CID](https://docs.ipfs.tech/concepts/content-address
 - Multihash: `sha-256` with 256 bits (0x12)
 
 ## CAR File Serialization
-The standard export format for nosh-protocol repositories: [CAR v1](https://ipld.io/specs/transport/car/carv1/), which have file suffix `.car` and mimetype `application/vnd.ipld.car`.
+The standard export format for repos is: [CAR v1](https://ipld.io/specs/transport/car/carv1/), which have file suffix `.car` and mimetype `application/vnd.ipld.car`.
 
 ## References
 - [Merkle Search Tree (MST) Guide Paper](https://hal.inria.fr/hal-02303490/document)

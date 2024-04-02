@@ -14,7 +14,7 @@ The NSDL is used for the definition of RPC methods and record types, providing d
 ## Motivation
 Our motivation for a schema definition language is largely the same as the [raw IPLD Schema motivation](https://ipld.io/docs/schemas/#motivation). A standard for the networks data will make coordinating groups of developers and their applications much easier. IPLD Schemas have rich support for describing immutable document graphs based on [content-addressable](https://ipld.io/glossary/#content-addressing) [linking](https://ipld.io/glossary/#link) in distributed systems.  
 
-An open network like nosh needs a way to agree on data structures, transport, and semantics. Lexicon solves this problem by giving a uniform schema definition language. This primitive allows new markets to permissionlessly emerge. 
+An open network like nosh needs a way to agree on data structures, transport, and semantics. The NSDL solves this problem by giving a uniform schema definition language. This primitive allows new markets to permissionlessly emerge. 
 
 For example, the company will initially define the basic data models and API definitions for food-delivery, rideshare, and other e-commerce networks but it is unliekly that we will be able to create the schemas for all categories of commercial applications. In order for the network to grow into many new categories independently, we need a common way for developers to describe data. Further, this schema language enables code-generation with types and validation which makes life very easy for developers. 
 
@@ -322,7 +322,7 @@ Represents a syntactically valid [Reverse Domain Schema Identifier](./00009-name
 - `xn.2.test.thing`
 
 ### `uri`
-Flexible to any URI schema, following the generic RFC-3986 on URIs. This includes, but isn’t limited to: `https`, `wss`, `ipfs` (for CIDs), `dns`, and [`nosh`](./00008-uri-standards.md). Maximum length in Lexicons is 8 KBytes.
+Flexible to any URI schema, following the generic RFC-3986 on URIs. This includes, but isn’t limited to: `https`, `wss`, `ipfs` (for CIDs), `dns`, and [`nosh`](./00008-uri-standards.md). Maximum length is 8 KBytes.
 
 ### `language`
 A string formatted as an [IETF Language Tag](https://en.wikipedia.org/wiki/IETF_language_tag) should adhere to the [BCP 47](https://www.rfc-editor.org/info/bcp47) standard outlined in [RFC 5646](https://www.rfc-editor.org/rfc/rfc5646.txt). This standard is widely used in web technologies like HTTP and HTML for language identification. The string must be a "well-formed" language tag as defined by the RFC. Clients should disregard "well-formed" tags that are not considered "valid" according to the RFC's specifications.
@@ -372,7 +372,7 @@ A shorthand format for an [`Account Identifier`](./00003-identity-contracts.md#a
 - `198663` an integer nonce representing registered account 198663 in the [`Identity Contracts`](./00003-identity-contracts.md)
 
 ## When to use `$type`
-In data objects, the `$type` field indicates their Lexicon type. This field is necessary whenever there could be ambiguity about the content type during data validation.
+In data objects, the `$type` field indicates their NSDL type. This field is necessary whenever there could be ambiguity about the content type during data validation.
 
 The rules regarding the `$type` field are as follows:
 
