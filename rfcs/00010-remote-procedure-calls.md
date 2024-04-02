@@ -1,4 +1,4 @@
-# XRPC, A Lighteight HTTP Runtime Validation Wrapper for [The NSDL](./00005-schema-definition-language.md)
+# NRPC, A Lighteight HTTP Runtime Validation Wrapper for [NSDL](./00005-schema-definition-language.md)
 
 - **status:** Draft
 - **Author:** Michael Perhats
@@ -6,18 +6,18 @@
 - **Last supportd:** 03-31-2024
 
 ## Abstract
-The `X` in XRPC is meant to represent the nature of the custom variation of the HTTP standard. Under the hood, XRPC implements standard `GET` and `POST` methods. The RPC simply stands for [remote procedure call](https://en.wikipedia.org/wiki/Remote_procedure_call).
+NRPC is a simple wrapper around HTTP that provides runtime validation for inputs and outputs from [The NSDL](./00005-schema-definition-language.md)
 
 ## Introduction
-HTTP APIs for client-server and server-server requests in the nosh-protocol network use a set of common conventions called XRPC. Endpoint path names include an [RDSID](./00009-namespace-identifiers.md) indicating the [NSDL](./00005-schema-definition-language.md) document specifying the request and response schemas (usually with content-type JSON).
+HTTP APIs for client-server and server-server requests in the nosh-protocol network use a set of common conventions called NRPC. Endpoint path names include an [RDSID](./00009-namespace-identifiers.md) indicating the [NSDL](./00005-schema-definition-language.md) document specifying the request and response schemas (usually with content-type JSON).
 
 ## Motivation
-XRPC is simply [HTTP](https://en.wikipedia.org/wiki/HTTP) with some additional, protocol-specific conventions for runtime validation checks on inputs and outputs (request and response bodies respectively). XRPC uses [NSDL](./00005-schema-definition-language.md) definitions under the hood and maps them to specific methods. 
+NRPC is simply [HTTP](https://en.wikipedia.org/wiki/HTTP) with some additional, protocol-specific conventions for runtime validation checks on inputs and outputs (request and response bodies respectively). NRPC uses [NSDL](./00005-schema-definition-language.md) definitions under the hood and maps them to specific methods. 
 
-We considered not implementing NSDL or XRPC (using [RDF](https://en.wikipedia.org/wiki/RDF_Schema) instead). We decided to introduce NSDL so that infrastructure hosts engaging in data exchanges and RPC commands across organizations had better guarantees and runtime validations. Especially in distributed systems, software *needs* to correctly handle schemas created by disparate parties. By standardizing a schema definition language, we give developers a common way to define APIs for new markets while ensuring existing infrastructure hosts don't sacrifice on strong type validations. We understand that a decision to introduce a custom schema definition language may be frustrating, but we think the NSDL standards provide a nice developer UX and people will come to enjoy working in this system.
+We considered not implementing NSDL or NRPC (using [RDF](https://en.wikipedia.org/wiki/RDF_Schema) instead). We decided to introduce NSDL so that infrastructure hosts engaging in data exchanges and RPC commands across organizations had better guarantees and runtime validations. Especially in distributed systems, software *needs* to correctly handle schemas created by disparate parties. By standardizing a schema definition language, we give developers a common way to define APIs for new markets while ensuring existing infrastructure hosts don't sacrifice on strong type validations. We understand that a decision to introduce a custom schema definition language may be frustrating, but we think the NSDL standards provide a nice developer UX and people will come to enjoy working in this system.
 
 ## Proposal, NSDL Endpoints
-The HTTP request path starts with `/xrpc/`, followed by an [RDSID](./00009-namespace-identifiers.md). Paths must always be top-level, not below a prefix. The RDSID maps to the `id` field in the associated [NSDL](./00005-schema-definition-language.md#at-identifier) document.
+The HTTP request path starts with `/nrpc/`, followed by an [RDSID](./00009-namespace-identifiers.md). Paths must always be top-level, not below a prefix. The RDSID maps to the `id` field in the associated [NSDL](./00005-schema-definition-language.md#at-identifier) document.
 
 The two requests types that can be expressed in NSDL are "query" (HTTP GET) and "procedure" (HTTP POST). Following HTTP REST semantics, queries (GET) are cacheable and should not mutate resource state. Procedures are not cacheable and may mutate state.
 

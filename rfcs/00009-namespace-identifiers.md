@@ -20,7 +20,7 @@ The RDSID structure can be broken down into its component parts using the format
 Where:
 - **{top-level-domain}**: top-level-domain, such as `com`, `org`, `xyz`, or a country code like `uk`, `us`, etc.
 - **{domain-name}**: The second-level domain, which is typically the name of the organization, company, or service.
-- **{name}**: the name segment used to reference a [NSDL](./00005-schema-definition-language.md) schema for records, or XRPC endpoints.
+- **{name}**: the name segment used to reference a [NSDL](./00005-schema-definition-language.md) schema for records, or [NRPC](./00010-remote-procedure-calls.md) endpoints.
 
 - **Overall RDSID Requirements**:
     - It should only include ASCII characters.

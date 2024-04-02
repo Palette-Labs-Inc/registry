@@ -88,8 +88,8 @@ Related NSDL documents are often grouped together under a `RDSID` hierarchy, for
 
 ## Primary Type Definitions
 The primary types are:
-- `query`: describes an XRPC Query (HTTP GET)
-- `procedure`: describes an XRPC Procedure (HTTP POST)
+- `query`: describes an [NRPC](./00010-remote-procedure-calls.md) Query (HTTP GET)
+- `procedure`: describes an [NRPC](./00010-remote-procedure-calls.md) Procedure (HTTP POST)
 - `subscription`: Event Stream (WebSocket)
 - `context`: describe a cryptographically signed binary data object used to validate the integrity of a record and it's creator (signer)
 - `record`: describes an object that can be stored in a repository record
