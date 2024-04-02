@@ -120,9 +120,6 @@ And a node with a single field `"exampleBytes"` with type `bytes` would enco
 }
 ```
 
-## Examples
-(Optional) If applicable, provide details about the implementation of the proposal, including any prototypes, code snippets, or reference implementations.
-
 ## References
 - [IPLD Data Model Documentation](https://ipld.io/docs/data-model/)
 - [IPLD Schemas Documentation](https://ipld.io/docs/schemas/)
