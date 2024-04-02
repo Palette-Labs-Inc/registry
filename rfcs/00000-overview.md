@@ -36,7 +36,7 @@ If any `Personal Data Store` fails to maintain it's service, begins charging hig
 
 A user's PDS also serves as a generic HTTP proxy between the user and other services within the network. We assume that 
 
-## Intent Casting and Federation
+## Intent Casting
 Users are categorized as either a `Buyer` or `Provider`. Each represents a specific *type* of user on either side of a two-sided market. User's can discover one another and engage in purchasing behavior through a basic server-to-server communication standard in a peer-to-peer network. All peers, in this context, are PDS servers that are registered and discoverable in a global, public, decentralized [registry](./00002-node-registry.md) infrastructure. 
 
 Peers are represented as either `Buyer Supporting Nodes (BSN)` or `Provider Supporting Nodes (PSN)`, depending on whether they support the `Buyer` or `Provider` side of the market.
@@ -44,7 +44,7 @@ Peers are represented as either `Buyer Supporting Nodes (BSN)` or `Provider Supp
 `Buyers` form purchase intents as signed data request's on any protocol-enabled client. The user's PDS receive requests on behalf of a user and proxies these search requests to the network. Purchase intents discover PDS servers that support `Providers` who have the capacity to fulfill the purchase intent by indexing a list of available services in the netowrk's registry infrastructure. This process of discovery is called intent-casting. After discovery, a `Buyer` and `Provider` peer can directly engage and commence in their transaction without the need for an intermediary. 
 
 ## Interoperability Guarantee
-An open network like nosh needs a way to agree on data structures, transport, and semantics. During inter-service network communications (like intent-casting), PDS nodes receive strong typechecks and runtime correctness guarantees by implementing the "Nosh Schema Defintion Language (NSDL)". The NSDL NSDL is similar to an [OpenAPI](https://en.wikipedia.org/wiki/OpenAPI_Specification) specification with added semantic nice-to-haves and opinions for ensuring interoparability among services.
+An open network like nosh needs a way to agree on data structures, transport, and semantics. During inter-service network communications (like intent-casting), PDS nodes receive strong typechecks and runtime correctness guarantees by implementing the [Nosh Schema Defintion Language (NSDL)](./00005-schema-definition-language.md). The NSDL NSDL is similar to an [OpenAPI](https://en.wikipedia.org/wiki/OpenAPI_Specification) specification with added semantic nice-to-haves and opinions for ensuring interoparability among services.
 
 The NSDL is used to define RPC methods and record types, providing developers with a standardized approach and workflow for crafting and specifying new data structures within the network. Such a standard allows protocol implementations to have strong guarantee as the network matures into new categories. 
 
