@@ -6,7 +6,7 @@
 - **Last supportd:** 03-30-2024
 
 ## Abstract
-This RFC proposes a self-sovereign identity framework for decentralized commercial networks and identity primitives for a distributed network of users on either side of a two-sided commercial transaction. 
+This RFC proposes a self-sovereign identity framework for a distributed network of users on either side of a two-sided commercial transaction. 
 
 ## Motivation
 The motiviation for a decentralized identity standard is to shift control back to the users within the network.
