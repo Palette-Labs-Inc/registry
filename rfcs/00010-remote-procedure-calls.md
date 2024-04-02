@@ -19,7 +19,7 @@ We considered not implementing NSDL or NRPC (using [RDF](https://en.wikipedia.or
 ## Proposal, NSDL Endpoints
 The HTTP request path starts with `/nrpc/`, followed by an [RDSID](./00009-namespace-identifiers.md). Paths must always be top-level, not below a prefix. The RDSID maps to the `id` field in the associated [NSDL](./00005-schema-definition-language.md#at-identifier) document.
 
-NSDL schema files support types of "query" (HTTP GET) and "mutation" (HTTP POST). Following HTTP REST semantics, queries (GET) are cacheable and should not mutate resource state. Mutations are not cacheable and may mutate state.
+NSDL schema files support types of "query" (HTTP GET) and "mutation" (HTTP POST). 
 
 **NRPC Notes:**
 - NSDL `params` map to HTTP URL "query parameters". Only certain NSDL types can be included in params, as specified by the `params` type. 
@@ -27,18 +27,18 @@ NSDL schema files support types of "query" (HTTP GET) and "mutation" (HTTP POST)
 - When encoding `boolean` parameters, the strings `true` and `false` should be used (strings should not be quoted).
 - If a `default` value is included in the schema, it should be included in every request to ensure consistent caching behavior.
 
-Request and response body content types can be specified in NSDL. 
+Request and response body content types can be specified in a NSDL definition file. 
 
 ### Error Responses
 All unsuccessful responses should adhere to a standardized error response schema. The `Content-Type` should be `application/json`, and the payload should consist of a JSON object with the following fields:
 - `error` (string, required): type name of the error (generic ASCII constant, no whitespace)
 - `message` (string, optional): description of the error, appropriate for display to humans
 
-The error type should correspond to an error name specified in the endpoint's NSDL schema. This facilitates more precise error-handling by client software. This is especially recommended for status codes such as `400`, `500`, and `502`, where additional information can be beneficial.
+The error type should correspond to an error name specified in the endpoint's NSDL schema. This facilitates more precise error-handling by clients.
 
 ### Blob Upload and Download
 - Blobs can have *any* MIME type
-- Blobs are not stored directly in [data repos](./00006-data-repositories.md), and are not directly associated with an `RDSID`.
+- Blobs are not stored directly in [data repos](./00006-data-repositories.md)
 
 TODO: update docs afte defining the api spec for handling blobs / media types.
 
@@ -49,30 +49,30 @@ TODO: update docs afte defining the api spec for handling paginated data types.
 TODO: update docs afte defining the api spec for registration.
 
 ### Client-to-Server Authentication:
-When an `account` (user) (either a Buyer or Provider) uses a protocol enabled client application, they will authorize the client to sign transactions on their behalf by adding a *Signer* to the [`Signature Authority Registry`](./00003-identity-contracts.md#signature-authority-registry). A _Signer_ is an Ed25519[1](https://github.com/farcasterxyz/protocol/blob/main/docs/SPECIFICATION.md#user-content-fn-ed25519-20ca98ebc54d674b56cc47326c811976) key pair that clients can use to authorize messages (http requests) to the network.
+When an `account` (user) (either a Buyer or Provider) uses a protocol-enabled-client, they will authorize the client to sign transactions on their behalf by adding a *Signer* to the [`Signature Authority Registry`](./00003-identity-contracts.md#signature-authority-registry). A _Signer_ is an Ed25519[1](https://github.com/farcasterxyz/protocol/blob/main/docs/SPECIFICATION.md#user-content-fn-ed25519-20ca98ebc54d674b56cc47326c811976) key pair that clients can use to authorize messages (http requests) to the network.
 
-An account authorizes a clients key as a delegated signer (called a *Signer* in this doc) with a signature from their `custody address` currently holding their Account Identifier `aid`. The client can use the Signer to authorize actions within the network on behalf of the account. Accounts can revoke a Signer at any time with a signature from their `custody address`. A Signer is added or removed by registering the public key of the signer to an `aid` with a smart contract. Signers can only be added for the `aid` owned by the caller of the contract.
+An account authorizes a clients key as a delegated signer (called a *Signer* in this doc) with a signature from their `custody address` currently holding their `account identifier (aid)`. The client can use the *Signer* to authorize actions within the network on behalf of the account. Accounts can revoke a *Signer* at any time with a signature from their `custody address`. A *Signer* is added or removed by registering the public key of the signer to an `aid` with a smart contract. *Signers* can only be added for the `aid` owned by the caller of the contract.
 
-The `PDS` can then verify the signatures from the client and ensure the Signer is valid against the [`Signature Authority Registry`](./00003-identity-contracts.md#signature-authority-registry).
+The `PDS` can verify the signatures from the client and ensure the *Signer* is valid against the [`Signature Authority Registry`](./00003-identity-contracts.md#signature-authority-registry).
 
-A protocol enabled client makes HTTP requests, and uses a *Signer* to sign requests for the account that they are currently representing. Clients can choose a 1:1, or 1:N relationship between users and Signers. 
+A protocol enabled client makes HTTP requests, and uses a *Signer* to sign requests for the account that they are currently representing. Clients can choose a 1:1, or 1:N relationship between users and *Signers*. 
 
-Clients generate a short-lived JWT that they include in the in the HTTP request within an `Authorization` signature header.
+Clients generate a JWT that they include in the HTTP request in an `Authorization` signature header.
 
 The JWT parameters are:
 - `alg` header field: indicates the signing key type (see [Cryptography](TODO))
     - Use `EdDSA` for Ed25519 keys, all requests are signed with the EdDSA algorithm (Ed25519 signing).
 - `aud` body field: the uid for an entry in the [`Node Registry`](./00002-node-registry.md) associated with the service that the request is being sent to
-- `exp` body field: token expiration time, as a UNIX timestamp with seconds precision. 
 - `aid` body field: the [`Account Identifier`](./00003-identity-contracts.md#account-identifiers).
+- `exp` body field: token expiration time, as a UNIX timestamp with seconds precision. 
 
-The client-signed request is then sent to the `accounts` `PDS`. The PDS verifies the client's JWT using the public key listed in the [`Signature Authority Registry`](./00003-identity-contracts.md#signature-authority-registry).  
+The client-signed request is then sent to the `accounts` `PDS`. The `PDS` verifies the client's JWT using the public key listed in the [`Signature Authority Registry`](./00003-identity-contracts.md#signature-authority-registry).  
 
 
 ### Server-to-Server Authentication:
-Upon successful verification of the client's JWT, the initial server decides whether the request needs to be forwarded to another server.
+Upon successful verification of the client's JWT, the initial server decides whether the request needs to be forwarded to another server (read on about the `X-Nosh-Delegation-Proxy` header).
 
-Clients can also opt to use the `X-Nosh-Delegation-Proxy` header to specify which service in the network they want the request forwarded to (eg, a search gateway, or a specific `PDS`). The PDS will execute some safety checks, then forward the request with an inter-service authentication token (JWT, described above) issued and signed by the `PDS`s identity.
+Clients can also opt to use the `X-Nosh-Delegation-Proxy` header to specify which service in the network they want the request forwarded to (eg, a search gateway, or a specific `PDS`). The `PDS` will execute some safety checks, then forward the request with an inter-service authentication token (JWT, described above) issued and signed by the `PDS`s identity.
 
 An example request header from a client to proxy the request to a `PSN` service with uid "0x56e3B524302Ec60Ec7850aF492D079367E03e5fb"
 
@@ -91,7 +91,7 @@ The JWT parameters are:
 - `aud` body field: the uid of the `PDS` that the the request is being sent to
 - `exp` body field: token expiration time, as a UNIX timestamp with seconds precision. Should be a short time window, as revocation is not implemented. 60 seconds is a good value.
 
-- JWT signature: base64url-encoded signature using the account `PDS`s signing key
+- JWT signature is a base64url-encoded signature using the account `PDS`s signing key
 
 ## Example
 The signature for both client-to-server and server-to-server requests is written in Typescript like this:
@@ -103,11 +103,8 @@ const jwt = headerPayload + '.' + bytesToBase64Url(signature)
 
 ## Summary of HTTP Headers
 Clients can use the following request headers:
-
 `Content-Type`: If a request body is present, this header should be included and indicate the content type.
-
 `Authorization`: Contains auth information. See "Authentication" section of this specification for details.
-
 `X-Nosh-Delegation-Proxy`: used for proxying to other nosh-protocol services. See "Service Proxying" section of this document for details.
 
 ## Summary of HTTP Status Codes
