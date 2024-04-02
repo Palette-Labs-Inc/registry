@@ -6,7 +6,7 @@
 - **Last supportd:** 03-31-2024
 
 ## Abstract
-Records and messages need to be stored, transmitted, encoded, and decoded in a consistent way to promote interoperability in distributed systems. This document proposes the adoption of a slightly modified [Interplanetary Linked Data (IPLD)](https://ipld.io/docs/data-model/) specification for the networks data models.
+Records and messages need to be stored, transmitted, encoded, and decoded in a consistent way to promote interoperability in distributed systems. This document proposes the adoption of a slightly modified [Interplanetary Linked Data (IPLD)](https://ipld.io/docs/data-model/) specification for the network's data models.
 
 ## Motivation
 Content addressing through hashes has become a widely-used means of connecting data in distributed systems[^ipld]. IPLD enables decentralized data structures that are universally addressable and linkable. The data model is similar to JSON -- with convenient types for bytes, and links. These additional properties are useful for defining linked data structures in distributed systems and allowing anyone to explore data regardless of the underlying protocol. Common type representations can then be easily representable by common programming languages. Such a standard creates low friction for tooling and libraries within the nosh-protocol network.

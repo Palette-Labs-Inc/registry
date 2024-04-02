@@ -19,9 +19,9 @@ The proposed solution aims to achieve the following:
 - **Key rotation** Users must be able to rotate their key material without disrupting their identity.
 - **Service discovery** To interact with other users, applications must be able to discover the services in use by a given user.
 - **Usability** Users should not have to remember a seed phrase or perform other cognitively demanding tasks to receive the benefits of their decentralized identity.  
-- **Portability** Identities should be portable across services. Changing a provider should not cause a user to lose their identity, social graph, or content.
+- **Portability** Identities should be portable across services. Changing a provider should not cause a user to lose their identity, relationship to the network, or content.
 - **Self-Custody**: Users should have full digital control of their identity and their relationship to infrastructure and services within the network.
-- **EVM Compatible**: Identity primitives should be compatible with EVM's and server as a users wallet. Users must be able to earn blockchain tokens
+- **EVM Compatible**: Identity primitives should be compatible with EVM compatible blockchains and serve as a users wallet. Users must be able to earn tokens.
 - **Privacy-Preserving Interactions**: Ensure that users can selectively disclose relevant information while protecting sensitive data, such as addresses or personal identifiers
 
 ## Account Contracts
