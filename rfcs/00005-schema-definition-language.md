@@ -64,7 +64,7 @@ Below you can see an overview of types. This RFC builds on top of the [Data Mode
 | `unknown`    |                 | meta       |
 | `record`     |                 | primary    |
 | `query`      |                 | primary    |
-| `procedure`  |                 | primary    |
+| `mutation`   |                 | primary    |
 | `context`    |                 | primary    |
 | `subscription`|                | primary    |
 
@@ -89,7 +89,7 @@ Related NSDL documents are often grouped together under a `RDSID` hierarchy, for
 ## Primary Type Definitions
 The primary types are:
 - `query`: describes an [NRPC](./00010-remote-procedure-calls.md) Query (HTTP GET)
-- `procedure`: describes an [NRPC](./00010-remote-procedure-calls.md) Procedure (HTTP POST)
+- `mutation`: describes an [NRPC](./00010-remote-procedure-calls.md) Mutation (HTTP POST)
 - `subscription`: Event Stream (WebSocket)
 - `context`: describe a cryptographically signed binary data object used to validate the integrity of a record and it's creator (signer)
 - `record`: describes an object that can be stored in a repository record
@@ -103,25 +103,25 @@ Type-specific fields:
 - `key` (string, required): specifies the [Record Key type](./00006-record-keys.md)
 - `record` (object, required): a schema definition with type `object`, which specifies this type of record
 
-### Query, Procedure, and Context
+### Query, Mutation, and Context
 Type-specific fields:
 - `parameters` (object, optional): a schema definition with type `params`, describing the HTTP query parameters for this endpoint
 - `output` (object, optional): describes the HTTP response body
     - `description` (string, optional): short description
     - `encoding` (string, required): MIME type for body contents. Must use `application/json` for JSON responses.
     - `schema` (object, optional): schema definition, either an `object`, a `ref`, or a `union` of refs. Used to describe JSON encoded responses, though schema is optional even for JSON responses.
-- `input` (object, optional, only for `procedure`): describes HTTP request body schema, with the same format as the `output` field
+- `input` (object, optional, only for `mutation`): describes HTTP request body schema, with the same format as the `output` field
 - `errors` (array of objects, optional): set of string error codes which might be returned
     - `name` (string, required): short name for the error type, with no whitespace
     - `description` (string, optional): short description, one or two sentences
 
 ### Subscription (Events)
 Type-specific fields:
-- `parameters` (object, optional): same as Query and Procedure
+- `parameters` (object, optional): same as Query and Mutation
 - `message` (object, optional): specifies what messages can be
     - `description` (string, optional): short description
     - `schema` (object, required): schema definition, which must be a `union` of refs
-- `errors` (array of objects, optional): same as Query and Procedure
+- `errors` (array of objects, optional): same as Query and Mutation
 
 Subscription schemas (referenced by the `schema` field under `message`) must be a `union` of refs, not an `object` type.
 
