@@ -40,7 +40,7 @@ await nosh.server.buyer.updatePreferences({
   user: 'alice',
 })
 ```
-In the above API call, NSDL establishes a shared method id (`xyz.nosh.buyer.updateAddress`) and the expected query params, input body, and output body. By using NSDL, the call inherits runtime checks on the inputs, outputs, and contexts of all calls which is vital in distributed systems.
+In the above API call, NSDL establishes a shared method id (`xyz.nosh.buyer.updateAddress`) and the expected query params, input body, and output body. By using NSDL, the call inherits runtime checks on the inputs and outputs of all requests which is vital in distributed systems.
 
 ## Proposal
 Below you can see an overview of types. This RFC builds on top of the [Data Models](./00004-data-models.md) RFC.
