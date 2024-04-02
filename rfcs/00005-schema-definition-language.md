@@ -1,4 +1,4 @@
-# RFC: Lexicons, a Nosh Protocol specific Schema Definition Language
+# RFC: NSDL, a Nosh Protocol specific Schema Definition Language
 
 - **status:** Draft
 - **Author:** Michael Perhats
@@ -6,10 +6,10 @@
 - **Last supportd:** 03-31-2024
 
 ## Abstract
-The protocol will define data types and messages that can be universally referenced within the network. This document proposes the adoption of a schema definition language called "Lexicon" to define data schemas that represent objects related to events in the lifecycle of a commercial transaction, or otherwise the entities that are engaged in the transaction. Lexicon is similar to an [OpenAPI](https://en.wikipedia.org/wiki/OpenAPI_Specification) specification with added semantic nice-to-haves that are useful for our architecture.
+The protocol will define data types and messages that can be universally referenced within the network. This document proposes the adoption of a schema definition language called the "Nosh Schema Defintion Language (NSDL)" to define data schemas that represent objects related to events in the lifecycle of a commercial transaction. NSDL is similar to an [OpenAPI](https://en.wikipedia.org/wiki/OpenAPI_Specification) specification with added semantic nice-to-haves that are useful for our architecture.
 
 ## Introduction
-Lexicon is used to define RPC methods and record types. Lexicons give developers a uniform method and process to write and define new data structures for the network. Schemas are defined using `NSID`s. `NSID`s support a network wide domain categorization of methods and [Data Models](./00004-data-models.md).
+The NSDL is used for the definition of RPC methods and record types, providing developers with a standardized approach and workflow for crafting and specifying new data structures within the network. Schemas are defined using RDSIDs. RDSIDs facilitate a network-wide domain categorization of methods and [Data Models](./00004-data-models.md).
 
 ## Motivation
 Our motivation for a schema definition language is largely the same as the [raw IPLD Schema motivation](https://ipld.io/docs/schemas/#motivation). A standard for the networks data will make coordinating groups of developers and their applications much easier. IPLD Schemas have rich support for describing immutable document graphs based on [content-addressable](https://ipld.io/glossary/#content-addressing) [linking](https://ipld.io/glossary/#link) in distributed systems.  
@@ -40,13 +40,13 @@ await nosh.server.buyer.updatePreferences({
   user: 'alice',
 })
 ```
-In the above API call, Lexicon establishes a shared method id (`xyz.nosh.buyer.updateAddress`) and the expected query params, input body, and output body. By using Lexicon the call inherits runtime checks on the inputs, outputs, and contexts of all calls which is vital in distributed systems.
+In the above API call, NSDL establishes a shared method id (`xyz.nosh.buyer.updateAddress`) and the expected query params, input body, and output body. By using NSDL, the call inherits runtime checks on the inputs, outputs, and contexts of all calls which is vital in distributed systems.
 
 ## Proposal
-Here, we introduce "Lexicon", a schema [interface definition language](https://en.wikipedia.org/wiki/Interface_description_language) used to describe records, HTTP endpoints, and event stream messages (websockets). This RFC builds on top of the [Data Models](./00004-data-models.md) RFC.
+Below you can see an overview of types. This RFC builds on top of the [Data Models](./00004-data-models.md) RFC.
 
 ### Overview of Types
-| Lexicon Type | Data Model Type | Category   |
+| NSDL Type    | Data Model Type | Category   |
 |--------------|-----------------|------------|
 | `null`       | Null            | concrete   |
 | `boolean`    | Boolean         | concrete   |
@@ -69,24 +69,22 @@ Here, we introduce "Lexicon", a schema [interface definition language](https://e
 | `subscription`|                | primary    |
 
 
-### Lexicon Files
-Lexicons are JSON files associated with a single `NSID`. A file contains one or more definitions, each with a distinct short name. A definition with the name `main` optionally describes the "primary" definition for the entire file. A Lexicon with zero definitions is invalid.
+### NSDL Files (Schema Definition Documents)
+NSDL files are JSON documents associated with a single `RDSID`. Each file includes one or more definitions, each marked by a unique short name. A definition named `main` may optionally signify the "primary" definition for the entire document. An NSDL file lacking definitions is considered invalid.
 
-A Lexicon JSON file is an object, similar to a `.yaml` or `.json` file in [OpenAPI](https://en.wikipedia.org/wiki/OpenAPI_Specification). Each Lexicon JSON file defines a specific piece of information or communication method for the network. Lexicon JSON files universally define client-to-server interactions and server-to-server interactions in the network.
+An NSDL JSON file is an object, akin to a `.yaml` or `.json` file in [OpenAPI](https://en.wikipedia.org/wiki/OpenAPI_Specification). Each NSDL JSON file delineates a specific piece of information or communication method for the network. NSDL JSON files uniformly define client-to-server and server-to-server interactions within the network.
 
-- `lexicon` (integer, required): indicates Lexicon language version. In this version, a fixed value of `1` is used
-- `id` (string, required): the `NSID` of the Lexicon
-- `revision` (integer, optional): indicates the version of this Lexicon, if changes have occurred
-- `description` (string, optional): a description of the Lexicon, usually one or two sentences useful for developers to understand
-- `defs` (map of strings-to-objects, required): set of definitions, each with a distinct name (key)
+- `nsdl` (integer, required): indicates the NSDL language version. In this version, a fixed value of `1` is used.
+- `id` (string, required): the `RDSID` of the NSDL document.
+- `revision` (integer, optional): indicates the version of this NSDL document, if changes have occurred.
+- `description` (string, optional): a description of the NSDL document, usually one or two sentences useful for developers to understand.
+- `defs` (map of strings-to-objects, required): set of definitions, each with a distinct name (key).
 
 Schema definitions under `defs` all have a `type` field to distinguish their type. A file can have at most one definition with one of the "primary" types. Primary types should always have the name `main`. It is possible for `main` to describe a non-primary type.
 
-References to specific definitions within a Lexicon use fragment syntax, like `com.referenceDomain.defs#someView`. If a `main` definition exists, it can be referenced without a fragment, just using the `NSID`. For references in the `$type` fields in data objects themselves (eg, records or contents of a union), this is a "must" (use of a `#main` suffix is invalid). For example, `com.referenceDomain.record` not `com.referenceDomain.record#main`.
+References to specific definitions within an NSDL document use fragment syntax, like `com.referenceDomain.defs#someView`. If a `main` definition exists, it can be referenced without a fragment, just using the `RDSID`. For references in the `$type` fields in data objects themselves (e.g., records or contents of a union), this is a "must" (use of a `#main` suffix is invalid). For example, `com.referenceDomain.record` not `com.referenceDomain.record#main`.
 
-The semantics of the `revision` field have not been worked out yet, but are intended to help third parties identify the most recent among multiple versions or copies of a Lexicon.
-
-Related Lexicons are often grouped together in a `NSID` hierarchy, for example a `Buyer` entity might have it's own namespace to group data models under a single `Buyer` domain. As a convention, any definitions used by multiple Lexicons are defined in a dedicated `*.defs` Lexicon (eg, `com.referenceDomain.psn.defs`) within the group. A `*.defs` Lexicon should generally not include a definition named `main`, though it is not strictly invalid to do so.
+Related NSDL documents are often grouped together under a `RDSID` hierarchy, for example, a `Buyer` entity might have its own namespace to group data models under a single `Buyer` domain. As a convention, any definitions used by multiple NSDL documents are defined in a dedicated `*.defs` NSDL document (e.g., `com.referenceDomain.psn.defs`) within the group. A `*.defs` NSDL document should generally not include a definition named `main`, though it is not strictly invalid to do so.
 
 ## Primary Type Definitions
 The primary types are:
@@ -129,7 +127,6 @@ Subscription schemas (referenced by the `schema` field under `message`) must 
 
 ## Field Type Definitions
 Every schema object includes these fields:
-
 - `type` (string, required): fixed value for each type
 - `description` (string, optional): short, usually only a sentence or two
 
@@ -138,7 +135,6 @@ No additional fields.
 
 ### `boolean`
 Type-specific fields:
-
 - `default` (boolean, optional): a default value for this field
 - `const` (boolean, optional): a fixed (constant) value for this field
 
@@ -174,18 +170,14 @@ Strings are Unicode. For non-Unicode encodings, use `bytes` instead. The basic
 
 ### `bytes`
 Type-specific fields:
-
 - `minLength` (integer, optional): minimum size of value, as raw bytes with no encoding
 - `maxLength` (integer, optional): maximum size of value, as raw bytes with no encoding
 
 ### `cid-link`
-No type-specific fields.
-
-See [Data Model spec](./00004-data-models.md) for CID restrictions.
+No type-specific fields. See [Data Model spec](./00004-data-models.md) for CID restrictions.
 
 ### `array`
 Type-specific fields:
-
 - `items` (object, required): describes the schema elements of this array
 - `minLength` (integer, optional): minimum count of elements in array
 - `maxLength` (integer, optional): maximum count of elements in array
@@ -193,10 +185,9 @@ Type-specific fields:
 In theory arrays have homogeneous types (meaning every element as the same type). However, with union types this restriction is meaningless, so implementations can not assume that all the elements have the same type.
 
 ### `object`
-A generic object schema which can be nested i`NSID`e other definitions by reference.
+A generic object schema which can be nested inside other definitions by reference.
 
 Type-specific fields:
-
 - `properties` (map of strings-to-objects, required): defines the properties (fields) by name, each with their own schema
 - `required` (array of strings, optional): indicates which properties are required
 - `nullable` (array of strings, optional): indicates which properties can have `null` as a value
@@ -205,7 +196,6 @@ As described in the data model specification, there is a semantic difference in 
 
 ### `blob`
 Type-specific fields:
-
 - `accept` (array of strings, optional): list of acceptable MIME types. Each may end in `*` as a glob pattern (eg, `image/*`). Use `*/*` to indicate that any MIME type is accepted.
 - `maxSize` (integer, optional): maximum size in bytes
 
@@ -213,7 +203,6 @@ Type-specific fields:
 This is a limited-scope type which is only ever used for the `parameters` field on `query`, `procedue`, and `subscription` primary types. These map to HTTP query parameters.
 
 Type-specific fields:
-
 - `required` (array of strings, optional): same semantics as field on `object`
 - `properties`: similar to properties under `object`, but can only include the types `boolean`, `integer`, `string`, and `unknown`; or an `array` of one of these types
 
@@ -233,33 +222,32 @@ Type-specific fields:
 
 - `ref` (string, required): reference to another schema definition
 
-Refs are a mechanism for re-using a schema definition in multiple places. The `ref` string can be a global reference to a Lexicon type definition (an `NSID`, optionally with a `#`-delimited name indicating a definition other than `main`), or can indicate a local definition within the same Lexicon file (a `#` followed by a name).
+Refs serve as a method for re-utilizing a schema definition. The `ref` string may either point to a global reference of an NSDL type definition, an `RDSID` which might include a `#`-delimited name to specify a definition distinct from `main`, or it can refer to a local definition within the same NSDL document. This local reference is indicated by a `#` followed by the name, enabling the reuse of definitions either globally across different files or locally within the same document.
 
 ### `union`
 Type-specific fields:
-
 - `refs` (array of strings, required): references to schema definitions
 - `closed` (boolean, optional): indicates if a union is "open" or "closed". defaults to `false` (open union)
 
-Unions represent that multiple possible types could be present at this location in the schema. The references follow the same syntax as `ref`, allowing references to both global or local schema definitions. Actual data will validate against a single specific type: the union does not _combine_ fields from multiple schemas, or define a new _hybrid_ data type. The different types are referred to as **variants**.
+Unions in a schema signify the presence of multiple possible types at a specific location, functioning similarly to polymorphic types. These unions utilize the `ref` syntax for referencing, allowing them to point to either global or local schema definitions. A union does not amalgamate fields from different schemas into one or create a new "hybrid" type. Instead, the actual data must match one specific type within the union, which are referred to as **variants**.
 
-By default unions are "open", meaning that future revisions of the schema could add more types to the list of refs (though can not remove types). This means that implementations should be permissive when validating, in case they do not have the most recent version of the Lexicon. The `closed` flag (boolean) can indicate that the set of types is fixed and can not be extended in the future.
+Unions are typically `open`. *Openness* allows for the possibility of adding more types to the list of refs. This design choice suggests that implementations should *validate data leniently* to accommodate potential updates they haven't yet received. 
 
-A `union` schema definition with no `refs` is allowed and similar to `unknown`, as long as the `closed` flag is false (the default). An empty refs list with `closed` set to true is an invalid schema.
+A `closed` boolean flag exists to signify that a union's set of types is permanently fixed, preventing any future amendments.
 
-The schema definitions pointed to by a `union` are generally objects or types with a clear mapping to an object, like a `record`. All the variants must be represented by a CBOR map (or JSON Object) and include a `$type` field indicating the variant type.
+A unique aspect of unions is the allowance of a schema definition without any `refs`, akin to an `unknown` type, provided the `closed` flag is unset (false by default). Conversely, a union marked as `closed` without any `refs` constitutes an invalid schema, highlighting the necessity for at least one potential type in a closed union.
+
+For the types within a `union`, they are typically structured as objects or types easily translated into objects, like a `record`. Each variant within the union is expected to be represented by a CBOR map (or JSON Object) and must include a `$type` field to denote the specific variant type. 
 
 ### `unknown`
-Indicates than any data could appear at this location, with no specific validation. Note that the data must still be valid under the data model: it can't contain unsupported things like floats.
-
-No type-specific fields.
+Any type of data is permitted to appear at the designated location without undergoing type-specific validation. It's crucial to note that while this offers flexibility, the data *must still conform* to the overarching [data model requirements](./00004-data-models.md). This implies that the data cannot include elements unsupported by the model, such as Floats.
 
 ## String Formats
 Strings can optionally be constrained to one of the following `format` types:
 - `nosh-uri`: [NOSH-URI](./00008-uri-standards.md#full-nosh-uri-syntax)
 - `cid`: CID in string format, details specified in [Data Model](./00004-data-models.md)
 - `datetime`: timestamp, details specified below
-- `nsid`: a [Namespaced Identifier](./00009-namespace-identifiers.md)
+- `rdsid`: a [Namespaced Identifier](./00009-namespace-identifiers.md)
 - `uri`: generic URI, details specified below
 - `language`: language code, details specified below
 - `currency`: currency code, details specified below
@@ -332,7 +320,7 @@ Invalid examples:
 1985-00-12T23:20:50.123Z
 ```
 
-### `nsid`
+### `rdsid`
 Represents a syntactically valid [Namespace Identifier](./00009-namespace-identifiers.md)
 
 #### Examples:
@@ -405,7 +393,7 @@ The specific rules are:
 
 Note that `blob` objects always include `$type`, which allows generic processing.
 
-As a reminder, `main` types must be referenced in `$type` fields as just the `NSID`, not including a `#main` suffix.
+As a reminder, `main` types must be referenced in `$type` fields as just the `RDSID`, not including a `#main` suffix.
 
 ## References
 

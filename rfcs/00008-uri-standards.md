@@ -34,7 +34,7 @@ In current nosh-protocol Lexicon use, the **query** and **fragment** parts a
 "nosh://" AUTHORITY [ "/" COLLECTION [ "/" RKEY ] ]
 ```
 
-The **authority** section is required and must be normalized. The optional **collection** part of the path must be a normalized [NSID](./00009-namespace-identifiers.md). The optional **rkey** part of the path must be a valid [Record Key](./00007-record-keys.md).
+The **authority** section is required and must be normalized. The optional **collection** part of the path must be a normalized [RDSID](./00009-namespace-identifiers.md). The optional **rkey** part of the path must be a valid [Record Key](./00007-record-keys.md).
 
 A major semantic difference between NOSH URIs and common URL formats like `https://`, `ftp://`, or `wss://` is that the "authority" part of A NOSH URI does not indicate a network location for the indicated resource.
 
@@ -69,7 +69,7 @@ A restricted sub-set of valid NOSH URIs are currently used in Lexicons for the 
 ```shell
 NOSH-URI        = "nosh://" AUTHORITY [ "/" COLLECTION [ "/" RKEY ] ]
 AUTHORITY     = address | account-identifer
-COLLECTION    = NSID
+COLLECTION    = RDSID
 RKEY          = RECORD-KEY
 ```
 
@@ -81,7 +81,7 @@ Particularly when included in nosh-protocol records, strict normalization should
 - URI schema is lowercase
 - No trailing slashes in path part
 - No duplicate slashes or "dot" sections in path part (`/./` or `/abc/../` for example)
-- NSID in path: domain authority part lowercased
+- RDSID in path: domain authority part lowercased
 - Record Key is case-sensitive and not normalized
 - Query and fragment parts should not be included when referencing repositories or records in Lexicon records
 
@@ -96,7 +96,7 @@ nosh://foo.com/com.example.foo/123
 
 **Valid general NOSH URI syntax, invalid in current Lexicon**:
 ```shell
-nosh://foo.com/example/123     // invalid NSID
+nosh://foo.com/example/123     // invalid RDSID
 nosh://computer                // not a valid account identifier or `custody address`
 nosh://example.com:3000        // not a valid account identifier or `custody address`
 ```
