@@ -124,6 +124,8 @@ graph LR
 
 ## Getting to Permissionless
 - Insurance, Arbitration, and Disputes
+- Gossip, libp2p specification
+- Peer scoring methods
 - Indexers, Gateways
 - Payments
 - WebAuthN docs
