@@ -3,7 +3,7 @@
 ## Abstract
 Web2 marketplaces tend to be [rent-seeking](https://en.wikipedia.org/wiki/Rent-seeking), charging asymmetric fees relative to the value of the services they provide. These networks create negative externalities on society, reduce economic efficiency, prevent emerging markets, and fail to adequately fill incentive gaps in markets. 
 
-Here we define a new communication standard, set of rules, and technical specifications for building open e-commerce networks across which providers and their services are universally discoverable from any protocol-enabled application.
+We develop structures for a [self-authenticating](https://en.wiktionary.org/wiki/self-authenticating) protocol specification; a new communication standard, set of rules, and technical specifications for building open e-commerce networks across which `Providers` and their services are universally discoverable from any protocol-enabled application.
 
 Our design supports an interoperable network of independently hosted `Provider Supporting Nodes` and `Buyer Supporting Nodes` - generically referred to as a `Personal Data Stores (PDS)` - that are responsible for onboarding participants on either side of a market, storing their data, and relaying transaction `intents` to a range of open services in the network.
 
@@ -35,7 +35,9 @@ We introduce a [self-sovereign identity](https://en.wikipedia.org/wiki/Self-sove
 - **Recoverability**: Users must be able to recover their account in the event of a lost private key.
 - **Privacy-Preserving Interactions**: Ensure that users can selectively disclose relevant information while protecting sensitive data, such as address information or other personal identifiers.
 
-Users create a global identity within the network by going through a registration procedure and interfacing with on-chain smart contracts. A users identity is a numeric identifier like `423987` controlled by a key pair, and is called the `account identifier`. We also introduce the concept of a `delegated signer`. Delegated signing allows a user to easily interact with the network and it's avilable services while delegating the signing process to a client that represents their interests. Delegated signatures allow clients to automate the signature process so the user does not have to present their private key during every stage in their transaction lifecycle. Users can unilaterally revoks signature delegation at any time.
+Users create a global identity within the network by going through a registration procedure and interfacing with on-chain smart contracts. A users identity is a numeric identifier like `423987` controlled by a key pair, and is called the `account identifier`. We also introduce the concept of a `delegated signer`. Delegated signing allows a user to easily interact with the network and it's avilable services while delegating the signing process to a `client` that represents their interests. Delegated signatures allow clients to automate the signature process so the user does not have to present their private key during every stage in their transaction lifecycle. Users can unilaterally revoks signature delegation at any time.
+
+Users include their `account identifier` and sign every [`intent`](#intent-casting). This mechanism makes all communication within the network tamper-proof and self-certifying. Recipients of `intents` validate these signed messages against the [`identity contracts`](./00003-identity-contracts.md) before processing, storing, or transmitting data. 
 
 ## Personal Data Stores
 We assume webservers are necessary for performing computational tasks for filtering information and providing app-views. We also assume that most users will not want to host their infrastructure, although this is entirely possible within the standard.
