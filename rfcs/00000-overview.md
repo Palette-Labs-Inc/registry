@@ -87,10 +87,8 @@ An open network like nosh needs a way to agree on data structures, transport, an
 
 The NSDL is used to define RPC methods and record types, providing developers with a standardized approach and workflow for crafting and specifying new data structures within the network. Such a standard allows protocol implementations to have strong guarantee as the network matures into new categories.
 
-## Indexing Services
-
 ## Clients
-A client is a 
+A client is any application interface that allows a user to register and / or interface with the network and it's services. Users are then free to choose the client that best suits their needs and preferences. Clients are free to produce and distributed. Application developers have the benefit of tapping into the existing network effects of the protocol network. Developers can run their own servers to provide highly-customized experiences, or they can tap into existing infrastructure, depending on their needs.
 
 ## Getting to Permissionless
 - Insurance, Arbitration, and Disputes
@@ -103,6 +101,7 @@ A client is a
 
 ## Future Work and Technical Challenges
 - Privacy-preservation: Improve the design to enable privacy-preserving interactions, allowing users to selectively disclose relevant information.
-- Session-based signing
+- Session-based signature delegation
+- 
 
 ## References
