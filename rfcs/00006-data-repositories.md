@@ -76,30 +76,28 @@ A PDS maintains repos for accounts as a [Merkle Search Tree (MST)](https://hal.i
 3. When a node contains a link to another sub-tree, all keys within that linked sub-tree, as well as any sub-trees linked to it, are positioned in the tree structure in a manner that maintains the order of keys.
 4. The sorting order follows a left-to-right [lexographical order](https://en.wikipedia.org/wiki/Lexicographic_order)
 
-**represented graphically, this looks like:**
 ```mermaid
 graph TD
-    A["Root Node (A-F)"]
-    B["Node1 (A-C)"]
-    C["Node2 (D-E)"]
-    D["Node3 (G-H)"]
-    E["Entry1 (A)"]
-    F["Entry2 (B)"]
-    G["Entry3 (C)"]
-    H["Entry4 (D)"]
-    I["Entry5 (E)"]
-    J["Entry6 (F)"]
-    K["Entry7 (G)"]
-    L["Entry8 (H)"]
-    A -->|Link1| B
-    A -->|Link2| C
-    A -->|Link3| D
-    B -->|Link4| E
-    B -->|Link5| F
-    C -->|Link6| I
-    C -->|Link7| J
-    D -->|Link8| K
-    D -->|Link9| L
+    rootNode(Root Node) --> |"Highest depth keys"| entryNode1(Entry Node 1)
+    rootNode --> |"Sub-tree link"| intermediateNode1(Intermediate Node 1)
+    rootNode --> |"Sub-tree link"| intermediateNode2(Intermediate Node 2)
+    
+    entryNode1 --> |"key: 2653ae71"| keyNode1(Key Node 1: CID)
+    entryNode1 --> |"key: 34sdv23"| keyNode2(Key Node 2: CID)
+
+    intermediateNode1 --> |"Left link"| subTree1(Sub-tree Node)
+    subTree1 --> |"key: 5786vdf2"| keyNode3(Key Node 3: CID)
+    subTree1 --> |"Right link"| subTree1Right(Sub-tree Right Node)
+    
+    intermediateNode2 --> |"Left link"| subTree2(Sub-tree Node)
+    subTree2 --> |"key: 07dvf3214"| keyNode4(Key Node 4: CID)
+    subTree2 --> |"Right link"| subTree2Right(Sub-tree Right Node)
+    
+    classDef rootNode fill:#ff9f9b,stroke:#333,stroke-width:4px;
+    classDef intermediateNode fill:#ffcc5c,stroke:#333,stroke-width:4px;
+    classDef entryNode fill:#ffeead,stroke:#333,stroke-width:4px;
+    classDef subTreeNode fill:#d4ebf2,stroke:#333,stroke-width:4px;
+    classDef keyNode fill:#d0f4de,stroke:#333,stroke-width:4px;
 ```
 
 ### MST Implementation
@@ -114,7 +112,7 @@ graph TD
 Some examples, with the given ASCII strings mapping to byte arrays:
 ```python
 import hashlib
-def calculate_depth_corrected(key: str) -> int:
+def calculate_depth(key: str) -> int:
     # Convert the key to a byte array
     key_bytes = key.encode('utf-8')
     
@@ -138,9 +136,9 @@ key1 = '2653ae71'
 key2 = 'nosh'
 key3 = "xyz.nosh.buyer.address/s"
 
-depth1 = calculate_depth_corrected(key1)
-depth2 = calculate_depth_corrected(key2)
-depth3 = calculate_depth_corrected(key3)
+depth1 = calculate_depth(key1)
+depth2 = calculate_depth(key2)
+depth3 = calculate_depth(key3)
 
 depth1, depth2, depth3 # outputs (0, 1, 2), representing the unique depths for each key input
 ```
