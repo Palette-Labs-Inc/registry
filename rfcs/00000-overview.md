@@ -10,9 +10,13 @@ Our design supports an interoperable network of independently hosted `Provider S
 Our design grants users the ability to "switch" between managed-hosts (PDS), shifting control to individuals within the network. This simple design modification ensures that the rent that any infrastructure provider might charge to an account in the network will fall to it's market clearing price. As such, most of the value created by the network will accrue to the edges, maximally benefiting the networks participants as the network matures.
 
 *Our design optimizes for:*
-- **User Choice**: if any Personal Data Store fails to maintain it's service, begins charging high fees, or has performance failures, users are free to switch to a new managed host (Personal Data Store)
-- **Scale**: Self-authenticating data provides a scalability advantage by enabling [store and forward caching](https://en.wikipedia.org/wiki/Store_and_forward) from one intermediate point to another within a network without sacrificing trust
-- **Trust**: Self-authenticating data allows trust to reside in the data itself, widening the set of storage and computational possibilities to a much broader set of possible providers
+- **Scale**: [Self-authenticating data](./00004-data-models.md#proposal) provides a scalability advantage by enabling [store and forward caching](https://en.wikipedia.org/wiki/Store_and_forward) from one intermediate point to another within the network. 
+- **Extensibility**: The [Nosh Schema Definition Language (NSDL)](./00005-schema-definition-language.md) provides a standardized and extensible way to define new data structures, record types, and API methods as the network grows into new markets and use cases.
+- **User Choice and Portability**: if any `Personal Data Store` fails to maintain it's service, begins charging high fees, or has performance failures, users are free to switch to a new managed host (Personal Data Store) without requiring permission from the original host.
+- **Interoperability**: The [Nosh Schema Definition Language (NSDL)](./00005-schema-definition-language.md) and [Node Registry](./00002-node-registry.md) promotes interoperability between different nodes, services, and applications.
+- **Self-Covereign Identity**: The design introduces a [self-sovereign identity](./00003-identity-contracts.md) framework that gives users control over their identities and data within the network.
+- **Developer Experience**: The The [Nosh Schema Definition Language (NSDL)](./00005-schema-definition-language.md) and [Nosh Remote Procedure Calls](./00010-remote-procedure-calls.md) aim to provide a robust developer experience with tooling like code generation, runtime validation, and strong type guarantees without sacrificing interoparability.
+- **Token Economies**: Individual users (`Buyers` and `Providers`) and services all have globally unique identites on the blockchain. The blockchain serves as both a discovery layer, and infrastructure for token based incentive mechanisms. 
 
 ## Identity
 In centralized networks, central servers own a users identity and, as such, their relationship to the network. As the network grows, and power accumulates to central authorities, platforms begin to extract from stakeholders - usually through increasingly high take rates in commercial settings. 
@@ -59,3 +63,7 @@ The NSDL is used to define RPC methods and record types, providing developers wi
 - WebAuthN docs
 - Verifiable Compute
 - Decentralized micro-services architectures
+
+
+## Future Work and Technical Challenges
+- Privacy-preservation: Improve the design to enable privacy-preserving interactions, allowing users to selectively disclose relevant information.
