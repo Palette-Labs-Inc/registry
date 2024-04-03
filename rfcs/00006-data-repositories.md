@@ -144,7 +144,7 @@ depth1, depth2, depth3 # outputs (0, 1, 2), representing the unique depths for e
 ```
 
 ### CID Formats
-The specification for [IPFS CID](https://docs.ipfs.tech/concepts/content-addressing/#what-is-a-cid) is broad. We restrict the allowable formats to:
+We restrict the allowable [IPFS CID](https://docs.ipfs.tech/concepts/content-addressing/#what-is-a-cid) formats to:
 - CIDv1
 - Multibase: binary serialization within [DAG-CBOR](https://ipld.io/docs/codecs/known/dag-cbor/) (or `base32` for JSON mappings)
 - Multicodec: `dag-cbor` (0x71)
