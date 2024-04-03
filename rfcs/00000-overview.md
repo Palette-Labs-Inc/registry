@@ -18,6 +18,8 @@ Our design grants users the ability to "switch" between managed-hosts (PDS), shi
 - **Developer Experience**: The [Nosh Schema Definition Language (NSDL)](./00005-schema-definition-language.md) and [Nosh Remote Procedure Calls](./00010-remote-procedure-calls.md) aim to provide a robust developer experience with tooling like code generation, runtime validation, and strong type guarantees without sacrificing interoparability with other peers.
 - **Token Economies**: Individual users (`Buyers` and `Providers`) and services all have globally unique identites on the blockchain. The blockchain serves as both a discovery layer, and infrastructure for token based incentive mechanisms. 
 - **Trust**: We introduce concepts for [authenticated](https://www.cs.umd.edu/~mwh/papers/gpads.pdf), [conflict free](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) data structures through a signed, content-addressed, [Merkle Search Tree](./00006-data-repositories.md#mst-structure). Such structures allow us to widen the set of storage and computational possibilities to a much broader set of untrusted providers.
+- **Usability**: We adopt [WebAuthN](https://www.w3.org/TR/webauthn-2/) as a universal registration and authentication standard. WebAuthN is the w3c specification underlying Passkeys. Passkeys are a significant UX improvement over traditional seed phrase management mechanisms for decentralized identity solutions. 
+
 
 ## Identity
 In centralized networks, central servers own a users identity and, as such, their relationship to the network. As the network grows, and power accumulates to central authorities, platforms begin to extract from stakeholders - usually through increasingly high take rates in commercial settings. 
@@ -83,7 +85,12 @@ graph LR
 ## Interoperability Guarantees
 An open network like nosh needs a way to agree on data structures, transport, and semantics. During inter-service network communications (like intent-casting), PDS nodes receive strong typechecks and runtime correctness guarantees by implementing the [Nosh Schema Defintion Language (NSDL)](./00005-schema-definition-language.md). The NSDL NSDL is similar to an [OpenAPI](https://en.wikipedia.org/wiki/OpenAPI_Specification) specification with added semantic nice-to-haves and opinions for ensuring interoparability among services.
 
-The NSDL is used to define RPC methods and record types, providing developers with a standardized approach and workflow for crafting and specifying new data structures within the network. Such a standard allows protocol implementations to have strong guarantee as the network matures into new categories. 
+The NSDL is used to define RPC methods and record types, providing developers with a standardized approach and workflow for crafting and specifying new data structures within the network. Such a standard allows protocol implementations to have strong guarantee as the network matures into new categories.
+
+## Indexing Services
+
+## Clients
+A client is a 
 
 ## Getting to Permissionless
 - Insurance, Arbitration, and Disputes
@@ -96,3 +103,6 @@ The NSDL is used to define RPC methods and record types, providing developers wi
 
 ## Future Work and Technical Challenges
 - Privacy-preservation: Improve the design to enable privacy-preserving interactions, allowing users to selectively disclose relevant information.
+- Session-based signing
+
+## References
