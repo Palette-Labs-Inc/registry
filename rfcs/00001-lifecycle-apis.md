@@ -115,7 +115,7 @@ Modern platforms use sophisticated services for: search and discovery, personali
 
 Independent parties can write `Service Modules` for various computational needs and sell them to `Personal Data Stores`.  There should be ways for services to be discovered by `Personal Data Stores` and used at any point during the transaction lifecycle. A network token can function as a micro-payments layer to facilitate the exchange of services. It also introduces a novel business model for publishing algorithms that provide utility for the network. This approach enables the development of a diverse range of services, enhancing the network's possibilities. 
 
-Independent third parties should be able to list their services in a publicly discoverable registry. Their services should be computationally verifiable and self-authenticating. 
+Independent third parties should be able to list their services in a publicly discoverable registry.
 
 ```mermaid
 sequenceDiagram

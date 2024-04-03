@@ -6,7 +6,7 @@
 - **Last supportd:** 03-30-2024
 
 ## Abstract
-A data repo is a collection of data stored by a user and signed by a users delegated signature authority. Repositories contain self-authenticating data structures, meaning each creation or update of a piece of content is signed, canonical, live, transactable, and can be independently verified by any third party regardless of the storage location of the data.
+A data repo is a collection of data stored by a user and signed by a users delegated signature authority. Repositories contain authenticated data structures, meaning each creation or update of a piece of content is signed, canonical, live, transactable, and can be independently verified by any third party regardless of the storage location of the data.
 
 _Please Note_: this document is a work-in-progess, we still have to write a functional implementation of the repo and this document is subject to change during this process.
 

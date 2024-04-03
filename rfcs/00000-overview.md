@@ -1,4 +1,4 @@
-# Nosh, A Protocol for Decentralized Commerce
+# Nosh, a Protocol for Decentralized Commerce
 
 ## Abstract
 Web2 marketplaces tend to be [rent-seeking](https://en.wikipedia.org/wiki/Rent-seeking), charging asymmetric fees relative to the value of the services they provide. These networks create negative externalities on society, reduce economic efficiency, prevent emerging markets, and fail to adequately fill incentive gaps in markets. 
@@ -40,7 +40,7 @@ Users create a global identity within the network by going through a registratio
 ## Personal Data Stores
 We assume webservers are necessary for performing computational tasks for filtering information and providing app-views. We also assume that most users will not want to host their infrastructure, although this is entirely possible within the standard.
 
-Each user has a PDS. A PDS is a webserver containing a content-addressed personal data repository for a user's account. This repository represents a collection of records stored by a user and signed by the users delegated signature authority (delegated signer). Repositories contain self-authenticating data structures, meaning each creation or update of a piece of content is signed, canonical, live, transactable, and can be independently verified by any third party regardless of the storage location of the data.
+Each user has a PDS. A PDS is a webserver containing a content-addressed personal data repository for a user's account. This repository represents a collection of records stored by a user and signed by the users delegated signature authority (delegated signer). Creation or updates of records are signed, canonical, live, transactable, and can be independently verified by any third party regardless of the storage location of the data.
 
 If any `Personal Data Store` fails to maintain it's service, begins charging high fees, or has performance failures, users are free to switch to a new managed host provider (`Personal Data Store`), including to their own infrastructure. Because, 1. it is easy to switch hosts, 2. it is easy for anyone to operate a `Personal Data Stores`, `Personal Data Stores` will be able to charge *the exact rent* that their service can justify in an open market. 
 
