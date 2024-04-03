@@ -90,6 +90,38 @@ The NSDL is used to define RPC methods and record types, providing developers wi
 ## Clients
 A client is any application interface that allows a user to register and / or interface with the network and it's services. Users are then free to choose the client that best suits their needs and preferences. Clients are free to produce and distributed. Application developers have the benefit of tapping into the existing network effects of the protocol network. Developers can run their own servers to provide highly-customized experiences, or they can tap into existing infrastructure, depending on their needs.
 
+```mermaid
+graph LR
+    subgraph Blockchain
+        id(Registry Contracts)
+    end
+
+    subgraph Web Servers
+        id---hub1(PDS)
+        id---hub4(Custom Service)
+        id---hub2(PDS)
+    end
+
+    hub2---app2(Desktop Client)
+    hub2---app3(Mobile Client)
+    
+    subgraph App3
+      hub1-.-client1(Desktop Client)
+      hub4-.-client1(Desktop Client)
+      hub1-.-client2(Mobile Client)
+      hub4-.-client2(Mobile Client)
+    end
+
+    subgraph App2
+        app2
+    end
+
+    subgraph App1
+      app3
+    end
+
+```
+
 ## Getting to Permissionless
 - Insurance, Arbitration, and Disputes
 - Indexers, Gateways
