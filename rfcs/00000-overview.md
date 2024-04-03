@@ -3,7 +3,7 @@
 ## Abstract
 Web2 marketplaces tend to be [rent-seeking](https://en.wikipedia.org/wiki/Rent-seeking), charging asymmetric fees relative to the value of the services they provide. These networks create negative externalities on society, reduce economic efficiency, prevent emerging markets, and fail to adequately fill incentive gaps in markets. 
 
-We develop structures for a [self-authenticating](https://en.wiktionary.org/wiki/self-authenticating) protocol specification; a new communication standard, set of rules, and technical specifications for building open e-commerce networks. 
+We develop structures for a [self-authenticating](https://en.wiktionary.org/wiki/self-authenticating) protocol specification; a set of primitives and technical specifications for building open e-commerce networks. 
 
 Our design supports an interoperable network of independently hosted `Provider Supporting Nodes` and `Buyer Supporting Nodes` - generically referred to as a `Personal Data Stores (PDS)` - that are responsible for onboarding participants on either side of a market, storing their data, and relaying transaction `intents` to a range of open services in the network.
 
