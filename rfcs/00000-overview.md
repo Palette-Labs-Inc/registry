@@ -130,10 +130,9 @@ graph LR
 - Verifiable Compute
 - Decentralized micro-services architectures
 
-
 ## Future Work and Technical Challenges
 - Privacy-preservation: Improve the design to enable privacy-preserving interactions, allowing users to selectively disclose relevant information.
 - Session-based signature delegation
-- 
+- Associated domain entitlements and native webAuthN libraries
 
 ## References
