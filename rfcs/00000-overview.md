@@ -7,8 +7,6 @@ We develop structures for a [self-authenticating](https://en.wiktionary.org/wik
 
 Our design supports an interoperable network of independently hosted `Provider Supporting Nodes` and `Buyer Supporting Nodes` - generically referred to as a `Personal Data Stores (PDS)` - that are responsible for onboarding participants on either side of a market, storing their data, and relaying transaction `intents` to a range of open services in the network.
 
-Our design grants users the ability to "switch" between managed-hosts (PDS), shifting control to individuals within the network. This simple design modification ensures that the rent that any infrastructure provider might charge to an account in the network will fall to it's market clearing price. As such, most of the value created by the network will accrue to the edges, maximally benefiting the networks participants as the network matures.
-
 *Our design optimizes for:*
 - **Scale**: Our Authenticated [Data Model](./00004-data-models.md#proposal) can prove its own "validity" without an external validator through simple crytographic signing methods. Such properties are important when sharing data with untrusted parties in distributed systems.
 - **Extensibility**: The [Nosh Schema Definition Language (NSDL)](./00005-schema-definition-language.md) provides a standardized and extensible way to define new data structures, record types, and API methods as the network grows into new markets and use cases.
