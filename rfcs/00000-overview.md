@@ -35,27 +35,52 @@ We introduce a [self-sovereign identity](https://en.wikipedia.org/wiki/Self-sove
 - **Recoverability**: Users must be able to recover their account in the event of a lost private key.
 - **Privacy-Preserving Interactions**: Ensure that users can selectively disclose relevant information while protecting sensitive data, such as address information or other personal identifiers.
 
-Users create a global identity within the network by going through a registration procedure and interfacing with on-chain smart contracts. A users identity is a numeric identifier like `423987` controlled by a key pair, and is called the `account identifier`. We also introduce the concept of a `delegated signer`. Delegated signing allows a user to easily interact with the network and it's avilable services while delegating the signing process to a `client` that represents their interests. Delegated signatures allow clients to automate the signature process so the user does not have to present their private key during every stage in their transaction lifecycle. Users can unilaterally revoks signature delegation at any time.
+Users create a global identity within the network by going through a registration procedure and interfacing with on-chain smart contracts. A users identity is a numeric identifier like `423987` controlled by a key pair, and is called the `account identifier`. 
 
-Users include their `account identifier` and sign every [`intent`](#intent-casting). This mechanism makes all communication within the network tamper-proof and self-certifying. Recipients of `intents` validate these signed messages against the [`identity contracts`](./00003-identity-contracts.md) before processing, storing, or transmitting data. 
+We also introduce the concept of a `delegated signer`. Delegated signing makes it easy for a user to interact with the network and it's available services while delegating the signing process to a `client` that represents their interests. Delegated signatures allow clients to automate the signature process so the user does not have to present their private key during every stage in their transaction lifecycle. 
+
+Users typically approve a `client` as a signer during the sign up flow in a new application. Users can unilaterally revoke signature delegation at any time.
+
+Users include their `account identifier` and sign every [`intent`](#intent-casting). This mechanism makes all communication within the network tamper-proof and self-certifying. Recipients of `intents` validate these signed messages against the [`identity contracts`](./00003-identity-contracts.md) before processing, storing, or transmitting data.
+
+```mermaid
+graph LR
+    Custody([Address Key Pair]) --> |Signature|DSignerA1([Signer Key Pair])
+    DSignerA1 -->  |Signature|CastC[Search Pizza]
+    DSignerA1 -->  |Signature|CastD[Add to cart]
+```
 
 ## Personal Data Stores
 We assume webservers are necessary for performing computational tasks for filtering information and providing app-views. We also assume that most users will not want to host their infrastructure, although this is entirely possible within the standard.
 
-Each user has a PDS. A PDS is a webserver containing a content-addressed personal data repository for a user's account. This repository represents a collection of records stored by a user and signed by the users delegated signature authority (delegated signer). Creation or updates of records are signed, canonical, live, transactable, and can be independently verified by any third party regardless of the storage location of the data.
+Each user has a PDS. A PDS is a webserver containing a content-addressed personal data repository for a user's account information. This repository represents a collection of records stored by a user and signed by the users delegated signature authority (delegated signer). Creation or updates of records are signed, canonical, live, transactable, and can be independently verified by any third party regardless of the storage location of the data.
+
+```mermaid
+graph LR
+    User([Alice]) -->|signature| Key([Delegated Signer Key])
+    Key -->|signature| Records([Personal Repository])
+```
 
 If any `Personal Data Store` fails to maintain it's service, begins charging high fees, or has performance failures, users are free to switch to a new managed host provider (`Personal Data Store`), including to their own infrastructure. Because, 1. it is easy to switch hosts, 2. it is easy for anyone to operate a `Personal Data Stores`, `Personal Data Stores` will be able to charge *the exact rent* that their service can justify in an open market. 
 
-A user's PDS also serves as a generic HTTP proxy between the user and other services within the network. We assume that 
+A user's PDS also serves as a generic HTTP proxy between the user and other services within the network.
 
 ## Intent Casting
 Users are categorized as either a `Buyer` or `Provider`. Each represents a specific *type* of user on either side of a two-sided market. User's can discover one another and engage in purchasing behavior through a basic server-to-server communication standard in a peer-to-peer network. All peers, in this context, are PDS servers that are registered and discoverable in a global, public, decentralized [registry](./00002-node-registry.md) infrastructure. 
 
-Peers are represented as either `Buyer Supporting Nodes (BSN)` or `Provider Supporting Nodes (PSN)`, depending on whether they support the `Buyer` or `Provider` side of the market.
+Peers are represented as either `Buyer PDS` or `Provider PDS`, depending on whether they support the `Buyer` or `Provider` side of the market.
 
-`Buyers` form purchase intents as signed data request's on any protocol-enabled client. The user's PDS receive requests on behalf of a user and proxies these search requests to the network. Purchase intents discover PDS servers that support `Providers` who have the capacity to fulfill the purchase intent by indexing a list of available services in the netowrk's registry infrastructure. This process of discovery is called intent-casting. After discovery, a `Buyer` and `Provider` peer can directly engage and commence in their transaction without the need for an intermediary. 
+`Buyers` form purchase intents as signed data requests on any protocol-enabled client. The user's PDS receive requests on behalf of a user and proxies these search requests to the network. Purchase intents discover PDS servers that support `Providers` who have the capacity to fulfill the purchase intent by indexing a list of available services in the netowrk's [registry infrastructure](./00002-node-registry.md). After discovery, a `Buyer` and `Provider` peer can directly engage and commence in their transaction without the need for an intermediary. This process of discovery, as well as the subseuqent steps in a transaction, are called `intent-casting`.
 
-## Interoperability Guarantee
+```mermaid
+graph LR
+    Alice([Alice]) --> |signature| PDS([Search Gateway])
+    PDS([Buyer PDS]) --> |POST searchMerchants| GP([Search Gateway])
+    PDS([Buyer PDS]) --> |POST addItemToCart| PSN([Provider PSN])
+    PDS([Buyer PDS]) --> |GET getAccount| Repo([Storage])
+```
+
+## Interoperability Guarantees
 An open network like nosh needs a way to agree on data structures, transport, and semantics. During inter-service network communications (like intent-casting), PDS nodes receive strong typechecks and runtime correctness guarantees by implementing the [Nosh Schema Defintion Language (NSDL)](./00005-schema-definition-language.md). The NSDL NSDL is similar to an [OpenAPI](https://en.wikipedia.org/wiki/OpenAPI_Specification) specification with added semantic nice-to-haves and opinions for ensuring interoparability among services.
 
 The NSDL is used to define RPC methods and record types, providing developers with a standardized approach and workflow for crafting and specifying new data structures within the network. Such a standard allows protocol implementations to have strong guarantee as the network matures into new categories. 

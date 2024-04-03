@@ -31,12 +31,12 @@ An `Buyer` or a `Provider` that uses a `Client`. Commonly called an `account` in
 #### Account
 A `User` with an account identifier in the `Account Registry`
 
-#### Buyer Servicing Node (BSN)
+#### Buyer Supporting Node (BSN)
 `BSNs` build software applications & store Buyer data for the network. BSNs can be managed by individual developers or organizations who intend to offer experiences to consumers but do not care to maintain inventory lists of `Providers`.  
 
 `BSNs` can be managed by individual developers or organizations who intend to offer experiences to consumers. `BSNs` might have a new idea for a new application, like a video-first shopping app, a social-commerce app, or a spatial-computing shopping experience. `BSNs` implement the protocol because it gives them instant access to a network of `Providers`. They can implement the protocol standard and get access to these `Providers` without ever having to formally onboard the `Provider` or communicate with them. 
 
-#### Provider Servicing Node (PSN)
+#### Provider Supporting Node (PSN)
 `PSN`s onboard the `Provider` side of the network. PSNs can be managed by a local chamber of commerce, a small business cooperative, individual restaurants or retailers, taxi-networks, big tech companies, etc. The primary role of the `PSN` in the open network is to attain and maintain fresh inventory lists for `Providers` such that when a `Buyer` broadcasts an intent to transact, they can be sure that their request to avail services/products is fulfilled by the `Provider` 
 
 The primary role of the `PSN` is to maintain inventory lists for `Providers` so that when a `Buyer` searches for a service, the `PSN` can respond with a list of `Providers` that are capable of fulfilling the `Buyers` request. `PSNs` can charge a fee for providing tools for `Providers` that help them maintain their inventory and accept more orders. For example a `PSN` might make it easier for `Providers` to manage their inventory via a point-of-sale solution. Some `Providers` may choose to run their own `PSN` instance, although this behavior is unexpected. 
@@ -81,7 +81,7 @@ sequenceDiagram
  ```
 
 #### Registry 
-A decentralized public ledger that maintains the records of `Personal Data Stores`, their supported Industry Codes, and the geographical regions that they represent. The registry is queried for a `Providers` products or services by `Gateways` and `Buyer Servicing Nodes` during the search phase of a `Buyers` transaction lifecycle 
+A decentralized public ledger that maintains the records of `Personal Data Stores`, their supported Industry Codes, and the geographical regions that they represent. The registry is queried for a `Providers` products or services by `Gateways` and `Buyer Supporting Nodes` during the search phase of a `Buyers` transaction lifecycle 
 
 During the server-to-server communication node's are expected to send a signed digest of the request body using the private key that was used to register their node in the reigistry. When a server recives a new request, it verifies the signature header and message contents by looking up the public key of the signer in the registry and verifying the signature.
 
@@ -167,9 +167,9 @@ The network's core working groups and community will work on and publish standar
    - Forwards this packet to the `Gateway Provider` using the `POST /search` method, targeting the `Gateway Provider's` callback URL as registered.
 
 4. **Gateway Provider (Broadcasting):** 
-   - Receives the search query and broadcasts it to all relevant `PSN`s (Provider Servicing Nodes) that match the search criteria, ensuring a wide net is cast for Providers offering "pizza" in the appropriate geographical areas.
+   - Receives the search query and broadcasts it to all relevant `PSN`s (Provider Supporting Nodes) that match the search criteria, ensuring a wide net is cast for Providers offering "pizza" in the appropriate geographical areas.
 
-5. **PSN (Provider Servicing Node):** 
+5. **PSN (Provider Supporting Node):** 
    - Each `PSN` processes the search query and compiles a list of Providers that meet the search criteria.
    - Responds to the `Gateway Provider` with their respective lists using the `POST /on_search` method, directed at the `Gateway Provider's` callback URL.
 
@@ -227,7 +227,7 @@ sequenceDiagram
    - Incorporates the selected `Provider` ID into a search packet.
    - Forwards this packet to the designated `PSN` using the `POST /search` method, targeting the `PSN's` callback URL as recorded in the service directory.
 
-4. **PSN (Provider Servicing Node):** 
+4. **PSN (Provider Supporting Node):** 
    - Receives the query and processes the request.
    - Responds with the `Provider`'s catalog, utilizing the `POST /on_search` method directed at the `BSN's` callback URL.
 
@@ -280,7 +280,7 @@ sequenceDiagram
    - Compiles the selected items into a selection packet.
    - Forwards this packet to the designated `PSN` using the `POST /select` method, targeting the `PSN's` callback URL as registered in the directory.
 
-4. **PSN (Provider Servicing Node):** 
+4. **PSN (Provider Supporting Node):** 
    - Processes the selection request.
    - Responds with a detailed cart, including itemized pricing information, through the `POST /on_select` method, addressing the `BSN's` callback URL.
 
@@ -331,7 +331,7 @@ sequenceDiagram
    - Gathers Alice's billing and shipping details into the initialization packet.
    - Forwards this packet to the designated `PSN` using the `POST /init` method, targeting the `PSN's` callback URL as recorded in the service registry.
 
-4. **PSN (Provider Servicing Node):** 
+4. **PSN (Provider Supporting Node):** 
    - Processes the initialization request.
    - Responds with comprehensive details including the final price, payment options, refund policy, cancellation terms, and fulfillment terms, using the `POST /on_init` method directed at the `BSN's` callback URL.
 
@@ -382,7 +382,7 @@ sequenceDiagram
    - Compiles Alice's payment information into a confirmation packet.
    - Forwards this packet to the designated `PSN` using the `POST /confirm` method, targeting the `PSN's` callback URL as registered.
 
-4. **PSN (Provider Servicing Node):** 
+4. **PSN (Provider Supporting Node):** 
    - Receives the payment confirmation packet from the `BSN`.
    - Verifies the payment details and, upon successful verification, responds with the active order details using the `POST /on_confirm` method, addressing the `BSN's` callback URL.
 
@@ -438,7 +438,7 @@ sequenceDiagram
    - Prepares a status inquiry by packaging the order ID in a request packet.
    - Forwards this request to the designated `PSN` utilizing the `POST /status` method, referencing the `PSN's` callback URL.
 
-4. **PSN (Provider Servicing Node):** 
+4. **PSN (Provider Supporting Node):** 
    - Receives the status inquiry from the `BSN`.
    - Processes the inquiry and responds to the `BSN` with the current order status using the `POST /on_status` method, targeting the `BSN`'s callback URL.
 
@@ -479,15 +479,15 @@ sequenceDiagram
 
 2. **Bob's App:** Initiates the status update by sending a status update packet to the `PSN`.
 
-3. **PSN (Provider Servicing Node):** 
+3. **PSN (Provider Supporting Node):** 
    - Receives the status update packet from Bob's App.
    - Processes the update and uses the `POST /on_status` API endpoint to forward the updated status information to the `BSN`.
 
-4. **BSN (Buyer Servicing Node):** 
+4. **BSN (Buyer Supporting Node):** 
    - Acknowledges the receipt of the updated status information from the PSN with an ACK (Acknowledgement) response.
    - Prepares to forward the updated order status to the Client Application.
 
-5. **BSN (Buyer Servicing Node):** 
+5. **BSN (Buyer Supporting Node):** 
    - Forwards the updated order status to the Client Application using a websocket connection (`ws:/status`), ensuring real-time update delivery.
 
 6. **Client Application:** 
@@ -525,7 +525,7 @@ sequenceDiagram
    - Prepares an update request by including the order ID in an update packet.
    - Sends this update packet to the corresponding `PSN` utilizing the `POST /update` API method, referencing the `PSN's` callback URL as registered in the system.
 
-4. **PSN (Provider Servicing Node):** 
+4. **PSN (Provider Supporting Node):** 
    - Receives the update packet from the `BSN`.
    - Processes the order update and responds back to the BSN using the `POST /on_update` method, indicating the update has been accepted and processed.
 
@@ -573,7 +573,7 @@ sequenceDiagram
 
 2. **Bob's App:** Initiates the update by sending an updated order packet to the `PSN`.
 
-3. **PSN (Provider Servicing Node):** 
+3. **PSN (Provider Supporting Node):** 
    - Receives the update request from Bob's App and processes the updated order contents. 
    - Uses the `POST /on_update` method to forward the updated order packet to the `BSN`
 
@@ -617,7 +617,7 @@ sequenceDiagram
 3. **BSN (Before API Processing):** 
    - Prepares a cancellation request by packaging Alice's order ID and sending it to the appropriate `PSN` using the `POST /cancel` method on the `PSN's` callback URL, as found in the registry.
 
-4. **PSN (Provider Servicing Node):** 
+4. **PSN (Provider Supporting Node):** 
    - Receives the cancellation request and processes it. Confirms the cancellation by using the `POST /on_cancel` method, sending a confirmation back to the `BSN` through its callback URL.
 
 5. **BSN (After API Processing):** 
@@ -664,7 +664,7 @@ sequenceDiagram
 
 2. **Bob's App:** Initiates the cancellation by sending a cancellation request to the `PSN`.
 
-3. **PSN (Provider Servicing Node):** 
+3. **PSN (Provider Supporting Node):** 
    - Receives the cancellation request from Bob's App and processes the request.
    - Uses the `POST /on_cancel` method to forward the cancellation request to the `BSN`, indicating the desire to cancel the order.
 
@@ -708,21 +708,21 @@ sequenceDiagram
 
 2. **Alice's Client Application:** Initiates the support request by sending a support query to the `BSN`.
 
-3. **BSN (Buyer Servicing Node):** 
+3. **BSN (Buyer Supporting Node):** 
    - Receives Alice's request for support and processes it.
    - Sends a `POST /support` request to the `PSN`, including details of Alice's order and the specific support requested.
 
-4. **PSN (Provider Servicing Node):** 
+4. **PSN (Provider Supporting Node):** 
    - Acknowledges the receipt of the support request from the BSN with an ACK (Acknowledgement) response.
    - Assesses the request and compiles the necessary support details.
 
-5. **PSN (Provider Servicing Node):** 
+5. **PSN (Provider Supporting Node):** 
    - Sends the compiled support details back to the BSN using the `POST /on_support` method.
 
-6. **BSN (Buyer Servicing Node):** 
+6. **BSN (Buyer Supporting Node):** 
    - Receives the support details from the PSN and prepares the information for Alice's Client Application.
 
-7. **BSN (Buyer Servicing Node):** 
+7. **BSN (Buyer Supporting Node):** 
    - Forwards the detailed support response to Alice's Client Application using the `api/on_support` response endpoint.
 
 8. **Alice's Client Application:** 
