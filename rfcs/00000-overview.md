@@ -129,6 +129,7 @@ graph LR
 - WebAuthN docs
 - Verifiable Compute
 - Decentralized micro-services architectures
+- Allow lists / Ucan
 
 ## Future Work and Technical Challenges
 - Privacy-preservation: Improve the design to enable privacy-preserving interactions, allowing users to selectively disclose relevant information.
@@ -136,3 +137,4 @@ graph LR
 - Associated domain entitlements and native webAuthN libraries
 
 ## References
+- 
