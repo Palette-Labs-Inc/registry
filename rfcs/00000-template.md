@@ -6,7 +6,7 @@
 - **Last supportd:** [Last supportd Date]
 
 ## Abstract
-A brief summary of the proposal, including the problem it addresses and the proposed solution or innovation.
+A brief summary of the proposal, including the problem it addresses and the proposed solution
 
 ## Introduction
 A more detailed explanation of the problem and why it is important to address it. This section should provide enough background to understand the context of the RFC.

@@ -41,7 +41,7 @@ We also introduce the concept of a `delegated signer`. Delegated signing makes i
 
 Users typically approve a `client` as a signer during the sign up flow in a new application. Users can unilaterally revoke signature delegation at any time.
 
-Users include their `account identifier` and sign every [`intent`](#intent-casting). This mechanism makes all communication within the network tamper-proof and self-certifying. Recipients of `intents` validate these signed messages against the [`identity contracts`](./00003-identity-contracts.md) before processing, storing, or transmitting data.
+Users include their `account identifier` and sign every [`intent`](#intent-casting). This mechanism makes all communication within the network tamper-proof and self-certifying. Recipients of `intents` validate these signed messages against the [`identity contracts`](./00003-identity-contracts.md) before processing, storing, transmitting, or forwarding data.
 
 ```mermaid
 graph LR
