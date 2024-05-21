@@ -19,10 +19,27 @@ A programmable open and extensible architecture allows for the creation of a wid
 **Arbiter**: an entity that resolves disputes between a buyer and a producer
 
 ## Motivation
-Traditional marketplaces tend to be [rent-seeking](https://en.wikipedia.org/wiki/Rent-seeking), charging asymmetric fees relative to the value of the services they provide. These networks create negative externalities on society, reduce economic efficiency, prevent emerging markets, and fail to adequately fill incentive gaps in markets. Over time, marketplaces accumulate power and trend towards rents that are equal to the margins of their suppliers. As the platform grows, fees to buyers increase and earnings for sellers decrease. Marketplaces are therefore economically sub-optimal and fail to meet the demands of modern markets.
+Traditional marketplaces tend to be [rent-seeking](https://en.wikipedia.org/wiki/Rent-seeking), charging asymmetric fees relative to the value of the services they provide. These networks create negative externalities on society, reduce economic efficiency, prevent emerging markets, and fail to adequately fill incentive gaps in markets. Over time, marketplaces accumulate power and trend towards rents that are equal to the margins of their suppliers. As the platform grows, fees to buyers increase and earnings for sellers decrease. Traditional centralized marketplace platforms are therefore economically sub-optimal and fail to meet the demands of modern markets.
+
+In contrast, a decentralized, permissionless network unlocks local-knowledge from a much broader network of individuals who are better equipped to fill incentive gaps in unique markets and more quickly adapt to the rapid changes in consumer preferences faster than any central planner.
+
+In designined a decentralized protocol for an arbitrary 
+
+The primary constraint in the design of such a protocol is the inability to systematically verify a wide-range of real-world activity. Real-world activity is subject to the Oracle problem, and 
+
+
+
+that there is no cryptographic way to prove real-world activities. This could limit the scope of our design to rewarding token distributions from a protocol-fee. Unless we do KYC of all of the participants in the network, users could create identities as both a buyer and a seller in the network, create transactions with themselves and earn a token reward for self-dealing. Such interactions should not be profitable but this limits the scope of our design space.
+
+classical consensus or validity proofs 
+
+honest majority assumption.
+
+
+Design optimizes for network effects, is immutable
 
 ## Introduction
-The Nosh protocol is a decentralized marketplace built around a dynamic transaction graph and native token network. Producers (e.g. restaurants, drivers) earn a block reward by providing service-proofs to the network. Buyers earn rewards through an augmentation fee that Producers use as a means to market their services to the Buyer network. The graph allows for dynamic markets to discover optimal token distributions without having to make naive assumptions about the behavior of participants or the properties of the market in advance. Block rewards are paid out at the time of a new transaction relative to the state of the transaction graph. 
+The Nosh protocol is a decentralized marketplace built around a dynamic transaction graph and native token network. Producers (e.g. restaurants, drivers) earn a block reward by providing service-proofs to the network. Buyers earn rewards through an augmentation fee that Producers use as a means to market their services to the Buyer network. The graph allows for dynamic markets to discover optimal token distributions without having to make naive assumptions about the behavior of participants or the properties of the market in advance. Block rewards are paid out at a pre-defined reward epoch relative to the state of the transaction graph. Rewards are redistibuted based on a modified eigenvector centrality ranking which computes the "relative influence" of a producer to the network, granting asymetrically large rewards to high value producers. 
 
 In the case of a dispute, a decentralized network of arbiters provide a resolution service. The losing party in a dispute can have the edge-weights in their transaction graph slashed or burned, harming their future earning potential in the network. This mechanism reduces the frequency of false-claims for economically rational actors. In a dispute, arbiters are eligible to earn the block reward that would have otherwise been earned for creating the transaction, as well as a portion of the tokens slashed from the edge-weights in the transaction graph.  
 
@@ -35,20 +52,19 @@ Our design has these properties:
 - Transactions are represented in a dynamic transaction graph, with nodes for producers and buyers, and weighted edges capturing their activity.
 - The protocol removes centralized middlemen, enabling direct producer-buyer interactions in a decentralized marketplace.
 - Adjustable augmentation fees allow the market to self-regulate based on collective participant actions across diverse commercial contexts.
-- Optimal token distributions are discovered based on the pricing power of producers in different sub-markets.
+- Immutablility: optimal token distributions are discovered based on the pricing power of producers in different sub-markets.
 - Decentralized identity management verifies that the participants are unique to prevent sybil attacks.
 - Reputation and rating systems allow participants to rate each other, adjusting edge weights in the transaction graph to incentivize good behavior.
-- A Multi-signature escrow contract holds funds until both parties attest to service completion. Escrow contracts resolve upon a signed mutual attestation.
+- A multi-signature escrow contract holds funds until both parties attest to service completion. Escrow contracts resolve upon a signed mutual attestation.
 - Decentralized dispute resolution mechanisms and community arbitration protocol resolve conflicts.
-- A layered approach to service-proofs protects the network against collusion and malicious actors.
+- A modified eigenvector centrality ranking replaces the need for strict service-proofs and protects the network against collusion and malicious actors.
 - A decentralized arbitration service to handle disputes, even when services are performed.
 
-Our economic model aims to optimize for the following:
+Our economic model optimizes for:
 - bootstrap supply
 - bootstrap demand
 - increase the volume of transactions over time
 - mature markets in equilibrium must pay market participant's proportional to their marginal contribution
-
 ___
 
 ### Dynamic Transaction Graph
